@@ -1,0 +1,10 @@
+[27-Feb-2020 20:42:53 America/Bogota] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; JUpload has a deprecated constructor in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 55
+[27-Feb-2020 20:42:53 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:42:53 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:42:53 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:42:53 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 245
+[27-Feb-2020 20:44:06 America/Bogota] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; JUpload has a deprecated constructor in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 55
+[27-Feb-2020 20:44:06 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:44:06 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:44:06 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 247
+[27-Feb-2020 20:44:06 America/Bogota] PHP Notice:  A non well formed numeric value encountered in /home/crediciti/public_html/scripts/tinymce/plugins/filemanager/uploader/jupload.php on line 245

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="/components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="carousel.js"></script>
+	<link rel="stylesheet" type="text/css" href="carousel.css">
+	<script type="text/javascript">
+	 $(document).ready(function() {
+	 	$("#carousel_container").carousel();
+	 	$("#segundo").carousel({
+	 		pause : 1000,
+	 		quantity : 6,
+	 		sizes : {
+	 			'900' : 3,
+	 			'500' : 1
+	 		}
+	 	});
+	 });
+</script>
+</head>
+<body>
+	<div id='carousel_container'>
+		<div class='left_scroll'>Izquierda</div>
+		<div class="carousel_inner">
+			<ul>
+				<li style="background-color: #FF0000;"><div>contenido 1<br> 453sdsfsdfsd</div></li>
+				<li style="background-color: #FFff00;"><div>contenido 2</div></li>
+				<li style="background-color: #FF0ff0;"><div>contenido 3</div></li>
+				<li style="background-color: #FF0000;"><div>contenido 4</div></li>
+				<li style="background-color: #FFff00;"><div>contenido 5</div></li>
+				<li style="background-color: #FF00ff;"><div>contenido 6</div></li>
+				<li style="background-color: #FF00ff;"><div>contenido 7</div></li>
+			</ul>
+		</div>
+		<div class='right_scroll'>Derecha</div>
+	</div>
+
+	<div id='segundo'>
+		<div id='left_scroll'>Izquierda</div>
+		<div class="carousel_inner">
+			<ul>
+				<li style="background-color: #FF0000;"><div>contenido 1</div></li>
+				<li style="background-color: #FFff00;"><div>contenido 2</div></li>
+				<li style="background-color: #FF0ff0;"><div>contenido 3</div></li>
+				<li style="background-color: #FF0000;"><div>contenido 4</div></li>
+				<li style="background-color: #FFff00;"><div>contenido 5</div></li>
+				<li style="background-color: #FF00ff;"><div>contenido 6</div></li>
+				<li style="background-color: #FF00ff;"><div>contenido 7</div></li>
+			</ul>
+		</div>
+		<div id='right_scroll'>Derecha</div>
+	</div>
+</body>
+</html>

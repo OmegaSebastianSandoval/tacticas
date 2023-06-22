@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_rsfotos1" value="name:id_foto;datatype:int,name:id_album;datatype:int,name:nombre;datatype:string,name:foto;datatype:string,name:orden;datatype:int" />
+</info>

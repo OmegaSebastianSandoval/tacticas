@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="MM_css_include" value="../menucss/style.css" />
+	<infoitem key="UD_rsAlbum" value="name:id_album;datatype:int,name:tituloAlbum;datatype:string,name:imagen;datatype:string,name:descripcion;datatype:string" />
+</info>

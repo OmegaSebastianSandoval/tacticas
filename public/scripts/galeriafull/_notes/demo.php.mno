@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="MM_css_include" value="../estilos.css,../menucss/style.css" />
+	<infoitem key="UD_rsFotos" value="name:id;datatype:int,name:nombre;datatype:string,name:name;datatype:string,name:descripcion;datatype:blob,name:description;datatype:blob,name:imagen;datatype:string,name:album;datatype:int" />
+	<infoitem key="UD_rsAlbum" value="name:id_album;datatype:int,name:tituloAlbum;datatype:string,name:imagen;datatype:string,name:descripcion;datatype:string" />
+	<infoitem key="UD_rsAlbumes" value="name:id;datatype:int,name:titulo;datatype:string,name:title;datatype:string,name:descripcion;datatype:blob,name:description;datatype:blob,name:imagen;datatype:string" />
+</info>
