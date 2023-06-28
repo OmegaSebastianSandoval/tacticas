@@ -119,23 +119,25 @@ class Page_dotacioneshojadevidaController extends Page_mainController
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];
 		$this->_view->list_tipo = $this->getTipo();
 		$this->_view->cc = $this->_getSanitizedParam("cc");
+		$this->_view->seccion = $seccion = $this->_getSanitizedParam("seccion");
+
 		$id = $this->_getSanitizedParam("id");
 		if ($id > 0) {
 			$content = $this->mainModel->getById($id);
 			if ($content->id) {
 				$this->_view->content = $content;
-				$this->_view->routeform = $this->route . "/update";
+				$this->_view->routeform = $this->route . "/update?seccion=" . $seccion;
 				$title = "Actualizar dotaci&oacute;n";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			} else {
-				$this->_view->routeform = $this->route . "/insert";
+				$this->_view->routeform = $this->route . "/insert?seccion=" . $seccion;
 				$title = "Crear dotaci&oacute;n";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
 		} else {
-			$this->_view->routeform = $this->route . "/insert";
+			$this->_view->routeform = $this->route . "/insert?seccion=" . $seccion;
 			$title = "Crear dotaci&oacute;n";
 			$this->getLayout()->setTitle($title);
 			$this->_view->titlesection = $title;
@@ -162,8 +164,13 @@ class Page_dotacioneshojadevidaController extends Page_mainController
 			$logModel->insert($data);
 		}
 		$cc = $this->_getSanitizedParam("cedula");
-				header('Location:/page/hojadevida/manage?cc=' .$cc. '#pills-dotaciones');
+		$seccion = $this->_getSanitizedParam("seccion");
 
+		if ($seccion) {
+			header('Location:/page/vencimientodotaciones');
+		} else {
+			header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-dotaciones');
+		}
 	}
 
 	/**
@@ -189,8 +196,14 @@ class Page_dotacioneshojadevidaController extends Page_mainController
 			$logModel->insert($data);
 		}
 		$cc = $this->_getSanitizedParam("cedula");
-				header('Location:/page/hojadevida/manage?cc=' .$cc. '#pills-dotaciones');
+		$seccion = $this->_getSanitizedParam("seccion");
 
+		if ($seccion) {
+			header('Location:/page/vencimientodotaciones');
+		} else {
+			header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-dotaciones');
+		}
+		
 	}
 
 	/**
@@ -217,8 +230,7 @@ class Page_dotacioneshojadevidaController extends Page_mainController
 			}
 		}
 		$cc = $this->_getSanitizedParam("cc");
-				header('Location:/page/hojadevida/manage?cc=' .$cc. '#pills-dotaciones');
-
+		header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-dotaciones');
 	}
 
 	/**

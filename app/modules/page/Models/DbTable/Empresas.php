@@ -52,4 +52,6 @@ class Page_Model_DbTable_Empresas extends Db_Table
 		$query = "UPDATE empresa SET  nombre = '$nombre', logo = '$logo', direccion = '$direccion', telefono = '$telefono', email = '$email', web = '$web', fecha_c = '$fecha_c' WHERE id = '".$id."'";
 		$res = $this->_conn->query($query);
 	}
+
+	
 }

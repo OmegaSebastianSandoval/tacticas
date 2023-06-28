@@ -9,8 +9,9 @@
 			<?php if ($this->content->id) { ?>
 				<input type="hidden" name="id" id="id" value="<?= $this->content->id; ?>" />
 			<?php } ?>
+
 			<div class="row">
-				<div class="col-12 col-lg-4 form-group">
+				<div class="col-12 col-md-6 col-lg-3 form-group">
 					<label for="nombre" class="control-label">Nombre</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -20,7 +21,7 @@
 					</label>
 					<div class="help-block with-errors"></div>
 				</div>
-				<div class="col-12 col-lg-4 form-group">
+				<div class="col-12 col-md-6 col-lg-3 form-group">
 					<label for="usuario" class="control-label">Usuario</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -30,17 +31,9 @@
 					</label>
 					<div class="help-block with-errors"></div>
 				</div>
-				<div class="col-12 col-lg-4 form-group">
-					<label for="clave_principal" class="control-label">Clave</label>
-					<label class="input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-pencil-alt"></i></span>
-						</div>
-						<input type="password" autocomplete="off" value="<?= $this->content->clave_principal; ?>" name="clave_principal" id="clave_principal" class="form-control" required>
-					</label>
-					<div class="help-block with-errors"></div>
-				</div>
-				<div class="col-12 col-lg-4 form-group">
+
+
+				<div class="col-12 col-md-6 col-lg-3 form-group">
 					<label for="email" class="control-label">Email</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -50,7 +43,7 @@
 					</label>
 					<div class="help-block with-errors"></div>
 				</div>
-				<div class="col-12 col-lg-4 form-group">
+				<div class="col-12 col-md-6 col-lg-2 form-group">
 					<label class="control-label">Nivel</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -67,14 +60,14 @@
 					</label>
 					<div class="help-block with-errors"></div>
 				</div>
-				<div class="col-3 d-grid form-group">
+				<div class="col-1 d-grid form-group">
 					<label class="control-label">Activo</label>
 					<input type="checkbox" name="activo" value="1" class="form-control switch-form " <?php if ($this->getObjectVariable($this->content, 'activo') == 1) {
 																											echo "checked";
 																										} ?>></input>
 					<div class="help-block with-errors"></div>
 				</div>
-				<div class="col-3 form-group contenedor-empresa">
+				<div class="col-12 col-md-6 col-lg-3 form-group contenedor-empresa">
 					<label class="control-label">Empresa</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -91,6 +84,33 @@
 					</label>
 					<div class="help-block with-errors"></div>
 				</div>
+
+				<?php if (!$this->content->id) { ?>
+
+					<div class="col-12 col-md-6 col-lg-3 form-group">
+						<label for="clave_principal" class="control-label">Contraseña</label>
+						<label class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-pencil-alt"></i></span>
+							</div>
+							<input type="password" autocomplete="off" value="" name="clave_principal" id="clave_principal" class="form-control" required>
+						</label>
+						<div class="help-block with-errors">
+							<p id="message"></p>
+							<ul id="conditions"></ul>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-3 form-group">
+						<label for="clave_principal-r" class="control-label">Repetir contraseña</label>
+						<label class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-pencil-alt"></i></span>
+							</div>
+							<input type="password" autocomplete="off" value="" name="clave_principal-r" id="clave_principal-r" class="form-control" required>
+						</label>
+						<div class="help-block with-errors"></div>
+					</div>
+				<?php } ?>
 				<div class="col-12 form-group d-none">
 					<label for="asignacion" class="control-label">Asignacion</label>
 					<label class="input-group">
@@ -131,16 +151,15 @@
 					echo '</pre>'
 					?> -->
 		</div>
-		<div class="botones-acciones">
-			<button class="btn btn-guardar" type="submit">Guardar</button>
+		<div id="botones-acciones" class="botones-acciones">
+			<button class="btn btn-guardar" id="submitButton" type="submit">Guardar</button>
 			<a href="<?php echo $this->route; ?>" class="btn btn-cancelar">Cancelar</a>
 		</div>
 	</form>
 </div>
 
 <script>
-	selectorUsuario()
-	leerAsignacion()
+	// selectorUsuario()
 	//guardar asignacion, empresas
 	// Array para almacenar los checkboxes marcados
 	let asignacion = document.getElementById('asignacion')
@@ -170,4 +189,6 @@
 		});
 		console.log(numerosArray);
 	}
+	// selectorUsuario()
+	leerAsignacion()
 </script>

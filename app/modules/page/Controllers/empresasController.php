@@ -51,7 +51,9 @@ class Page_empresasController extends Page_mainController
 	public function init()
 	{
 		
-		
+		if ((Session::getInstance()->get("kt_login_level") != '1' )) {
+			header('Location: /page/panel');
+		}
 		$this->mainModel = new Page_Model_DbTable_Empresas();
 		$this->namefilter = "parametersfilterempresas";
 		$this->route = "/page/empresas";
@@ -122,6 +124,15 @@ class Page_empresasController extends Page_mainController
 		if ($id > 0) {
 			$content = $this->mainModel->getById($id);
 			if($content->id){
+
+
+				//DOCUMENTOS
+				$documentosEmpresaModel = new Page_Model_DbTable_Documentosempresa();
+				
+				$this->_view->listaDocumentos = $listaDocumentos = $documentosEmpresaModel->getList("documento_empresa_empresa_id = '$id'", "");
+				$this->_view->cantidadContactosEmergencia = $cantidadContactosEmergencia = count($listaDocumentos);
+	
+
 				$this->_view->content = $content;
 				$this->_view->routeform = $this->route."/update";
 				$title = "Actualizar empresas";
@@ -163,7 +174,7 @@ class Page_empresasController extends Page_mainController
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);
 		}
-		header('Location: '.$this->route.''.'');
+		header('Location: '.$this->route.'/manage?id='.$id.'');
 	}
 
 	/**

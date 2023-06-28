@@ -16,4 +16,19 @@ class Page_Model_DbTable_Dependempresa extends Db_Table
 	 */
 	protected $_id = 'id';
 
+	
+	public function getListAsignacion($filters = '', $order = '')
+	{
+	  $filter = '';
+	  if ($filters != '') {
+		$filter = ' WHERE ' . $filters;
+	  }
+	  $orders = "";
+	  if ($order != '') {
+		$orders = ' ORDER BY ' . $order;
+	  }
+	  $select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' ' . $orders;
+	  $res = $this->_conn->query($select)->fetchAsObject();
+	  return $res;
+	}
 }

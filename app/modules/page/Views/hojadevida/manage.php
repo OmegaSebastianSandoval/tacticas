@@ -60,7 +60,7 @@
 			<div class=" d-flex justify-content-start ">
 				<h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
 			</div>
-			<form class="text-left" enctype="multipart/form-data" method="post" action="<?php echo $this->routeform; ?>" data-bs-toggle="validator">
+			<form class="text-left" enctype="multipart/form-data" method="post" action="<?php echo $this->routeform; ?>?debug=1" data-bs-toggle="validator">
 				<div class="content-dashboard">
 					<input type="hidden" name="csrf" id="csrf" value="<?php echo $this->csrf ?>">
 					<input type="hidden" name="csrf_section" id="csrf_section" value="<?php echo $this->csrf_section ?>">
@@ -112,7 +112,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-pencil-alt"></i></span>
 								</div>
-								<input type="text" value="<?= $this->content->documento; ?>" name="documento" id="documento" class="form-control" required>
+								<input type="text" value="<?= $this->content->id; ?>" name="documento" id="documento" class="form-control" required>
 							</label>
 							<div class="help-block with-errors"></div>
 						</div>
@@ -122,11 +122,11 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text input-icono  fondo-azul "><i class="fas fa-calendar-alt"></i></span>
 								</div>
-								<input type="text" value="<?php if ($this->content->fecha_nacimiento) {
+								<input type="date" value="<?php if ($this->content->fecha_nacimiento) {
 																echo $this->content->fecha_nacimiento;
 															} else {
-																echo date('Y-m-d');
-															} ?>" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" required data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
+																/* echo date('Y-m-d'); */
+															} ?>" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" required data-date-format="yyyy-mm-dd" data-date-language="es">
 							</label>
 							<div class="help-block with-errors"></div>
 						</div>
@@ -221,20 +221,7 @@
 							</label>
 							<div class="help-block with-errors"></div>
 						</div>
-						<div class="col-12 col-md-4 col-lg-3 form-group">
-							<label for="fecha_ingreso" class="control-label">Fecha ingreso</label>
-							<label class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-calendar-alt"></i></span>
-								</div>
-								<input type="text" value="<?php if ($this->content->fecha_ingreso) {
-																echo $this->content->fecha_ingreso;
-															} else {
-																echo date('Y-m-d');
-															} ?>" name="fecha_ingreso" id="fecha_ingreso" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
-							</label>
-							<div class="help-block with-errors"></div>
-						</div>
+
 						<div class="col-12 col-md-4 col-lg-3 form-group">
 							<label for="numero_seguro" class="control-label">N&uacute;mero de seguro</label>
 							<label class="input-group">
@@ -292,47 +279,64 @@
 							<div class="help-block with-errors"></div>
 						</div>
 						<div class="col-12 col-md-4 col-lg-3 form-group">
+							<label for="fecha_ingreso" class="control-label">Fecha ingreso</label>
+							<label class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-calendar-alt"></i></span>
+								</div>
+								<input type="date" value="<?php if ($this->content->fecha_ingreso) {
+																echo $this->content->fecha_ingreso;
+															} else {
+																/* echo date('Y-m-d'); */
+															} ?>" name="fecha_ingreso" id="fecha_ingreso" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
+							</label>
+							<div class="help-block with-errors"></div>
+						</div>
+						<div class="col-12 col-md-4 col-lg-3 form-group">
 							<label for="fecha_salida" class="control-label">Fecha de salida</label>
 							<label class="input-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text input-icono  fondo-cafe "><i class="fas fa-calendar-alt"></i></span>
 								</div>
-								<input type="text" value="<?php if ($this->content->fecha_salida) {
+								<input type="date" value="<?php if ($this->content->fecha_salida) {
 																echo $this->content->fecha_salida;
 															} else {
-																echo date('Y-m-d');
-															} ?>" name="fecha_salida" id="fecha_salida" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
+																/* echo date('Y-m-d'); */
+															} ?>" name="fecha_salida" id="fecha_salida" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
 							</label>
 							<div class="help-block with-errors"></div>
 						</div>
-						<div class="col-12 col-md-4 col-lg-3 form-group d-none">
-							<label for="inicio" class="control-label">Inicio</label>
-							<label class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text input-icono  fondo-azul-claro "><i class="fas fa-calendar-alt"></i></span>
-								</div>
-								<input type="text" value="<?php if ($this->content->inicio) {
-																echo $this->content->inicio;
-															} else {
-																echo date('Y-m-d');
-															} ?>" name="inicio" id="inicio" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
-							</label>
-							<div class="help-block with-errors"></div>
-						</div>
-						<div class="col-12 col-md-4 col-lg-3 form-group d-none">
-							<label for="fin" class="control-label">Fin</label>
-							<label class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text input-icono  fondo-rojo-claro "><i class="fas fa-calendar-alt"></i></span>
-								</div>
-								<input type="text" value="<?php if ($this->content->fin) {
-																echo $this->content->fin;
-															} else {
-																echo date('Y-m-d');
-															} ?>" name="fin" id="fin" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
-							</label>
-							<div class="help-block with-errors"></div>
-						</div>
+						<?php if ($this->content->id && $this->content->id > 0) { ?>
+							<div class="col-12 col-md-4 col-lg-3 form-group">
+								<label for="inicio" class="control-label">Fecha inicio de contrato</label>
+								<label class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text input-icono  fondo-azul-claro "><i class="fas fa-calendar-alt"></i></span>
+									</div>
+									<input type="date" value="<?php if ($this->content->inicio) {
+																	echo $this->content->inicio;
+																} else {
+																	/* echo date('Y-m-d'); */
+																} ?>" name="inicio" id="inicio" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
+								</label>
+								<div class="help-block with-errors"></div>
+							</div>
+							<div class="col-12 col-md-4 col-lg-3 form-group">
+								<label for="fin" class="control-label">Fecha fin de contrato</label>
+								<label class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text input-icono  fondo-rojo-claro "><i class="fas fa-calendar-alt"></i></span>
+									</div>
+									<input type="date" value="<?php if ($this->content->fin) {
+																	echo $this->content->fin;
+																} else {
+																	/* echo date('Y-m-d'); */
+																} ?>" name="fin" id="fin" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
+								</label>
+								<div class="help-block with-errors"></div>
+							</div>
+						<?php } ?>
+
 						<div class="col-12 col-md-4 col-lg-3 form-group">
 							<label class="control-label">Empresa</label>
 							<label class="input-group">
@@ -457,7 +461,7 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
@@ -491,7 +495,7 @@
 		<div class="tab-pane fade " id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
 			<?php if ($this->cantidadEstudios >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/estudios/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar estudio o formación</a>
+					<a href="/page/estudios/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar estudio o formación</a>
 				</div>
 				<!-- <?php print_r($this->listaContactos) ?> -->
 				<div class="content-table table-responsive">
@@ -520,7 +524,7 @@
 
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/estudios/manage?id=<?= $idEstudios ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/estudios/manage?id=<?= $idEstudios ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modaledu<?= $idEstudios ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -529,7 +533,7 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
@@ -554,7 +558,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/estudios/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar estudio o formación</a>
+					<a href="/page/estudios/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar estudio o formación</a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -567,7 +571,7 @@
 		<div class="tab-pane fade" id="pills-experiencia" role="tabpanel" aria-labelledby="pills-experiencia-tab" tabindex="0">
 			<?php if ($this->cantidadExperiencia >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/experiencia/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar experiencia laboral</a>
+					<a href="/page/experiencia/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar experiencia laboral</a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -592,7 +596,7 @@
 									<td><?= $content->detalles; ?></td>
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/experiencia/manage?id=<?= $idExperiencia ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/experiencia/manage?id=<?= $idExperiencia ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modalexp<?= $idExperiencia ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -601,7 +605,7 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
 													</div>
 													<div class="modal-body">
@@ -610,7 +614,7 @@
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
-														<a class="btn btn-danger" href="/page/experiencia/delete?id=<?= $idExperiencia ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/experiencia/delete?id=<?= $idExperiencia ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -623,7 +627,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/experiencia/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar experiencia laboral</a>
+					<a href="/page/experiencia/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar experiencia laboral</a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -636,7 +640,7 @@
 		<div class="tab-pane fade" id="pills-referencias" role="tabpanel" aria-labelledby="pills-referencias-tab" tabindex="0">
 			<?php if ($this->cantidadReferencia >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/referencias/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar referencias </a>
+					<a href="/page/referencias/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar referencias </a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -667,7 +671,7 @@
 									<td><?= $content->descripcion; ?></td>
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/referencias/manage?id=<?= $idReferencia ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/referencias/manage?id=<?= $idReferencia ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modalref<?= $idReferencia ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -676,14 +680,14 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
-														<a class="btn btn-danger" href="/page/referencias/delete?id=<?= $idReferencia ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/referencias/delete?id=<?= $idReferencia ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -696,7 +700,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/referencias/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar referencias </a>
+					<a href="/page/referencias/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar referencias </a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -707,7 +711,7 @@
 		<div class="tab-pane fade" id="pills-otros" role="tabpanel" aria-labelledby="pills-otros-tab" tabindex="0">
 			<?php if ($this->cantidadOtros >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/otros/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar otros datos </a>
+					<a href="/page/otros/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar otros datos </a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -726,7 +730,7 @@
 									<td><?= $content->descripcion; ?></td>
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/otros/manage?id=<?= $idOtros ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/otros/manage?id=<?= $idOtros ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modalotros<?= $idOtros ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -735,14 +739,14 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
-														<a class="btn btn-danger" href="/page/otros/delete?id=<?= $idOtros ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/otros/delete?id=<?= $idOtros ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -755,7 +759,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/otros/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar otros datos </a>
+					<a href="/page/otros/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar otros datos </a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -766,7 +770,7 @@
 		<div class="tab-pane fade" id="pills-vacaciones" role="tabpanel" aria-labelledby="pills-vacaciones-tab" tabindex="0">
 			<?php if ($this->cantidadVacaciones >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/vacacioneshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar vacaciones </a>
+					<a href="/page/vacacioneshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar vacaciones </a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -787,7 +791,7 @@
 									<td><?= $content->cedula; ?></td>
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/vacacioneshojadevida/manage?id=<?= $idVacaciones ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/vacacioneshojadevida/manage?id=<?= $idVacaciones ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modalvac<?= $idVacaciones ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -796,14 +800,14 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
-														<a class="btn btn-danger" href="/page/vacacioneshojadevida/delete?id=<?= $idVacaciones ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/vacacioneshojadevida/delete?id=<?= $idVacaciones ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -816,7 +820,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/vacacioneshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar vacaciones </a>
+					<a href="/page/vacacioneshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar vacaciones </a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -827,7 +831,7 @@
 		<div class="tab-pane fade" id="pills-dotaciones" role="tabpanel" aria-labelledby="pills-dotaciones-tab" tabindex="0">
 			<?php if ($this->cantidadDotacion >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/dotacioneshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar dotaciones </a>
+					<a href="/page/dotacioneshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar dotaciones </a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -852,7 +856,7 @@
 
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/dotacioneshojadevida/manage?id=<?= $idDotacion ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/dotacioneshojadevida/manage?id=<?= $idDotacion ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modaldot<?= $idDotacion ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -861,14 +865,14 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
-														<a class="btn btn-danger" href="/page/dotacioneshojadevida/delete?id=<?= $idDotacion ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/dotacioneshojadevida/delete?id=<?= $idDotacion ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -881,7 +885,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/dotacioneshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar dotaciones </a>
+					<a href="/page/dotacioneshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar dotaciones </a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -892,7 +896,7 @@
 		<div class="tab-pane fade" id="pills-documentos" role="tabpanel" aria-labelledby="pills-documentos-tab" tabindex="0">
 			<?php if ($this->cantidadDocumentos >= 1) { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/documentoshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar documentos </a>
+					<a href="/page/documentoshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar documentos </a>
 				</div>
 				<div class="content-table table-responsive">
 					<table class=" table table-striped  table-hover table-administrator text-left">
@@ -922,7 +926,7 @@
 									<td><?= $content->fecha_vencimiento; ?></td>
 									<td class="text-right">
 										<div>
-											<a class="btn btn-azul btn-sm" href="/page/documentoshojadevida/manage?id=<?= $idDocumento ?>&cc=<?php echo $this->content->documento ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
+											<a class="btn btn-azul btn-sm" href="/page/documentoshojadevida/manage?id=<?= $idDocumento ?>&cc=<?php echo $this->content->id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>
 											<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modaldocum<?= $idDocumento ?>"><i class="fas fa-trash-alt"></i></a></span>
 										</div>
 										<!-- Modal -->
@@ -931,14 +935,14 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-														<button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close"></button>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div class="modal-body">
 														<div class="">¿Esta seguro de eliminar este registro?</div>
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
-														<a class="btn btn-danger" href="/page/documentoshojadevida/delete?id=<?= $idDocumento ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->documento ?>">Eliminar</a>
+														<a class="btn btn-danger" href="/page/documentoshojadevida/delete?id=<?= $idDocumento ?>&csrf=<?= $this->csrf; ?>&csrf_section=<?= $this->csrf_section; ?><?php echo ''; ?>&cc=<?php echo $this->content->id ?>">Eliminar</a>
 													</div>
 												</div>
 											</div>
@@ -951,7 +955,7 @@
 				</div>
 			<?php } else { ?>
 				<div class="d-flex justify-content-end mb-2">
-					<a href="/page/documentoshojadevida/manage?cc=<?php echo $this->content->documento ?>" class="btn btn-primary">Agregar documentos </a>
+					<a href="/page/documentoshojadevida/manage?cc=<?php echo $this->content->id ?>" class="btn btn-primary">Agregar documentos </a>
 				</div>
 
 				<div class="alert alert-info text-center" role="alert">
@@ -962,15 +966,6 @@
 	</div>
 </div>
 <style>
-	/*   .tab-pane {
-    display: none;
-
-  }
-
-  .tab-pane.active {
-    display: block;
-
-  } */
 	.tab-pane:focus-visible {
 		outline: none;
 	}
@@ -1049,26 +1044,26 @@
 			});
 		});
 	});
-/* 	$(document).ready(function() {
-		// Obtener el identificador de la pestaña activa desde la URL
-		var url = window.location.href;
-		var activeTabId = url.substring(url.indexOf("#") + 1);
+	/* 	$(document).ready(function() {
+			// Obtener el identificador de la pestaña activa desde la URL
+			var url = window.location.href;
+			var activeTabId = url.substring(url.indexOf("#") + 1);
 
-		// Mover el carrusel hasta la pestaña activa después de que se haya inicializado
-		$('.autoplay').on('init', function() {
-			var activeTab = $('#' + activeTabId);
+			// Mover el carrusel hasta la pestaña activa después de que se haya inicializado
+			$('.autoplay').on('init', function() {
+				var activeTab = $('#' + activeTabId);
 
-			if (activeTab.length > 0) {
-				var activeTabIndex = activeTab.closest('li').index();
-				$('.autoplay').slick('slickGoTo', activeTabIndex);
-			}
-		});
+				if (activeTab.length > 0) {
+					var activeTabIndex = activeTab.closest('li').index();
+					$('.autoplay').slick('slickGoTo', activeTabIndex);
+				}
+			});
 
-		// Inicializar el carrusel
-		$('.autoplay').slick({
-			infinite: false,
-			slidesToShow: 6,
-			slidesToScroll: 1
-		});
-	}); */
+			// Inicializar el carrusel
+			$('.autoplay').slick({
+				infinite: false,
+				slidesToShow: 6,
+				slidesToScroll: 1
+			});
+		}); */
 </script>

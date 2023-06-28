@@ -4,6 +4,7 @@
 */
 class Page_cargosController extends Page_mainController
 {
+	public $botonpanel = 6;
 	/**
 	 * $mainModel  instancia del modelo de  base de datos cargos
 	 * @var modeloContenidos
@@ -49,6 +50,9 @@ class Page_cargosController extends Page_mainController
      */
 	public function init()
 	{
+		if ((Session::getInstance()->get("kt_login_level") == '2' )) {
+			header('Location: /page/panel');
+		}
 		$this->mainModel = new Page_Model_DbTable_Cargos();
 		$this->namefilter = "parametersfiltercargos";
 		$this->route = "/page/cargos";

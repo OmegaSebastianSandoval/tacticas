@@ -65,7 +65,9 @@ class Page_loginController extends Controllers_Abstract
             Session::getInstance()->set("kt_login_level", $resUser->nivel);
             Session::getInstance()->set("kt_login_user", $resUser->usuario);
             Session::getInstance()->set("kt_login_name", $resUser->nombre);
+            Session::getInstance()->set("kt_login_empresa", $resUser->empresa);
 
+            Session::getInstance()->set("kt_login_asignacion", $resUser->asignacion);
             /*  // start a session 
             session_start();
             // initialize session variables 
@@ -138,6 +140,10 @@ class Page_loginController extends Controllers_Abstract
       Session::getInstance()->set("kt_login_level", $resUser->nivel);
       Session::getInstance()->set("kt_login_user", $resUser->usuario);
       Session::getInstance()->set("kt_login_name", $resUser->nombre);
+      Session::getInstance()->set("kt_login_empresa", $resUser->empresa);
+
+      Session::getInstance()->set("kt_login_asignacion", $resUser->asignacion);
+
       header("Location: /page/panel");
     } else {
       // header('Location: /page/login?img=' . $img . '&error=' . $error);

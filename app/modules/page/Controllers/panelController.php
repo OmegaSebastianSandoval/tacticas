@@ -8,12 +8,50 @@ class Page_panelController extends Page_mainController
 {
     public $botonpanel = 0;
 
+	public $mainModel;
+
+	/**
+	 * $route  url del controlador base
+	 * @var string
+	 */
+	protected $route;
+
+	/**
+	 * $pages cantidad de registros a mostrar por pagina]
+	 * @var integer
+	 */
+	protected $pages;
+
+	/**
+	 * $namefilter nombre de la variable a la fual se le van a guardar los filtros
+	 * @var string
+	 */
+	protected $namefilter;
 		/**
 	 * $_csrf_section  nombre de la variable general csrf  que se va a almacenar en la session
 	 * @var string
 	 */
 	protected $_csrf_section = "panel_control";
-
+		/**
+	 * $namepages nombre de la pvariable en la cual se va a guardar  el numero de seccion en la paginacion del controlador
+	 * @var string
+	 */
+	protected $namepages;
+	public function init()
+	{
+		$this->mainModel = new Page_Model_DbTable_Hojadevida();
+		$this->namefilter = "parametersfilterpanel";
+		$this->route = "/page/panel";
+		$this->namepages = "pages_panel";
+		$this->namepageactual = "page_actual_panel";
+		$this->_view->route = $this->route;
+		if (Session::getInstance()->get($this->namepages)) {
+			$this->pages = Session::getInstance()->get($this->namepages);
+		} else {
+			$this->pages = 50;
+		}
+		parent::init();
+	}
     public function indexAction()
     {
         $title = "Panel Tácticas Panama";
@@ -22,10 +60,20 @@ class Page_panelController extends Page_mainController
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];
 
         $empresasModel = new Page_Model_DbTable_Empresas();
+		
+		
+
+		$filters = (object)Session::getInstance()->get($this->namefilter);
+		$this->_view->filters = $filters;
+		$filters = $this->getFilter();
+		// echo $filters;
+
+		
+		
         $this->_view->empresas = $empresasModel->getList("", "id DESC LIMIT 4");
 
         $hojasVida = new Page_Model_DbTable_Hojadevida();
-        $this->_view->hojaVida = $hojasVida->getList("", "id DESC LIMIT 10");
+        $this->_view->hojaVida = $hojasVida->getList($filters, "id DESC LIMIT 10");
         $this->_view->list_tipo_documento = $this->getTipodocumento();
 		$this->_view->list_empresa = $this->getEmpresa();
 		$this->_view->list_tipo_contrato = $this->getTipocontrato();
@@ -157,5 +205,35 @@ class Page_panelController extends Page_mainController
 			$array[$value->id] = $value->nombre;
 		}
 		return $array;
+	}
+	protected function getFilter()
+	{
+		$filtros = " 1 ";
+	
+		if(Session::getInstance()->get("kt_login_level") == 2){
+			$empresa = Session::getInstance()->get("kt_login_empresa");
+			$filtros = 	$filtros . " AND empresa = '$empresa' ";
+		}
+		if(Session::getInstance()->get("kt_login_level") == 3){
+			$asignacion = Session::getInstance()->get("kt_login_asignacion");
+			$filtros = 	$filtros . " AND FIND_IN_SET(empresa, '$asignacion') ";
+		}
+	
+		if (Session::getInstance()->get($this->namefilter) != "") {
+			$filters = (object)Session::getInstance()->get($this->namefilter);
+
+			if ($filters->empresa != '') {
+				$filtros = $filtros . " AND empresa ='" . $filters->empresa . "'";
+			}
+			if ($filters->nombre != '') {
+				$filtros = $filtros . " AND nombres LIKE '%" . $filters->nombre . "%'";
+			}
+			if ($filters->documento != '') {
+				$filtros = $filtros . " AND documento LIKE '%" . $filters->documento . "%'";
+			}
+		}
+
+
+		return $filtros;
 	}
 }

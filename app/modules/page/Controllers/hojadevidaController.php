@@ -61,7 +61,7 @@ class Page_hojadevidaController extends Page_mainController
 		if (Session::getInstance()->get($this->namepages)) {
 			$this->pages = Session::getInstance()->get($this->namepages);
 		} else {
-			$this->pages = 20;
+			$this->pages = 50;
 		}
 		parent::init();
 	}
@@ -108,12 +108,26 @@ class Page_hojadevidaController extends Page_mainController
 		$this->_view->pages = $this->pages;
 		$this->_view->totalpages = ceil(count($list) / $amount);
 		$this->_view->page = $page;
-		$this->_view->lists = $this->mainModel->getListPages($filters, $order, $start, $amount);
+		$this->_view->lists = $lists =  $this->mainModel->getListPages($filters, $order, $start, $amount);
 		$this->_view->csrf_section = $this->_csrf_section;
 		$this->_view->list_tipo_documento = $this->getTipodocumento();
 		$this->_view->list_empresa = $this->getEmpresa();
 		$this->_view->list_tipo_contrato = $this->getTipocontrato();
 
+		$historialContrato = new Page_Model_DbTable_Historialcontratos();
+		/*	$content = $this->mainModel->getList("", "");
+ 	foreach ($content as $key => $value) {
+			$value->contratos = $historialContrato->getList("historial_contratos_cedula = " . $value->id, "");
+		}
+		$this->_view->content = $content;
+		print_r($content); */
+		foreach ($lists as $key => $value) {
+			$contratos = $historialContrato->getList("historial_contratos_cedula = " . $value->id, "");
+			$value->contratos = $contratos;
+		}
+		/* echo '<pre>';
+		print_r($lists);
+		echo '</pre>'; */
 		//CONSULTAR DATOS DEL INICIO DE HOJA DE VIDA
 		$this->_view->activas = $this->mainModel->getListCount($filters . " AND retirado = '0' OR retirado IS NULL", $order)[0]->total;
 		$this->_view->retiradas = $this->mainModel->getListCount($filters . " AND retirado = 1", $order)[0]->total;
@@ -121,6 +135,7 @@ class Page_hojadevidaController extends Page_mainController
 		$this->_view->contratoIndefinido = $this->mainModel->getListCount($filters . " AND tipo_contrato = 1", $order)[0]->total;
 		$this->_view->contratoServicios = $this->mainModel->getListCount($filters . " AND tipo_contrato = 4", $order)[0]->total;
 		$this->_view->totalPersonas = $this->mainModel->totalPersonas($filters)[0]->total;
+
 
 		/* 	$array['1'] = 'Permanente';
 		$array['4'] = 'Por servicios';
@@ -157,8 +172,8 @@ class Page_hojadevidaController extends Page_mainController
 
 
 		if ($id > 0) {
-			$content = $this->mainModel->getById($id);
 
+			$content = $this->mainModel->getById($id);
 			//CONTACTOS DE EMERGENCIA
 			$contactosEmergenciaModel = new Page_Model_DbTable_Contactosemergencia();
 			$this->_view->listaContactos = $listaContactos = $contactosEmergenciaModel->getList("contacto_emergencia_empleado = '$id'", "");
@@ -166,38 +181,38 @@ class Page_hojadevidaController extends Page_mainController
 
 			//EDUCAION Y FORMACION
 			$educacionModel = new Page_Model_DbTable_Estudios();
-			$this->_view->listaEstudios = $listaEstudios = $educacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaEstudios = $listaEstudios = $educacionModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadEstudios = $cantidadEstudios = count($listaEstudios);
 
 			//EXPERIENCIA LABORAL
 			$experienciaModel = new Page_Model_DbTable_Experiencia();
-			$this->_view->listaExperiencia = $listaExperiencia = $experienciaModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaExperiencia = $listaExperiencia = $experienciaModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadExperiencia = $cantidadExperiencia = count($listaExperiencia);
 
 
 			//REFERENCIAS PERSONALES
 			$referenciaModel = new Page_Model_DbTable_Referencias();
-			$this->_view->listaReferencia = $listaReferencia = $referenciaModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaReferencia = $listaReferencia = $referenciaModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadReferencia = $cantidadReferencia = count($listaReferencia);
 
 			//OTROS DATOS
 			$otrosModel = new Page_Model_DbTable_Otros();
-			$this->_view->listaOtros = $listaOtros = $otrosModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaOtros = $listaOtros = $otrosModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadOtros = $cantidadOtros = count($listaOtros);
 
 			//VACACIONES 
 			$vacacionModel = new Page_Model_DbTable_Vacacioneshojadevida();
-			$this->_view->listaVacaciones = $listaVacaciones = $vacacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaVacaciones = $listaVacaciones = $vacacionModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadVacaciones = $cantidadVacaciones = count($listaVacaciones);
 
 			//DOTACION
 			$dotacionModel = new Page_Model_DbTable_Dotacioneshojadevida();
-			$this->_view->listaDotacion = $listaDotacion = $dotacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaDotacion = $listaDotacion = $dotacionModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadDotacion = $cantidadDotacion = count($listaDotacion);
 
 			//DOCUMENTOS
 			$documentosModel = new Page_Model_DbTable_Documentoshojadevida();
-			$this->_view->listaDocumentos = $listaDocumentos = $documentosModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaDocumentos = $listaDocumentos = $documentosModel->getList("cedula = '$id'", "");
 			$this->_view->cantidadDocumentos = $cantidadDocumentos = count($listaDocumentos);
 
 			if ($content->id) {
@@ -215,53 +230,53 @@ class Page_hojadevidaController extends Page_mainController
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
-		} else {
+		} else if (!$cc  && !$id) {
 			$this->_view->routeform = $this->route . "/insert";
 			$title = "Crear hoja de vida";
 			$this->getLayout()->setTitle($title);
 			$this->_view->titlesection = $title;
 		}
 		if ($cc > 0) {
-			$content = $this->mainModel->getByCedula($cc);
+			$content = $this->mainModel->getById($cc);
 
 			//CONTACTOS DE EMERGENCIA
 			$contactosEmergenciaModel = new Page_Model_DbTable_Contactosemergencia();
-			$this->_view->listaContactos = $listaContactos = $contactosEmergenciaModel->getList("contacto_emergencia_empleado = '$id'", "");
+			$this->_view->listaContactos = $listaContactos = $contactosEmergenciaModel->getList("contacto_emergencia_empleado = '$cc'", "");
 			$this->_view->cantidadContactosEmergencia = $cantidadContactosEmergencia = count($listaContactos);
 
 			//EDUCAION Y FORMACION
 			$educacionModel = new Page_Model_DbTable_Estudios();
-			$this->_view->listaEstudios = $listaEstudios = $educacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaEstudios = $listaEstudios = $educacionModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadEstudios = $cantidadEstudios = count($listaEstudios);
 
 			//EXPERIENCIA LABORAL
 			$experienciaModel = new Page_Model_DbTable_Experiencia();
-			$this->_view->listaExperiencia = $listaExperiencia = $experienciaModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaExperiencia = $listaExperiencia = $experienciaModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadExperiencia = $cantidadExperiencia = count($listaExperiencia);
 
 			//REFERENCIAS PERSONALES
 			$referenciaModel = new Page_Model_DbTable_Referencias();
-			$this->_view->listaReferencia = $listaReferencia = $referenciaModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaReferencia = $listaReferencia = $referenciaModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadReferencia = $cantidadReferencia = count($listaReferencia);
 
 			//OTROS DATOS 
 			$otrosModel = new Page_Model_DbTable_Otros();
-			$this->_view->listaOtros = $listaOtros = $otrosModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaOtros = $listaOtros = $otrosModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadOtros = $cantidadOtros = count($listaOtros);
 
 
 			//VACACIONES 
 			$vacacionModel = new Page_Model_DbTable_Vacacioneshojadevida();
-			$this->_view->listaVacaciones = $listaVacaciones = $vacacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaVacaciones = $listaVacaciones = $vacacionModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadVacaciones = $cantidadVacaciones = count($listaVacaciones);
 
 			//DOTACION
 			$dotacionModel = new Page_Model_DbTable_Dotacioneshojadevida();
-			$this->_view->listaDotacion = $listaDotacion = $dotacionModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaDotacion = $listaDotacion = $dotacionModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadDotacion = $cantidadDotacion = count($listaDotacion);
 			//DOCUMENTOS
 			$documentosModel = new Page_Model_DbTable_Documentoshojadevida();
-			$this->_view->listaDocumentos = $listaDocumentos = $documentosModel->getList("cedula = '$content->documento'", "");
+			$this->_view->listaDocumentos = $listaDocumentos = $documentosModel->getList("cedula = '$cc'", "");
 			$this->_view->cantidadDocumentos = $cantidadDocumentos = count($listaDocumentos);
 			if ($content->id) {
 				$this->_view->content = $content;
@@ -278,7 +293,7 @@ class Page_hojadevidaController extends Page_mainController
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
-		} else {
+		} else if (!$cc  && !$id) {
 			$this->_view->routeform = $this->route . "/insert";
 			$title = "Crear hoja de vida";
 			$this->getLayout()->setTitle($title);
@@ -302,6 +317,13 @@ class Page_hojadevidaController extends Page_mainController
 				$data['foto'] = $uploadImage->upload("foto");
 			}
 			$id = $this->mainModel->insert($data);
+
+			$this->guardarHistorialAction($id, $data);
+
+			/* 	$data['cedula'] = $id;
+			$historialContratosController = new Page_Model_DbTable_Historialcontratos();
+			$historialContratosController->insert($data);
+ */
 
 			$data['id'] = $id;
 			$data['log_log'] = print_r($data, true);
@@ -336,6 +358,12 @@ class Page_hojadevidaController extends Page_mainController
 					$data['foto'] = $content->foto;
 				}
 				$this->mainModel->update($data, $id);
+				$this->guardarHistorialAction($id, $data);
+				if ($data['inicio'] != $content->inicio && $data['fin'] != $content->fin) {
+					$data['cedula'] = $id;
+					$historialContratosController = new Page_Model_DbTable_Historialcontratos();
+					$historialContratosController->insert($data);
+				}
 			}
 			$data['id'] = $id;
 			$data['log_log'] = print_r($data, true);
@@ -346,6 +374,28 @@ class Page_hojadevidaController extends Page_mainController
 		header('Location: ' . $this->route . '/manage?id=' . $id . '');
 	}
 
+	public function guardarHistorialAction($id, $data)
+	{
+		$historialModel = new Page_Model_DbTable_Historial();
+		//calcular cantidad de empleados 
+		$totalTrabajadores = $this->mainModel->getList(" retirado != 1 ", "");
+		$totalTrabajadores = count($totalTrabajadores);
+		$data['trabajadores_total'] = $totalTrabajadores;
+		//calcular cantidad de empleados por empresa
+
+		$empresa = $data['empresa'];
+		$totalTrabajadoresEmpresa = $this->mainModel->getList(" retirado != 1 AND empresa =  $empresa  ", "");
+		$totalTrabajadoresEmpresa = count($totalTrabajadoresEmpresa);
+
+		$data['trabajadores_empresa'] = $totalTrabajadoresEmpresa;
+		$data['cedula'] = $id;
+		if ($data['empresa'] != "" &&  $id > 0 && $data['fecha_ingreso'] != "" && $data['fecha_ingreso'] != "0000-00-00") {
+			$historialModel->insert($data);
+			if ($data['fecha_salida'] != "" && $data['fecha_salida'] != "0000-00-00") {
+				$historialModel->update2($data);
+			}
+		}
+	}
 	/**
 	 * Recibe un identificador  y elimina un hoja de vida  y redirecciona al listado de hoja de vida.
 	 *
@@ -647,6 +697,8 @@ class Page_hojadevidaController extends Page_mainController
 	{
 		$array = array();
 		$array['1'] = 'Permanente';
+		$array['2'] = 'Definido por seis meses';
+		$array['3'] = 'Definido por un año';
 		$array['4'] = 'Por servicios';
 		$array['5'] = 'Definido';
 		return $array;
@@ -673,7 +725,17 @@ class Page_hojadevidaController extends Page_mainController
 	private function getEmpresa()
 	{
 		$modelData = new Page_Model_DbTable_Dependempresa();
-		$data = $modelData->getList();
+		if (Session::getInstance()->get("kt_login_level") == 3) {
+			$asignacion = Session::getInstance()->get("kt_login_asignacion");
+			// echo $asignacion;
+			$data = $modelData->getListAsignacion(" FIND_IN_SET(id, '$asignacion') ");
+		} else if (Session::getInstance()->get("kt_login_level") == 2) {
+			$empresa = Session::getInstance()->get("kt_login_empresa");
+			$data = $modelData->getList("id = '$empresa'", "");
+		} else {
+			$data = $modelData->getList();
+		}
+
 		$array = array();
 		foreach ($data as $key => $value) {
 			$array[$value->id] = $value->nombre;
@@ -702,12 +764,18 @@ class Page_hojadevidaController extends Page_mainController
 	 */
 	protected function getFilter($emp)
 	{
-		$filtros = " 1 = 1 ";
-		if ($emp  != '') {
-			Session::getInstance()->set($this->namefilter, '');
-
-			$filtros = $filtros . " AND empresa ='" . $emp . "'";
+		// $filtros = " 1 = 1 ";
+		$filtros = " 1 ";
+	
+		if(Session::getInstance()->get("kt_login_level") == 2){
+			$empresa = Session::getInstance()->get("kt_login_empresa");
+			$filtros = 	$filtros . " AND empresa = '$empresa' ";
 		}
+		if(Session::getInstance()->get("kt_login_level") == 3){
+			$asignacion = Session::getInstance()->get("kt_login_asignacion");
+			$filtros = 	$filtros . " AND FIND_IN_SET(empresa, '$asignacion') ";
+		}
+
 		if (Session::getInstance()->get($this->namefilter) != "") {
 			$filters = (object)Session::getInstance()->get($this->namefilter);
 			if ($filters->foto != '') {

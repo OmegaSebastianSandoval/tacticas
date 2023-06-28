@@ -10,7 +10,7 @@
 				<input type="hidden" name="id" id="id" value="<?= $this->content->cargo_id; ?>" />
 			<?php } ?>
 			<div class="row">
-				<div class="col-3 form-group">
+				<div class="col-9 form-group">
 					<label for="cargo_nombre" class="control-label">Nombre</label>
 					<label class="input-group">
 						<div class="input-group-prepend">

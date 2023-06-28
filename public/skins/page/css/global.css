@@ -844,7 +844,7 @@ footer.panel-derechos a {
 }
 
 thead td {
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   padding: 10px !important;
 }
 
@@ -1459,21 +1459,25 @@ thead td {
 }
 
 .page-link {
-  color: #09c2f6;
-  border-color: #09c2f6;
-  font-weight: 300;
+  color: var(--primary);
+  border-color: var(--primary);
+  font-weight: 500;
+  transition: all 300ms;
 }
 
 .page-link:hover {
-  color: #000000;
-  border-color: #09c2f6;
+  color: var(--tercero);
+  border-color: var(--primary);
+
+
+
   background: #EBF0F6;
 }
 
 .page-item.active .page-link {
   color: #fff;
-  background-color: #09c2f6;
-  border-color: #09c2f6;
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .content-table {
@@ -1522,13 +1526,14 @@ thead td {
   background: #dbeeff;
 }
 
-.content-table .table tbody tr td > a  {
+.content-table .table tbody tr td>a {
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
   transition: all 300ms;
 }
-.content-table .table tbody tr td > a :hover {
+
+.content-table .table tbody tr td>a :hover {
   color: var(--tercero);
 
 }
@@ -1717,7 +1722,27 @@ CREACION DE USUARIOS
   transition-duration: 300ms;
 }
 
+#message {
+  text-align: center;
+  font-weight: 500;
+}
 
+.clave-success {
+  color: var(--primary);
+}
+
+.clave-error {
+  color: #EB5353;
+}
+.condition-not-met {
+  color: red;
+  font-weight: bold;
+}
+.condition-met {
+  color: var(--primary);
+
+  font-weight: bold;
+}
 /************************************************
 FIN DE CREACION DE USUARIOS
 ************************************************ */
@@ -2128,4 +2153,100 @@ INICIO DE HOJA DE VIDA
 
 /************************************************
 FIN  DE HOJA DE VIDA
+************************************************ */
+
+/************************************************
+INICIO DE VENCIMIENTOS
+************************************************ */
+.card-vencimiento {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.card-vencimiento .image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: all 300ms;
+}
+
+.card-vencimiento .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  opacity: 0.9; /* Ajusta el valor de opacidad para hacerla más opaca */
+}
+
+.card-vencimiento:hover .image {
+  transform: scale(1.1); /* Agranda la imagen en un 10% */
+}
+
+.card-vencimiento:hover .image img {
+  opacity: 1; /* Al hacer hover, establece la opacidad en 1 para que se vea más clara */
+}
+
+.card-vencimiento .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 5px;
+  text-align: center;
+  background-color: rgba(25, 169, 201, 0.6);
+      color: #FFF;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 300ms; /* Agrega una transición para suavizar el cambio de fondo */
+}
+
+.card-vencimiento:hover .title {
+  background-color: rgba(25, 169, 201, 0.6); /* Cambia el valor a transparente con transparencia */
+}
+/************************************************
+FIN DE VENCIMIENTOS
+************************************************ */
+/************************************************
+VENCIMIENTO DE VACACIONES
+************************************************ */
+.rojo {
+  all: unset;
+  background-color: #FF6969 !important;
+  color: #FFF !important;
+  font-weight: 500 !important;
+}
+
+.naranja {
+  background-color: #FFAE6D !important;
+  color: #FFF !important;
+  font-weight: 500 !important;
+}
+
+.amarillo {
+  background-color: #FFEA20 !important;
+  color: #FFF !important;
+  font-weight: 500 !important;
+}
+
+.azul {
+  background-color: #3A98B9 !important;
+  color: #FFF !important;
+  font-weight: 500 !important;
+}
+
+.verde {
+  background-color: #A8DF65 !important;
+  color: #FFF !important;
+  font-weight: 500 !important;
+}
+
+/************************************************
+FIN DE VENCIMIENTO DE VACACIONES
 ************************************************ */

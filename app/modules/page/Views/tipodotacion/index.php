@@ -1,11 +1,21 @@
 <div class="container-fluid">
+	<div class=" d-flex justify-content-start mb-4 ">
+		<a href="/page/nomina">
+			<button class="btn-primary mt-2" type="submit">
+				<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+					<path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z" />
+				</svg>
+				<span>Regresar</span>
+			</button>
+		</a>
+	</div>
 	<div class=" d-flex justify-content-start ">
 		<h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
 	</div>
 	<form action="<?php echo $this->route; ?>" method="post">
 		<div class="content-dashboard">
 			<div class="row">
-				<div class="col-3">
+				<div class="col-12 col-md-6 col-lg-4">
 					<label>Nombre</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -14,11 +24,15 @@
 						<input type="text" class="form-control" name="nombre" value="<?php echo $this->getObjectVariable($this->filters, 'nombre') ?>"></input>
 					</label>
 				</div>
-				<div class="col-3  d-flex align-items-end ">
+				<div class="col-12 col-md-0 col-lg-4">
+				</div>
+				<div class="col-12 col-md-3 col-lg-2  d-grid align-items-end ">
+
 					<label>&nbsp;</label>
 					<button type="submit" class="btn btn-block btn-azul"> <i class="fas fa-filter"></i> Filtrar</button>
 				</div>
-				<div class="col-3  d-flex align-items-end ">
+				<div class="col-12 col-md-3 col-lg-2  d-grid align-items-end ">
+
 					<label>&nbsp;</label>
 					<a class="btn btn-block btn-azul-claro " href="<?php echo $this->route; ?>?cleanfilter=1"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
 				</div>
@@ -77,23 +91,23 @@
 
 				<div class="d-flex gap-2">
 					<div class="text-right"><a class="btn btn-sm btn-success" href="<?php echo $this->route . "\manage"; ?>"> <i class="fas fa-plus-square"></i> Crear Nuevo</a></div>
-					
+
 
 				</div>
 			</div>
 			<div class="content-table table-responsive">
-				<table class=" table table-striped  table-hover table-administrator text-left">
-					<thead>
-						<tr>
-							<td>Nombre</td>
+				<table class=" table table-striped  table-hover table-administrator text-left" >
+					<thead class="text-left">
+						<tr >
+							<td style="text-align: left;">Nombre</td>
 							<td width="100"></td>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody >
 						<?php foreach ($this->lists as $content) { ?>
 							<?php $id =  $content->id; ?>
 							<tr>
-								<td><?= $content->nombre; ?></td>
+								<td class="ps-2" style="text-align: left;"><?= $content->nombre; ?></td>
 								<td class="text-right">
 									<div>
 										<a class="btn btn-azul btn-sm" href="<?php echo $this->route; ?>/manage?id=<?= $id ?>" data-bs-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-pen-alt"></i></a>

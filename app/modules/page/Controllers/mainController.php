@@ -9,6 +9,7 @@ class Page_mainController extends Controllers_Abstract
 
 	public $template;
 
+	protected $namepages;
 	public function init()
 	{
 	 	if ((Session::getInstance()->get("kt_login_id") == '' || Session::getInstance()->get("kt_login_id", "") == '')) {
@@ -40,7 +41,10 @@ class Page_mainController extends Controllers_Abstract
 		$this->usuario();
 	}
 
-
+	public function changepageAction()
+	{
+		Session::getInstance()->set($this->namepages,$this->_getSanitizedParam("pages"));
+	}
 	public function usuario()
 	{
 		$userModel = new Core_Model_DbTable_Usuarios();

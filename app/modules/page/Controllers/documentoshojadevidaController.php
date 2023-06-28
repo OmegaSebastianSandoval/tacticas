@@ -86,6 +86,7 @@ class Page_documentoshojadevidaController extends Page_mainController
 		$list = $this->mainModel->getList($filters, $order);
 		$amount = $this->pages;
 		$page = $this->_getSanitizedParam("page");
+
 		if (!$page && Session::getInstance()->get($this->namepageactual)) {
 			$page = Session::getInstance()->get($this->namepageactual);
 			$start = ($page - 1) * $amount;
@@ -122,22 +123,24 @@ class Page_documentoshojadevidaController extends Page_mainController
 		$this->_view->cc = $this->_getSanitizedParam("cc");
 		$this->_view->list_tipo = $this->getTipo();
 		$id = $this->_getSanitizedParam("id");
+		$this->_view->seccion = $seccion = $this->_getSanitizedParam("seccion");
+
 		if ($id > 0) {
 			$content = $this->mainModel->getById($id);
 			if ($content->id) {
 				$this->_view->content = $content;
-				$this->_view->routeform = $this->route . "/update";
+				$this->_view->routeform = $this->route . "/update?seccion=" . $seccion;
 				$title = "Actualizar documento";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			} else {
-				$this->_view->routeform = $this->route . "/insert";
+				$this->_view->routeform = $this->route . "/insert?seccion=" . $seccion;
 				$title = "Crear documento";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
 		} else {
-			$this->_view->routeform = $this->route . "/insert";
+			$this->_view->routeform = $this->route . "/insert?seccion=" . $seccion;
 			$title = "Crear documento";
 			$this->getLayout()->setTitle($title);
 			$this->_view->titlesection = $title;
@@ -168,7 +171,13 @@ class Page_documentoshojadevidaController extends Page_mainController
 			$logModel->insert($data);
 		}
 		$cc = $this->_getSanitizedParam("cedula");
-		header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-documentos');
+		$seccion = $this->_getSanitizedParam("seccion");
+
+		if ($seccion) {
+			header('Location:/page/vencimientodocumentos');
+		} else {
+			header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-documentos');
+		}
 	}
 
 	/**
@@ -203,7 +212,13 @@ class Page_documentoshojadevidaController extends Page_mainController
 			$logModel->insert($data);
 		}
 		$cc = $this->_getSanitizedParam("cedula");
-		header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-documentos');
+		$seccion = $this->_getSanitizedParam("seccion");
+
+		if ($seccion) {
+			header('Location:/page/vencimientodocumentos');
+		} else {
+			header('Location:/page/hojadevida/manage?cc=' . $cc . '#pills-documentos');
+		}
 	}
 
 	/**

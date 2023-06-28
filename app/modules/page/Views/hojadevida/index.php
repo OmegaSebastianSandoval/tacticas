@@ -111,12 +111,12 @@
 				</div>
 				<div class="col-12 col-lg-1 d-flex align-items-end   px-0 mx-0">
 
-					<button type="submit" class="btn  mx-0 btn-azul" style="font-size: 14px;"> <i class="fas fa-filter"></i> Filtrar</button>
+					<button type="submit" class="btn  w-100 btn-azul" style="font-size: 14px;"> <i class="fas fa-filter"></i> Filtrar</button>
 				</div>
 
 				<div class="col-12 col-lg-1 d-flex align-items-end     px-0 mx-0">
 					<label>&nbsp;</label>
-					<a class="btn  btn-azul-claro px-1" href="<?php echo $this->route; ?>?cleanfilter=1" style="font-size: 14px;"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
+					<a class="btn  btn-azul-claro w-100" href="<?php echo $this->route; ?>?cleanfilter=1" style="font-size: 14px;"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
 				</div>
 			</div>
 		</div>
@@ -166,19 +166,19 @@
 					</div>
 					<div>
 
-						<select class="form-control form-control-sm selectpagination">
-							<option value="20" <?php if ($this->pages == 20) {
-													echo 'selected';
-												} ?>>20</option>
-							<option value="30" <?php if ($this->pages == 30) {
-													echo 'selected';
-												} ?>>30</option>
+					<select class="form-control form-control-sm selectpagination">
 							<option value="50" <?php if ($this->pages == 50) {
 													echo 'selected';
 												} ?>>50</option>
 							<option value="100" <?php if ($this->pages == 100) {
 													echo 'selected';
 												} ?>>100</option>
+							<option value="150" <?php if ($this->pages == 150) {
+													echo 'selected';
+												} ?>>150</option>
+							<option value="200" <?php if ($this->pages == 200) {
+													echo 'selected';
+												} ?>>200</option>
 						</select>
 					</div>
 				</div>

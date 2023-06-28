@@ -51,6 +51,9 @@ class Page_usuariosController extends Page_mainController
 	 */
 	public function init()
 	{
+		if ((Session::getInstance()->get("kt_login_level") != '1' )) {
+			header('Location: /page/panel');
+		}
 		$this->mainModel = new Page_Model_DbTable_Usuarios();
 		$this->namefilter = "parametersfilterusuarios";
 		$this->route = "/page/usuarios";
@@ -236,7 +239,7 @@ class Page_usuariosController extends Page_mainController
 		$data = array();
 		$data['nombre'] = $this->_getSanitizedParam("nombre");
 		$data['usuario'] = $this->_getSanitizedParam("usuario");
-		$data['clave_principal'] = $this->_getSanitizedParam("clave_principal");
+		// $data['clave_principal'] = $this->_getSanitizedParam("clave_principal");
 		$data['email'] = $this->_getSanitizedParam("email");
 		if ($this->_getSanitizedParam("nivel") == '') {
 			$data['nivel'] = '0';

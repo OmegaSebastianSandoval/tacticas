@@ -83,7 +83,13 @@
 		</div>
 		<div class="botones-acciones">
 			<button class="btn btn-guardar" type="submit">Guardar</button>
-			<a href="/page/hojadevida/manage?cc=<?php echo $this->cc ?>#pills-documentos" class="btn btn-cancelar">Cancelar</a>
+			<?php if ($this->seccion) { ?>
+				<a href="/page/vencimientodocumentos" class="btn btn-cancelar">Cancelar</a>
+
+			<?php } else { ?>
+				<a href="/page/hojadevida/manage?cc=<?php echo $this->cc ?>#pills-documentos" class="btn btn-cancelar">Cancelar</a>
+
+			<?php } ?>
 		</div>
 	</form>
 </div>

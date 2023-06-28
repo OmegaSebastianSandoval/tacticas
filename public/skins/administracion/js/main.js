@@ -226,7 +226,7 @@ window.addEventListener('load', function() {
     var route = $("#page-route").val();
     var pages = $(this).val();
     $.post(route, {
-      'pages': pages
+      pages
     }, function () {
       location.reload();
     });

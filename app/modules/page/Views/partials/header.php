@@ -44,15 +44,15 @@
  -->
     <div class="options__menu p-0 " style="top:0px;">
 
-        
-            <label class="hamburger icon__menu" >
-                <input type="checkbox" id="btn_open">
-                <svg viewBox="0 0 32 32">
-                    <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
-                    <path class="line" d="M7 16 27 16"></path>
-                </svg>
-            </label>
-     
+
+        <label class="hamburger icon__menu">
+            <input type="checkbox" id="btn_open">
+            <svg viewBox="0 0 32 32">
+                <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                <path class="line" d="M7 16 27 16"></path>
+            </svg>
+        </label>
+
 
 
     </div>
@@ -67,57 +67,73 @@
                 </div>
             </div>
         </a>
+        <?php if (Session::getInstance()->get("kt_login_level") == 1) { ?>
 
-        <a href="/page/empresas" <?php if ($this->botonpanel == 1) { ?>class="selected" <?php } ?>>
-            <div class="option">
+            <a href="/page/empresas" <?php if ($this->botonpanel == 1) { ?>class="selected" <?php } ?>>
+                <div class="option">
 
-                <i class="fa-solid fa-building" title="Empresas"></i>
-                <h5>Empresas</h5>
-                <div class="w-100 d-flex justify-content-end">
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-building" title="Empresas"></i>
+                    <h5>Empresas</h5>
+                    <div class="w-100 d-flex justify-content-end">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
 
-        <a href="/page/usuarios" <?php if ($this->botonpanel == 2) { ?>class="selected" <?php } ?>>
-            <div class="option">
-                <i class="fas fa-user" title="Usuarios"></i>
-                <h5>Usuarios</h5>
-                <div class="w-100 d-flex justify-content-end">
-                    <i class="fa-solid fa-chevron-right"></i>
+            <a href="/page/usuarios" <?php if ($this->botonpanel == 2) { ?>class="selected" <?php } ?>>
+                <div class="option">
+                    <i class="fas fa-user" title="Usuarios"></i>
+                    <h5>Usuarios</h5>
+                    <div class="w-100 d-flex justify-content-end">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php } ?>
 
         <a href="/page/hojadevida" <?php if ($this->botonpanel == 3) { ?>class="selected" <?php } ?>>
             <div class="option">
                 <i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
-                <h5>Hoja de vida</h5>
+                <h5>Hojas de vida</h5>
+                <div class=" d-flex justify-content-end">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </a>
+
+        <a href="/page/vencimientos" <?php if ($this->botonpanel == 4) { ?>class="selected" <?php } ?>>
+
+            <div class="option">
+                <i class="fa-solid fa-calendar-xmark" title="Vencimientos"></i>
+                <h5>Vencimientos</h5>
                 <div class="w-100 d-flex justify-content-end">
                     <i class="fa-solid fa-chevron-right"></i>
                 </div>
             </div>
         </a>
 
-        <a href="#">
-            <div class="option">
-                <i class="far fa-id-badge" title="Contacto"></i>
-                <h5>Contacto</h5>
-                <div class="w-100 d-flex justify-content-end">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </div>
-            </div>
-        </a>
+        <a href="/page/reportes" <?php if ($this->botonpanel == 5) { ?>class="selected" <?php } ?>>
 
-        <a href="#">
             <div class="option">
-                <i class="far fa-address-card" title="Nosotros"></i>
-                <h5>Nosotros</h5>
+                <i class="fa-solid fa-clipboard" title="Reportes"></i>
+                <h5>Reportes</h5>
                 <div class="w-100 d-flex justify-content-end">
                     <i class="fa-solid fa-chevron-right"></i>
                 </div>
             </div>
         </a>
+        <?php if ((Session::getInstance()->get("kt_login_level") != '2')) { ?>
+
+            <a href="/page/nomina" <?php if ($this->botonpanel == 6) { ?>class="selected" <?php } ?>>
+                <div class="option">
+                    <i class="fa-solid fa-money-check-dollar" title="Nómina"></i>
+                    <h5>Nómina</h5>
+                    <div class="w-100 d-flex justify-content-end">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+            </a>
+        <?php     } ?>
 
 
         <!--         <a href="/page/login/logout">
