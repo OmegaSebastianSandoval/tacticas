@@ -20,33 +20,30 @@
             <span></span>
         </a>
     </div> -->
+    <style>
+        .home-nomina {
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+    </style>
 
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-3">
-            <a href="/page/tipodotacion">
-                <div class="card-vencimiento mx-auto my-3">
+    <div class="home-nomina mt-3">
+
+        <div class="">
+            <a href="/page/parametros/manage?id=1">
+                <div class="card-vencimiento mx-auto ">
                     <div class="image">
-                        <img src="/skins/page/images/dotac.jpg" alt="Administrar de dotacion">
+                        <img src="/skins/page/images/parametros.jpg" alt="Administrar parámetros">
                     </div>
-                    <h2 class="title">Administrar dotacion</h2>
+                    <h2 class="title p-2">Administrar parámetros de cálculo</h2>
                 </div>
             </a>
         </div>
-        <div class="col-12 col-md-6 col-lg-3">
-            <a href="/page/cargos">
-                <div class="card-vencimiento mx-auto my-3">
-                    <div class="image">
-                        <img src="/skins/page/images/cargo.jpg" alt="Administrar de cargos">
-                    </div>
-                    <h2 class="title">Administrar cargos</h2>
-                </div>
-            </a>
-        </div>
-
-
-         <div class="col-12 col-md-6 col-lg-3">
+        <div class="">
             <a href="/page/localizaciones">
-                <div class="card-vencimiento mx-auto my-3">
+                <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/puesto.jpg" alt="Administrar localizaciones">
                     </div>
@@ -54,16 +51,109 @@
                 </div>
             </a>
         </div>
-       <!-- <div class="col-12 col-md-6 col-lg-3">
-            <a href="/page/vencimientocontratos">
-                <div class="card-vencimiento mx-auto my-3">
+        <div class="">
+            <a href="/page/tipodotacion">
+                <div class="card-vencimiento mx-auto ">
                     <div class="image">
-                        <img src="/skins/page/images/contrat.jpg" alt="">
+                        <img src="/skins/page/images/dotac.jpg" alt="Administrar de dotacion">
                     </div>
-                    <h2 class="title">Vencimiento de contratos</h2>
+                    <h2 class="title">Administrar dotacion</h2>
                 </div>
             </a>
-        </div> -->
+        </div>
+        <div class="">
+            <a href="/page/cargos">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/cargos2.jpg" alt="Administrar cargos">
+                    </div>
+                    <h2 class="title">Administrar cargos</h2>
+                </div>
+            </a>
+        </div>
+
+        <div class="">
+            <a href="/page/facturacion">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infofac.jpg" alt="Informe facturación">
+                    </div>
+                    <h2 class="title">Informe facturación</h2>
+                </div>
+            </a>
+        </div>
+        <div class="">
+            <a href="/page/provisiones">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infoprov.jpg" alt="Informe de provisiones">
+                    </div>
+                    <h2 class="title">Informe de provisiones</h2>
+                </div>
+            </a>
+        </div>
+        <div class="">
+            <a href="/page/segurosocial">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infoseguro.jpg" alt="Informe de seguro social">
+                    </div>
+                    <h2 class="title">Informe de seguro social</h2>
+                </div>
+            </a>
+        </div>
+        <div class="">
+            <a href="/page/viaticos">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infovia.jpg" alt="Informe de viaticos">
+                    </div>
+                    <h2 class="title">Informe de viaticos</h2>
+                </div>
+            </a>
+        </div>
+        <div class="">
+            <a href="/page/salario">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infosala.jpg" alt="Informe salario neto cliente">
+                    </div>
+                    <h2 class="title">Informe salario neto cliente</h2>
+                </div>
+            </a>
+        </div>
+        <div class="">
+            <a href="/page/infolocalizacion">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/infoloca.jpg" alt="Localizaciones">
+                    </div>
+                    <h2 class="title">Informe localizaciones</h2>
+                </div>
+            </a>
+        </div>
+
 
     </div>
 </div>
+
+<style>
+     .card-vencimiento {
+         max-width: 200px; 
+        height: 250px;
+    }
+
+    .card-vencimiento .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: rgba(25, 169, 201, 0.7);
+        font-size: 15px;
+        height: 50px;
+    }
+
+    .card-vencimiento:hover .title {
+        background-color: rgba(25, 169, 201, 1);
+    } 
+</style>

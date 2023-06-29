@@ -1,11 +1,11 @@
 <?php
 /**
-* Controlador de Parametros que permite la  creacion, edicion  y eliminacion de los par&aacute;metros del Sistema
+* Controlador de Planilla que permite la  creacion, edicion  y eliminacion de los planilla del Sistema
 */
-class Page_parametrosController extends Page_mainController
+class Page_planillaController extends Page_mainController
 {
 	/**
-	 * $mainModel  instancia del modelo de  base de datos par&aacute;metros
+	 * $mainModel  instancia del modelo de  base de datos planilla
 	 * @var modeloContenidos
 	 */
 	public $mainModel;
@@ -32,7 +32,7 @@ class Page_parametrosController extends Page_mainController
 	 * $_csrf_section  nombre de la variable general csrf  que se va a almacenar en la session
 	 * @var string
 	 */
-	protected $_csrf_section = "page_parametros";
+	protected $_csrf_section = "page_planilla";
 
 	/**
 	 * $namepages nombre de la pvariable en la cual se va a guardar  el numero de seccion en la paginacion del controlador
@@ -43,19 +43,17 @@ class Page_parametrosController extends Page_mainController
 
 
 	/**
-     * Inicializa las variables principales del controlador parametros .
+     * Inicializa las variables principales del controlador planilla .
      *
      * @return void.
      */
 	public function init()
 	{
-		
-
-		$this->mainModel = new Page_Model_DbTable_Parametros();
-		$this->namefilter = "parametersfilterparametros";
-		$this->route = "/page/parametros";
-		$this->namepages ="pages_parametros";
-		$this->namepageactual ="page_actual_parametros";
+		$this->mainModel = new Page_Model_DbTable_Planilla();
+		$this->namefilter = "parametersfilterplanilla";
+		$this->route = "/page/planilla";
+		$this->namepages ="pages_planilla";
+		$this->namepageactual ="page_actual_planilla";
 		$this->_view->route = $this->route;
 		if(Session::getInstance()->get($this->namepages)){
 			$this->pages = Session::getInstance()->get($this->namepages);
@@ -67,13 +65,13 @@ class Page_parametrosController extends Page_mainController
 
 
 	/**
-     * Recibe la informacion y  muestra un listado de  par&aacute;metros con sus respectivos filtros.
+     * Recibe la informacion y  muestra un listado de  planilla con sus respectivos filtros.
      *
      * @return void.
      */
 	public function indexAction()
 	{
-		$title = "Administración de par&aacute;metros";
+		$title = "Administración de planilla";
 		$this->getLayout()->setTitle($title);
 		$this->_view->titlesection = $title;
 		$this->filters();
@@ -105,14 +103,14 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Genera la Informacion necesaria para editar o crear un  par&aacute;metros  y muestra su formulario
+     * Genera la Informacion necesaria para editar o crear un  planilla  y muestra su formulario
      *
      * @return void.
      */
 	public function manageAction()
 	{
 		$this->_view->route = $this->route;
-		$this->_csrf_section = "manage_parametros_".date("YmdHis");
+		$this->_csrf_section = "manage_planilla_".date("YmdHis");
 		$this->_csrf->generateCode($this->_csrf_section);
 		$this->_view->csrf_section = $this->_csrf_section;
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];
@@ -122,25 +120,25 @@ class Page_parametrosController extends Page_mainController
 			if($content->id){
 				$this->_view->content = $content;
 				$this->_view->routeform = $this->route."/update";
-				$title = "Administrar par&aacute;metros";
+				$title = "Actualizar planilla";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}else{
 				$this->_view->routeform = $this->route."/insert";
-				$title = "Crear par&aacute;metros";
+				$title = "Crear planilla";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
 		} else {
 			$this->_view->routeform = $this->route."/insert";
-			$title = "Crear par&aacute;metros";
+			$title = "Crear planilla";
 			$this->getLayout()->setTitle($title);
 			$this->_view->titlesection = $title;
 		}
 	}
 
 	/**
-     * Inserta la informacion de un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Inserta la informacion de un planilla  y redirecciona al listado de planilla.
      *
      * @return void.
      */
@@ -153,7 +151,7 @@ class Page_parametrosController extends Page_mainController
 			
 			$data['id']= $id;
 			$data['log_log'] = print_r($data,true);
-			$data['log_tipo'] = 'CREAR PAR&AACUTE;METROS';
+			$data['log_tipo'] = 'CREAR PLANILLA';
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);
 		}
@@ -161,7 +159,7 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Recibe un identificador  y Actualiza la informacion de un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Recibe un identificador  y Actualiza la informacion de un planilla  y redirecciona al listado de planilla.
      *
      * @return void.
      */
@@ -177,14 +175,14 @@ class Page_parametrosController extends Page_mainController
 			}
 			$data['id']=$id;
 			$data['log_log'] = print_r($data,true);
-			$data['log_tipo'] = 'EDITAR PAR&AACUTE;METROS';
+			$data['log_tipo'] = 'EDITAR PLANILLA';
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);}
-		header('Location: /page/nomina');
+		header('Location: '.$this->route.''.'');
 	}
 
 	/**
-     * Recibe un identificador  y elimina un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Recibe un identificador  y elimina un planilla  y redirecciona al listado de planilla.
      *
      * @return void.
      */
@@ -199,7 +197,7 @@ class Page_parametrosController extends Page_mainController
 				if (isset($content)) {
 					$this->mainModel->deleteRegister($id);$data = (array)$content;
 					$data['log_log'] = print_r($data,true);
-					$data['log_tipo'] = 'BORRAR PAR&AACUTE;METROS';
+					$data['log_tipo'] = 'BORRAR PLANILLA';
 					$logModel = new Administracion_Model_DbTable_Log();
 					$logModel->insert($data); }
 			}
@@ -208,72 +206,35 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Recibe la informacion del formulario y la retorna en forma de array para la edicion y creacion de Parametros.
+     * Recibe la informacion del formulario y la retorna en forma de array para la edicion y creacion de Planilla.
      *
      * @return array con toda la informacion recibida del formulario.
      */
 	private function getData()
 	{
 		$data = array();
-		if($this->_getSanitizedParam("horas_extra") == '' ) {
-			$data['horas_extra'] = '0';
+		$data['fecha1'] = $this->_getSanitizedParam("fecha1");
+		$data['fecha2'] = $this->_getSanitizedParam("fecha2");
+		if($this->_getSanitizedParam("empresa") == '' ) {
+			$data['empresa'] = '0';
 		} else {
-			$data['horas_extra'] = $this->_getSanitizedParam("horas_extra");
+			$data['empresa'] = $this->_getSanitizedParam("empresa");
 		}
-		if($this->_getSanitizedParam("horas_dominicales") == '' ) {
-			$data['horas_dominicales'] = '0';
+		if($this->_getSanitizedParam("cerrada") == '' ) {
+			$data['cerrada'] = '0';
 		} else {
-			$data['horas_dominicales'] = $this->_getSanitizedParam("horas_dominicales");
+			$data['cerrada'] = $this->_getSanitizedParam("cerrada");
 		}
-		if($this->_getSanitizedParam("horas_nocturnas") == '' ) {
-			$data['horas_nocturnas'] = '0';
+		$data['fecha_cerrada'] = $this->_getSanitizedParam("fecha_cerrada");
+		if($this->_getSanitizedParam("limite_horas") == '' ) {
+			$data['limite_horas'] = '0';
 		} else {
-			$data['horas_nocturnas'] = $this->_getSanitizedParam("horas_nocturnas");
+			$data['limite_horas'] = $this->_getSanitizedParam("limite_horas");
 		}
-		if($this->_getSanitizedParam("festivos") == '' ) {
-			$data['festivos'] = '0';
+		if($this->_getSanitizedParam("limite_dominicales") == '' ) {
+			$data['limite_dominicales'] = '0';
 		} else {
-			$data['festivos'] = $this->_getSanitizedParam("festivos");
-		}
-		if($this->_getSanitizedParam("decimo") == '' ) {
-			$data['decimo'] = '0';
-		} else {
-			$data['decimo'] = $this->_getSanitizedParam("decimo");
-		}
-		if($this->_getSanitizedParam("vacaciones") == '' ) {
-			$data['vacaciones'] = '0';
-		} else {
-			$data['vacaciones'] = $this->_getSanitizedParam("vacaciones");
-		}
-		if($this->_getSanitizedParam("antiguedad") == '' ) {
-			$data['antiguedad'] = '0';
-		} else {
-			$data['antiguedad'] = $this->_getSanitizedParam("antiguedad");
-		}
-		if($this->_getSanitizedParam("seguridad_social") == '' ) {
-			$data['seguridad_social'] = '0';
-		} else {
-			$data['seguridad_social'] = $this->_getSanitizedParam("seguridad_social");
-		}
-		if($this->_getSanitizedParam("seguro_educativo") == '' ) {
-			$data['seguro_educativo'] = '0';
-		} else {
-			$data['seguro_educativo'] = $this->_getSanitizedParam("seguro_educativo");
-		}
-		if($this->_getSanitizedParam("seguridad_social2") == '' ) {
-			$data['seguridad_social2'] = '0';
-		} else {
-			$data['seguridad_social2'] = $this->_getSanitizedParam("seguridad_social2");
-		}
-		if($this->_getSanitizedParam("seguro_educativo2") == '' ) {
-			$data['seguro_educativo2'] = '0';
-		} else {
-			$data['seguro_educativo2'] = $this->_getSanitizedParam("seguro_educativo2");
-		}
-		if($this->_getSanitizedParam("riesgos_profesionales") == '' ) {
-			$data['riesgos_profesionales'] = '0';
-		} else {
-			$data['riesgos_profesionales'] = $this->_getSanitizedParam("riesgos_profesionales");
+			$data['limite_dominicales'] = $this->_getSanitizedParam("limite_dominicales");
 		}
 		return $data;
 	}
@@ -287,6 +248,27 @@ class Page_parametrosController extends Page_mainController
     	$filtros = " 1 = 1 ";
         if (Session::getInstance()->get($this->namefilter)!="") {
             $filters =(object)Session::getInstance()->get($this->namefilter);
+            if ($filters->fecha1 != '') {
+                $filtros = $filtros." AND fecha1 LIKE '%".$filters->fecha1."%'";
+            }
+            if ($filters->fecha2 != '') {
+                $filtros = $filtros." AND fecha2 LIKE '%".$filters->fecha2."%'";
+            }
+            if ($filters->empresa != '') {
+                $filtros = $filtros." AND empresa LIKE '%".$filters->empresa."%'";
+            }
+            if ($filters->cerrada != '') {
+                $filtros = $filtros." AND cerrada LIKE '%".$filters->cerrada."%'";
+            }
+            if ($filters->fecha_cerrada != '') {
+                $filtros = $filtros." AND fecha_cerrada LIKE '%".$filters->fecha_cerrada."%'";
+            }
+            if ($filters->limite_horas != '') {
+                $filtros = $filtros." AND limite_horas LIKE '%".$filters->limite_horas."%'";
+            }
+            if ($filters->limite_dominicales != '') {
+                $filtros = $filtros." AND limite_dominicales LIKE '%".$filters->limite_dominicales."%'";
+            }
 		}
         return $filtros;
     }
@@ -300,7 +282,14 @@ class Page_parametrosController extends Page_mainController
     {
         if ($this->getRequest()->isPost()== true) {
         	Session::getInstance()->set($this->namepageactual,1);
-            $parramsfilter = array();Session::getInstance()->set($this->namefilter, $parramsfilter);
+            $parramsfilter = array();
+					$parramsfilter['fecha1'] =  $this->_getSanitizedParam("fecha1");
+					$parramsfilter['fecha2'] =  $this->_getSanitizedParam("fecha2");
+					$parramsfilter['empresa'] =  $this->_getSanitizedParam("empresa");
+					$parramsfilter['cerrada'] =  $this->_getSanitizedParam("cerrada");
+					$parramsfilter['fecha_cerrada'] =  $this->_getSanitizedParam("fecha_cerrada");
+					$parramsfilter['limite_horas'] =  $this->_getSanitizedParam("limite_horas");
+					$parramsfilter['limite_dominicales'] =  $this->_getSanitizedParam("limite_dominicales");Session::getInstance()->set($this->namefilter, $parramsfilter);
         }
         if ($this->_getSanitizedParam("cleanfilter") == 1) {
             Session::getInstance()->set($this->namefilter, '');

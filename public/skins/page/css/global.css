@@ -2208,7 +2208,7 @@ INICIO DE VENCIMIENTOS
 }
 
 .card-vencimiento:hover .title {
-  background-color: rgba(25, 169, 201, 0.6); /* Cambia el valor a transparente con transparencia */
+  background-color: rgba(25, 169, 201, 0.9); /* Cambia el valor a transparente con transparencia */
 }
 /************************************************
 FIN DE VENCIMIENTOS

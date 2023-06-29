@@ -84,7 +84,7 @@ class Page_rotacionController extends Page_mainController
         $this->_view->filters = $filters;
         $filters = $this->getFilter();
         $historialModel = new Page_Model_DbTable_Historial();
-       // echo $filters . "ok";
+        // echo $filters . "ok";
         $order = " id ASC ";
         $meses = array("", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
         $dias = array("", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado", "Domingo");
@@ -131,16 +131,12 @@ class Page_rotacionController extends Page_mainController
                 $trabajadores2 = $totalTrabajadores2->trabajadores_empresa;
             }  */
 
-
             //calcular total de ingresos y retiros
             $ingresos += $totalIngresos;
             $retiros += $totalRetiros;
 
-
-
             $indicador1 = ($totalIngresos + $totalRetiros) * 100;
             $indicador2 = ($trabajadores1 + $trabajadores2) / 2;
-
 
             $indicador = ""; // Cadena vacía
             if ($indicador2 > 0) {

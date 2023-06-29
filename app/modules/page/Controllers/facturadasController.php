@@ -1,11 +1,11 @@
 <?php
 /**
-* Controlador de Parametros que permite la  creacion, edicion  y eliminacion de los par&aacute;metros del Sistema
+* Controlador de Facturadas que permite la  creacion, edicion  y eliminacion de los facturadas del Sistema
 */
-class Page_parametrosController extends Page_mainController
+class Page_facturadasController extends Page_mainController
 {
 	/**
-	 * $mainModel  instancia del modelo de  base de datos par&aacute;metros
+	 * $mainModel  instancia del modelo de  base de datos facturadas
 	 * @var modeloContenidos
 	 */
 	public $mainModel;
@@ -32,7 +32,7 @@ class Page_parametrosController extends Page_mainController
 	 * $_csrf_section  nombre de la variable general csrf  que se va a almacenar en la session
 	 * @var string
 	 */
-	protected $_csrf_section = "page_parametros";
+	protected $_csrf_section = "page_facturadas";
 
 	/**
 	 * $namepages nombre de la pvariable en la cual se va a guardar  el numero de seccion en la paginacion del controlador
@@ -43,19 +43,17 @@ class Page_parametrosController extends Page_mainController
 
 
 	/**
-     * Inicializa las variables principales del controlador parametros .
+     * Inicializa las variables principales del controlador facturadas .
      *
      * @return void.
      */
 	public function init()
 	{
-		
-
-		$this->mainModel = new Page_Model_DbTable_Parametros();
-		$this->namefilter = "parametersfilterparametros";
-		$this->route = "/page/parametros";
-		$this->namepages ="pages_parametros";
-		$this->namepageactual ="page_actual_parametros";
+		$this->mainModel = new Page_Model_DbTable_Facturadas();
+		$this->namefilter = "parametersfilterfacturadas";
+		$this->route = "/page/facturadas";
+		$this->namepages ="pages_facturadas";
+		$this->namepageactual ="page_actual_facturadas";
 		$this->_view->route = $this->route;
 		if(Session::getInstance()->get($this->namepages)){
 			$this->pages = Session::getInstance()->get($this->namepages);
@@ -67,13 +65,13 @@ class Page_parametrosController extends Page_mainController
 
 
 	/**
-     * Recibe la informacion y  muestra un listado de  par&aacute;metros con sus respectivos filtros.
+     * Recibe la informacion y  muestra un listado de  facturadas con sus respectivos filtros.
      *
      * @return void.
      */
 	public function indexAction()
 	{
-		$title = "Administración de par&aacute;metros";
+		$title = "Administración de facturadas";
 		$this->getLayout()->setTitle($title);
 		$this->_view->titlesection = $title;
 		$this->filters();
@@ -105,14 +103,14 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Genera la Informacion necesaria para editar o crear un  par&aacute;metros  y muestra su formulario
+     * Genera la Informacion necesaria para editar o crear un  facturadas  y muestra su formulario
      *
      * @return void.
      */
 	public function manageAction()
 	{
 		$this->_view->route = $this->route;
-		$this->_csrf_section = "manage_parametros_".date("YmdHis");
+		$this->_csrf_section = "manage_facturadas_".date("YmdHis");
 		$this->_csrf->generateCode($this->_csrf_section);
 		$this->_view->csrf_section = $this->_csrf_section;
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];
@@ -122,25 +120,25 @@ class Page_parametrosController extends Page_mainController
 			if($content->id){
 				$this->_view->content = $content;
 				$this->_view->routeform = $this->route."/update";
-				$title = "Administrar par&aacute;metros";
+				$title = "Actualizar facturadas";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}else{
 				$this->_view->routeform = $this->route."/insert";
-				$title = "Crear par&aacute;metros";
+				$title = "Crear facturadas";
 				$this->getLayout()->setTitle($title);
 				$this->_view->titlesection = $title;
 			}
 		} else {
 			$this->_view->routeform = $this->route."/insert";
-			$title = "Crear par&aacute;metros";
+			$title = "Crear facturadas";
 			$this->getLayout()->setTitle($title);
 			$this->_view->titlesection = $title;
 		}
 	}
 
 	/**
-     * Inserta la informacion de un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Inserta la informacion de un facturadas  y redirecciona al listado de facturadas.
      *
      * @return void.
      */
@@ -153,7 +151,7 @@ class Page_parametrosController extends Page_mainController
 			
 			$data['id']= $id;
 			$data['log_log'] = print_r($data,true);
-			$data['log_tipo'] = 'CREAR PAR&AACUTE;METROS';
+			$data['log_tipo'] = 'CREAR FACTURADAS';
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);
 		}
@@ -161,7 +159,7 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Recibe un identificador  y Actualiza la informacion de un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Recibe un identificador  y Actualiza la informacion de un facturadas  y redirecciona al listado de facturadas.
      *
      * @return void.
      */
@@ -177,14 +175,14 @@ class Page_parametrosController extends Page_mainController
 			}
 			$data['id']=$id;
 			$data['log_log'] = print_r($data,true);
-			$data['log_tipo'] = 'EDITAR PAR&AACUTE;METROS';
+			$data['log_tipo'] = 'EDITAR FACTURADAS';
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);}
-		header('Location: /page/nomina');
+		header('Location: '.$this->route.''.'');
 	}
 
 	/**
-     * Recibe un identificador  y elimina un par&aacute;metros  y redirecciona al listado de par&aacute;metros.
+     * Recibe un identificador  y elimina un facturadas  y redirecciona al listado de facturadas.
      *
      * @return void.
      */
@@ -199,7 +197,7 @@ class Page_parametrosController extends Page_mainController
 				if (isset($content)) {
 					$this->mainModel->deleteRegister($id);$data = (array)$content;
 					$data['log_log'] = print_r($data,true);
-					$data['log_tipo'] = 'BORRAR PAR&AACUTE;METROS';
+					$data['log_tipo'] = 'BORRAR FACTURADAS';
 					$logModel = new Administracion_Model_DbTable_Log();
 					$logModel->insert($data); }
 			}
@@ -208,72 +206,90 @@ class Page_parametrosController extends Page_mainController
 	}
 
 	/**
-     * Recibe la informacion del formulario y la retorna en forma de array para la edicion y creacion de Parametros.
+     * Recibe la informacion del formulario y la retorna en forma de array para la edicion y creacion de Facturadas.
      *
      * @return array con toda la informacion recibida del formulario.
      */
 	private function getData()
 	{
 		$data = array();
-		if($this->_getSanitizedParam("horas_extra") == '' ) {
-			$data['horas_extra'] = '0';
+		$data['fecha1'] = $this->_getSanitizedParam("fecha1");
+		$data['fecha2'] = $this->_getSanitizedParam("fecha2");
+		$data['localizacion'] = $this->_getSanitizedParam("localizacion");
+		if($this->_getSanitizedParam("normal1") == '' ) {
+			$data['normal1'] = '0';
 		} else {
-			$data['horas_extra'] = $this->_getSanitizedParam("horas_extra");
+			$data['normal1'] = $this->_getSanitizedParam("normal1");
 		}
-		if($this->_getSanitizedParam("horas_dominicales") == '' ) {
-			$data['horas_dominicales'] = '0';
+		if($this->_getSanitizedParam("normal2") == '' ) {
+			$data['normal2'] = '0';
 		} else {
-			$data['horas_dominicales'] = $this->_getSanitizedParam("horas_dominicales");
+			$data['normal2'] = $this->_getSanitizedParam("normal2");
 		}
-		if($this->_getSanitizedParam("horas_nocturnas") == '' ) {
-			$data['horas_nocturnas'] = '0';
+		if($this->_getSanitizedParam("normal3") == '' ) {
+			$data['normal3'] = '0';
 		} else {
-			$data['horas_nocturnas'] = $this->_getSanitizedParam("horas_nocturnas");
+			$data['normal3'] = $this->_getSanitizedParam("normal3");
 		}
-		if($this->_getSanitizedParam("festivos") == '' ) {
-			$data['festivos'] = '0';
+		if($this->_getSanitizedParam("extra1") == '' ) {
+			$data['extra1'] = '0';
 		} else {
-			$data['festivos'] = $this->_getSanitizedParam("festivos");
+			$data['extra1'] = $this->_getSanitizedParam("extra1");
 		}
-		if($this->_getSanitizedParam("decimo") == '' ) {
-			$data['decimo'] = '0';
+		if($this->_getSanitizedParam("extra2") == '' ) {
+			$data['extra2'] = '0';
 		} else {
-			$data['decimo'] = $this->_getSanitizedParam("decimo");
+			$data['extra2'] = $this->_getSanitizedParam("extra2");
 		}
-		if($this->_getSanitizedParam("vacaciones") == '' ) {
-			$data['vacaciones'] = '0';
+		if($this->_getSanitizedParam("extra3") == '' ) {
+			$data['extra3'] = '0';
 		} else {
-			$data['vacaciones'] = $this->_getSanitizedParam("vacaciones");
+			$data['extra3'] = $this->_getSanitizedParam("extra3");
 		}
-		if($this->_getSanitizedParam("antiguedad") == '' ) {
-			$data['antiguedad'] = '0';
+		if($this->_getSanitizedParam("nocturna1") == '' ) {
+			$data['nocturna1'] = '0';
 		} else {
-			$data['antiguedad'] = $this->_getSanitizedParam("antiguedad");
+			$data['nocturna1'] = $this->_getSanitizedParam("nocturna1");
 		}
-		if($this->_getSanitizedParam("seguridad_social") == '' ) {
-			$data['seguridad_social'] = '0';
+		if($this->_getSanitizedParam("nocturna2") == '' ) {
+			$data['nocturna2'] = '0';
 		} else {
-			$data['seguridad_social'] = $this->_getSanitizedParam("seguridad_social");
+			$data['nocturna2'] = $this->_getSanitizedParam("nocturna2");
 		}
-		if($this->_getSanitizedParam("seguro_educativo") == '' ) {
-			$data['seguro_educativo'] = '0';
+		if($this->_getSanitizedParam("nocturna3") == '' ) {
+			$data['nocturna3'] = '0';
 		} else {
-			$data['seguro_educativo'] = $this->_getSanitizedParam("seguro_educativo");
+			$data['nocturna3'] = $this->_getSanitizedParam("nocturna3");
 		}
-		if($this->_getSanitizedParam("seguridad_social2") == '' ) {
-			$data['seguridad_social2'] = '0';
+		if($this->_getSanitizedParam("festivo1") == '' ) {
+			$data['festivo1'] = '0';
 		} else {
-			$data['seguridad_social2'] = $this->_getSanitizedParam("seguridad_social2");
+			$data['festivo1'] = $this->_getSanitizedParam("festivo1");
 		}
-		if($this->_getSanitizedParam("seguro_educativo2") == '' ) {
-			$data['seguro_educativo2'] = '0';
+		if($this->_getSanitizedParam("festivo2") == '' ) {
+			$data['festivo2'] = '0';
 		} else {
-			$data['seguro_educativo2'] = $this->_getSanitizedParam("seguro_educativo2");
+			$data['festivo2'] = $this->_getSanitizedParam("festivo2");
 		}
-		if($this->_getSanitizedParam("riesgos_profesionales") == '' ) {
-			$data['riesgos_profesionales'] = '0';
+		if($this->_getSanitizedParam("festivo3") == '' ) {
+			$data['festivo3'] = '0';
 		} else {
-			$data['riesgos_profesionales'] = $this->_getSanitizedParam("riesgos_profesionales");
+			$data['festivo3'] = $this->_getSanitizedParam("festivo3");
+		}
+		if($this->_getSanitizedParam("dominical1") == '' ) {
+			$data['dominical1'] = '0';
+		} else {
+			$data['dominical1'] = $this->_getSanitizedParam("dominical1");
+		}
+		if($this->_getSanitizedParam("dominical2") == '' ) {
+			$data['dominical2'] = '0';
+		} else {
+			$data['dominical2'] = $this->_getSanitizedParam("dominical2");
+		}
+		if($this->_getSanitizedParam("dominical3") == '' ) {
+			$data['dominical3'] = '0';
+		} else {
+			$data['dominical3'] = $this->_getSanitizedParam("dominical3");
 		}
 		return $data;
 	}
