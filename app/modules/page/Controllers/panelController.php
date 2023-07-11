@@ -50,11 +50,15 @@ class Page_panelController extends Page_mainController
 		} else {
 			$this->pages = 50;
 		}
+		Session::getInstance()->set($this->namefilter, '');
+
 		parent::init();
 	}
     public function indexAction()
     {
         $title = "Panel Tácticas Panama";
+		Session::getInstance()->set($this->namefilter, '');
+
         $this->getLayout()->setTitle($title);
         $this->_view->titlesection = $title;
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];

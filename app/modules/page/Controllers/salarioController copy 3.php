@@ -70,7 +70,6 @@ class Page_salarioController extends Page_mainController
 			$this->pages = 50;
 		}
 		parent::init();
-		// Session::getInstance()->set($this->namefilter, '');
 	}
 
 
@@ -88,21 +87,14 @@ class Page_salarioController extends Page_mainController
 		$this->_view->list_empresa = $this->getEmpresa();
 		$filters = (object) Session::getInstance()->get($this->namefilter);
 		$this->_view->filters = $filters;
-		/* 		print_r($filters);
-		echo "|||||||||||||||||||||||||"; */
+		// print_r($filters);
 		$resultado = $this->getFilter();
 		$filtros = $resultado['filtros'];
 		$filtros2 = $resultado['filtros2'];
+		// print_r($resultado);
 
-
-		/* echo($filtros);
-	
-
-	echo $filtros;
-		echo "|||||||||||||||||||||||||";
-
+		/* 		echo $filtros;
 		echo $filtros2; */
-
 
 		$planillaHorasModel = new Page_Model_DbTable_Planillahoras();
 		$this->_view->empresas = $this->mainModel->getList("", "nombre");
@@ -137,6 +129,9 @@ echo '</pre>';
 		$antiguedad = [];
 		$total_provisiones = [];
 		$TOTAL = 0;
+
+
+
 
 
 		foreach ($planillas as $value) {
@@ -513,7 +508,29 @@ echo '</pre>';
 			$TOTAL += $total_neta2[$empresa];
 		}
 		$output = '<div align="left" style="font-size:20px">Informe de salario neto</div>';
+		if (Session::getInstance()->get($this->namefilter) != "") {
+			if ($filters->fecha_inicio != '' && $filters->fecha_fin != '') {
+			$output .= '<div align="">Desde: ' . $filters->fecha_inicio . ' - Hasta: ' . $filters->fecha_fin . '</div>';
+			}
+			
 
+		}else {
+			if (date('d') <= 15) {
+
+			
+				$fecha_inicio  = date('Y-m-15', strtotime('previous month')); 
+				$fecha_fin = date('Y-m-t', strtotime('previous month')); 
+			} else {
+
+				// Si estamos después del día 15 del mes actual
+				$fecha_inicio = date('Y-m-01'); // Fecha del primer día del mes actual
+				$fecha_fin  = date('Y-m-15'); // Fecha del día 15 del mes actual
+
+			}
+			$output .= '<div align="">Desde: ' . $fecha_inicio . ' - Hasta: ' . $fecha_fin . '</div>';
+
+
+		}
 		$output .= '<table border="1" cellspacing="0" cellpadding="3">';
 		$output .= '
 		<tr>
@@ -523,8 +540,8 @@ echo '</pre>';
 		</tr>';
 		$key = 1;
 		foreach ($empresas as $key => $row) {
-			$key++;
-			$output .= '
+		$key++;
+		$output .= '
 		<tr>
 	  	<td>' . $key . '</td>
 	  	<td>' . $row->nombre . '</td>
@@ -542,6 +559,8 @@ echo '</pre>';
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=Informe_salario_neto' . $hoy . '.xls');
 		echo $output;
+
+
 	}
 	public function formato_numero($n)
 	{
@@ -584,8 +603,7 @@ echo '</pre>';
 			$filters = (object) Session::getInstance()->get($this->namefilter);
 
 			if ($filters->empresa != '') {
-				// $filtros = $filtros . " AND planilla.empresa ='" . $filters->empresa . "'";
-
+				$filtros = $filtros . " AND empresa ='" . $filters->empresa . "'";
 				$filtros2 = $filtros2 . " AND planilla.empresa ='" . $filters->empresa . "'";
 			}
 
@@ -594,9 +612,8 @@ echo '</pre>';
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}
-		} else if (Session::getInstance()->get($this->namefilter) == "" || !(Session::getInstance()->get($this->namefilter))) {
+		} else {
 			$filters = (object) Session::getInstance()->get($this->namefilter);
-
 			if ($filters->fecha_inicio == '' && $filters->fecha_fin == '') {
 				$currentDate = date('Y-m-d'); // Obtener la fecha actual en formato Y-m-d
 
@@ -609,15 +626,13 @@ echo '</pre>';
 								   echo "Fecha 2: " . $previousMonth30 . "<br>"; */
 				} else {
 
-
 					// Si estamos después del día 15 del mes actual
 					$this->_view->fecha_inicio = 	$filters->fecha_inicio = date('Y-m-01'); // Fecha del primer día del mes actual
 					$this->_view->fecha_fin =	$filters->fecha_fin = date('Y-m-15'); // Fecha del día 15 del mes actual
 
-
-
 				}
-				$filtros = $filtros . " AND  planilla_horas.fecha >= '" . $filters->fecha_inicio . "' AND planilla_horas.fecha<='" . $filters->fecha_fin . "' ";
+
+				$filtros = $filtros . "  AND planilla_horas.fecha >= '" . $filters->fecha_inicio . "' AND planilla_horas.fecha<='" . $filters->fecha_fin . "' ";
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}

@@ -149,15 +149,24 @@ class Page_segurosocialController extends Page_mainController
 			$currentDate = date('Y-m-d');  // Obtener la fecha actual en formato Y-m-d
 
 			if (date('d') <= 15) {
+				
 				// Si estamos antes o en el día 15 del mes actual
 				$this->_view->fecha_inicio = $fecha_inicio = date('Y-m-15', strtotime('previous month'));  // Fecha del día 15 del mes anterior
-				$this->_view->fecha_fin = $fecha_fin = date('Y-m-t', strtotime('previous month'));   // Fecha del último día del mes anterior		
+				$this->_view->fecha_fin = $fecha_fin = date('Y-m-t', strtotime('previous month'));   // Fecha del último día del mes anterior
+				/* 	echo "Fecha 1: " . $previousMonth15 . "<br>";
+				echo "Fecha 2: " . $previousMonth30 . "<br>"; */
 			} else {
+			
 				// Si estamos después del día 15 del mes actual
 				$this->_view->fecha_inicio = $fecha_inicio = date('Y-m-01');   // Fecha del primer día del mes actual
-				$this->_view->fecha_fin = $fecha_fin = date('Y-m-15');  // Fecha del día 15 del mes actual				
+				$this->_view->fecha_fin = $fecha_fin = date('Y-m-15');  // Fecha del día 15 del mes actual
+				/* echo "Fecha 1: " . $currentMonth1 . "<br>";
+				echo "Fecha 2: " . $currentMonth15 . "<br>"; */
 			}
 
+
+			/* 	$fecha_inicio = date("Y-m-01", strtotime("-2 months"));
+			$fecha_fin = date("Y-m-30", strtotime("-1 months")); */
 			$filtros .= " 1 AND planilla_horas.fecha >='" . $fecha_inicio . "' AND planilla_horas.fecha <='" . $fecha_fin . "' ";
 			$filtros2 = $filtros2 . " fecha1 >= '" . $fecha_inicio . "' AND fecha1 <= '" . $fecha_fin . "' AND fecha2 >= ' " . $fecha_inicio . "' AND fecha2 <= '" . $fecha_fin . "' ";
 		}
@@ -173,6 +182,16 @@ class Page_segurosocialController extends Page_mainController
 
 		$planillaParametros = $planillaParametrosModel->getById(1);
 		$planillas = $planillaModel->getList($filtros2, "");
+
+
+
+
+
+		/* 		echo '<pre>';
+			  // print_r($planillaParametros);
+			  print_r($cedulas);
+			  // print_r($cedulas2);
+			  echo '</pre>'; */
 
 
 		$aux = explode("-", $this->_getSanitizedParam("fecha_inicio"));
@@ -204,7 +223,7 @@ class Page_segurosocialController extends Page_mainController
 		$total_nocturna = [];
 		$total_festivo = [];
 		$total_dominical = [];
-		$tipo = '0';
+		$tipo = '0'; //NORMAL
 		$aumento = 0;
 
 		$horas = 0;
@@ -430,24 +449,8 @@ class Page_segurosocialController extends Page_mainController
 
 
 		if ($filtros == "" && $filtros2 == "" || !$filtros && !$filtros2) {
-			$currentDate = date('Y-m-d');  // Obtener la fecha actual en formato Y-m-d
-
-			if (date('d') <= 15) {
-
-				// Si estamos antes o en el día 15 del mes actual
-				$this->_view->fecha_inicio = $fecha_inicio = date('Y-m-15', strtotime('previous month'));  // Fecha del día 15 del mes anterior
-				$this->_view->fecha_fin = $fecha_fin = date('Y-m-t', strtotime('previous month'));   // Fecha del último día del mes anterior
-				/* 	echo "Fecha 1: " . $previousMonth15 . "<br>";
-				echo "Fecha 2: " . $previousMonth30 . "<br>"; */
-			} else {
-
-				// Si estamos después del día 15 del mes actual
-				$this->_view->fecha_inicio = $fecha_inicio = date('Y-m-01');   // Fecha del primer día del mes actual
-				$this->_view->fecha_fin = $fecha_fin = date('Y-m-15');  // Fecha del día 15 del mes actual
-				/* echo "Fecha 1: " . $currentMonth1 . "<br>";
-				echo "Fecha 2: " . $currentMonth15 . "<br>"; */
-			}
-
+			$fecha_inicio = date("Y-m-01", strtotime("-2 months"));
+			$fecha_fin = date("Y-m-30", strtotime("-1 months"));
 			$filtros .= " 1 AND planilla_horas.fecha >='" . $fecha_inicio . "' AND planilla_horas.fecha <='" . $fecha_fin . "' ";
 			$filtros2 = $filtros2 . " fecha1 >= '" . $fecha_inicio . "' AND fecha1 <= '" . $fecha_fin . "' AND fecha2 >= ' " . $fecha_inicio . "' AND fecha2 <= '" . $fecha_fin . "' ";
 		}
@@ -639,14 +642,8 @@ class Page_segurosocialController extends Page_mainController
 		} else {
 			$output = '<div align="center">Informe seguro social de la empresa <strong>' . $list_empresa[$filters1->empresa] . '</strong></div>';
 		}
-		if ($filters1->fecha_inicio == "" && $filters1->fecha_fin == "") {
-			$output .= '<div align="center">Desde: ' . $fecha_inicio . ' - Hasta: ' . $fecha_fin . '</div>';
-		} else {
-			$output .= '<div align="center">Desde: ' . $filters1->fecha_inicio . ' - Hasta: ' . $filters1->fecha_fin . '</div>';
-		}
 
-
-
+		$output .= '<div align="center">Desde: ' . $filters1->fecha_inicio . ' - Hasta: ' . $filters1->fecha_fin . '</div>';
 
 
 

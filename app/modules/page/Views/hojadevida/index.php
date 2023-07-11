@@ -1,7 +1,7 @@
 <div class="container-fluid">
-<div class=" d-flex justify-content-start ">
-<h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
-</div>
+	<div class=" d-flex justify-content-start ">
+		<h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
+	</div>
 	<div class="content-table table-responsive">
 		<table class=" table table-striped  table-hover table-administrator text-center">
 			<thead>
@@ -126,27 +126,29 @@
 		<div align="center">
 			<ul class="pagination py-0 my-0 justify-content-center">
 				<?php
-				$url = $this->route;
-				$min = $this->page - 10;
-				if ($min < 0) {
-					$min = 1;
-				}
-				$max = $this->page + 10;
-				if ($this->totalpages > 1) {
-					if ($this->page != 1)
-						echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
-					for ($i = 1; $i <= $this->totalpages; $i++) {
-						if ($this->page == $i)
-							echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
-						else {
-							if ($i <= $max and $i >= $min) {
-								echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+		
+					$url = $this->route;
+					$min = $this->page - 10;
+					if ($min < 0) {
+						$min = 1;
+					}
+					$max = $this->page + 10;
+					if ($this->totalpages > 1) {
+						if ($this->page != 1)
+							echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+						for ($i = 1; $i <= $this->totalpages; $i++) {
+							if ($this->page == $i)
+								echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+							else {
+								if ($i <= $max and $i >= $min) {
+									echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+								}
 							}
 						}
+						if ($this->page != $this->totalpages)
+							echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
 					}
-					if ($this->page != $this->totalpages)
-						echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
-				}
+				
 				?>
 			</ul>
 		</div>
@@ -166,7 +168,7 @@
 					</div>
 					<div>
 
-					<select class="form-control form-control-sm selectpagination">
+						<select class="form-control form-control-sm selectpagination">
 							<option value="50" <?php if ($this->pages == 50) {
 													echo 'selected';
 												} ?>>50</option>
@@ -258,27 +260,30 @@
 		<div align="center">
 			<ul class="pagination pagination-end justify-content-center">
 				<?php
-				$url = $this->route;
-				$min = $this->page - 10;
-				if ($min < 0) {
-					$min = 1;
-				}
-				$max = $this->page + 10;
-				if ($this->totalpages > 1) {
-					if ($this->page != 1)
-						echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
-					for ($i = 1; $i <= $this->totalpages; $i++) {
-						if ($this->page == $i)
-							echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
-						else {
-							if ($i <= $max and $i >= $min) {
-								echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+
+					$url = $this->route;
+					$min = $this->page - 10;
+					if ($min < 0) {
+						$min = 1;
+					}
+					$max = $this->page + 10;
+					if ($this->totalpages > 1) {
+						if ($this->page != 1)
+							echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+						for ($i = 1; $i <= $this->totalpages; $i++) {
+							if ($this->page == $i)
+								echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+							else {
+								if ($i <= $max and $i >= $min) {
+									echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+								}
 							}
 						}
+						if ($this->page != $this->totalpages)
+							echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
 					}
-					if ($this->page != $this->totalpages)
-						echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
-				}
+				
+
 				?>
 			</ul>
 		</div>

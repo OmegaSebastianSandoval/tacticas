@@ -87,7 +87,8 @@ class Page_infolocalizacionController extends Page_mainController
 
 		$filters = (object)Session::getInstance()->get($this->namefilter);
 		$this->_view->filters = $filters;
-		echo $filters = $this->getFilter();
+		$filters = $this->getFilter();
+		// echo $filters;
 	}
 
 	private function getFacuradas()

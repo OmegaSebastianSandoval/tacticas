@@ -1,26 +1,28 @@
 <?php
 
 /**
-*
-*/
+ *
+ */
 
 class Session
 {
-	protected static $_instance = null;
+    protected static $_instance = null;
 
-	private function __construct()
+    private function __construct()
     {
     }
 
-    public function set($name,$value){
-    	$_SESSION[$name]=$value;
+    public function set($name, $value)
+    {
+        $_SESSION[$name] = $value;
     }
 
-    public function get($name){
-    	return $_SESSION[$name];
+    public function get($name)
+    {
+        return $_SESSION[$name];
     }
 
-	public static function getInstance()
+    public static function getInstance()
     {
         if (null == self::$_instance) {
             self::$_instance = new Session();

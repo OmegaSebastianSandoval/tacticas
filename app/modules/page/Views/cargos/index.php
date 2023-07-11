@@ -1,21 +1,23 @@
 <div class="container-fluid">
-	<div class=" d-flex justify-content-start mb-4 ">
-		<a href="/page/nomina">
-			<button class="btn-primary mt-2" type="submit">
-				<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
-					<path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z" />
-				</svg>
-				<span>Regresar</span>
-			</button>
-		</a>
-	</div>
-	<div class=" d-flex justify-content-start ">
-		<h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
-	</div>
+  
+    <div class=" d-flex justify-content-between ">
+        <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
+            <?php echo $this->titlesection; ?>
+        </h3>
+        <a href="/page/nomina">
+            <button class="btn-primary-home btn-primary-volver  mt-2" type="submit">
+                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+                    <path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z" />
+                </svg>
+                <span>Regresar</span>
+            </button>
+        </a>
+    </div>
+
 	<form action="<?php echo $this->route; ?>" method="post">
 		<div class="content-dashboard mb-0">
 			<div class="row">
-				<div class="col-12 col-md-6 col-lg-4">
+				<div class="col-12 col-md-6">
 					<label>Nombre</label>
 					<label class="input-group">
 						<div class="input-group-prepend">
@@ -24,8 +26,8 @@
 						<input type="text" class="form-control" name="cargo_nombre" value="<?php echo $this->getObjectVariable($this->filters, 'cargo_nombre') ?>"></input>
 					</label>
 				</div>
-				<div class="col-12 col-md-0 col-lg-4">
-				</div>
+			<!-- 	<div class="col-12 col-md-0 col-lg-4">
+				</div> -->
 				<!-- 				<div class="col-3">
 					<label>Activo</label>
 					<label class="input-group">
@@ -35,11 +37,11 @@
 						<input type="text" class="form-control" name="cargo_estado" value="<?php echo $this->getObjectVariable($this->filters, 'cargo_estado') ?>"></input>
 					</label>
 				</div> -->
-				<div class="col-12 col-md-3 col-lg-2  d-grid align-items-end ">
+				<div class="col-12 col-md-3  d-grid align-items-end ">
 
 					<button type="submit" class="btn btn-azul"> <i class="fas fa-filter"></i> Filtrar</button>
 				</div>
-				<div class="col-3  col-md-3 col-lg-2 d-grid align-items-end ">
+				<div class="col-3  col-md-3 d-grid align-items-end ">
 
 					<a class="btn btn-azul-claro " href="<?php echo $this->route; ?>?cleanfilter=1"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
 				</div>

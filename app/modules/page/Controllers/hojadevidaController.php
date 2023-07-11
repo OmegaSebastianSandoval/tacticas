@@ -104,6 +104,9 @@ class Page_hojadevidaController extends Page_mainController
 			Session::getInstance()->set($this->namepageactual, $page);
 			$start = ($page - 1) * $amount;
 		}
+
+
+		$this->_view->totalpages = ceil(count($list) / $amount);
 		$this->_view->register_number = count($list);
 		$this->_view->pages = $this->pages;
 		$this->_view->totalpages = ceil(count($list) / $amount);
@@ -766,12 +769,12 @@ class Page_hojadevidaController extends Page_mainController
 	{
 		// $filtros = " 1 = 1 ";
 		$filtros = " 1 ";
-	
-		if(Session::getInstance()->get("kt_login_level") == 2){
+
+		if (Session::getInstance()->get("kt_login_level") == 2) {
 			$empresa = Session::getInstance()->get("kt_login_empresa");
 			$filtros = 	$filtros . " AND empresa = '$empresa' ";
 		}
-		if(Session::getInstance()->get("kt_login_level") == 3){
+		if (Session::getInstance()->get("kt_login_level") == 3) {
 			$asignacion = Session::getInstance()->get("kt_login_asignacion");
 			$filtros = 	$filtros . " AND FIND_IN_SET(empresa, '$asignacion') ";
 		}
@@ -820,7 +823,6 @@ class Page_hojadevidaController extends Page_mainController
 			$parramsfilter['documento'] =  $this->_getSanitizedParam("documento");
 			$parramsfilter['empresa'] =  $this->_getSanitizedParam("empresa");
 			$parramsfilter['tipo_contrato'] =  $this->_getSanitizedParam("tipo_contrato");
-
 			Session::getInstance()->set($this->namefilter, $parramsfilter);
 		}
 		if ($this->_getSanitizedParam("cleanfilter") == 1) {

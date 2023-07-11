@@ -57,7 +57,7 @@
                     <div class="image">
                         <img src="/skins/page/images/dotac.jpg" alt="Administrar de dotacion">
                     </div>
-                    <h2 class="title">Administrar dotacion</h2>
+                    <h2 class="title">Administrar dotación</h2>
                 </div>
             </a>
         </div>

@@ -2,7 +2,7 @@
   <div class="container">
   </div>
 </div> -->
-<header>
+<header class="d-none">
 
     <div class="container-fluid  d-flex  order-1 order-md-2 ">
 
@@ -33,7 +33,7 @@
     </div>
 </header>
 <!-- <hr class="separador-header"> -->
-<div class="menu__side" id="menu_side">
+<div class="menu__side d-none" id="menu_side">
     <!--    <div class="icon__menu " id="btn_open">
         <i class="fas fa-bars"></i>
     </div> -->

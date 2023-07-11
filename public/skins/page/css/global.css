@@ -1515,9 +1515,10 @@ thead td {
 
 .content-table .table tbody {
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12.5px;
+  text-transform: uppercase;
   font-family: 'Montserrat', sans-serif;
-  color: var(--secondary);
+  /* color: var(--secondary); */
   font-weight: 500;
 
 }
@@ -1913,6 +1914,10 @@ INICIO DE LOGIN
   background: #FFF;
 }
 
+.btn-primary-volver {
+  min-height: 2em;
+
+}
 .btn-volver {
   background: #FFF;
 }
@@ -1936,7 +1941,16 @@ INICIO DE LOGIN
   color: #FFF;
   fill: #FFF;
 }
+.btn-primary-home>svg {
+  fill: var(--primary);
+}
 
+.btn-primary-home:hover>svg {
+ /*  font-size: 1.2em;
+  transform: translateX(5px); */
+  fill: #FFF;
+
+}
 .btn-volver>svg {
 
   fill: var(--primary);
@@ -2078,7 +2092,7 @@ FIN  DE PANEL
 /************************************************
 INICIO DE HOJA DE VIDA
 ************************************************ */
-.btn-tab {
+/* .btn-tab {
   border: none;
   display: flex;
   position: relative;
@@ -2096,8 +2110,52 @@ INICIO DE HOJA DE VIDA
   width: 200px;
   justify-content: center;
 
+} */
+
+ .btn-tab {
+  text-decoration: none;
+  padding: 0.7em 0.4em;
+  border: 1px solid var(--primary);
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  text-align: center;
+
+  font-weight: 500;
+  font-size: 14px;
+
+  transition: 0.3s;
+  z-index: 1;
+  font-family: inherit;
+  border-radius: 4px;
+  color: var(--primary);
+  /* min-width: 7rem; */
+  width: 200px;
+  margin: 0 auto;
 }
 
+.btn-tab::before {
+  content: "";
+  width: 0;
+  height: 450%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: linear-gradient(to right, var(--primary), var(--primary));
+  transition: 0.5s ease;
+  display: block;
+  z-index: -1;
+}
+
+.btn-tab:hover::before {
+  width: 105%;
+}
+
+.btn-tab:hover {
+  color: #fff;
+} 
+/* 
 .btn-tab span {
   position: absolute;
   left: 0;
@@ -2150,7 +2208,7 @@ INICIO DE HOJA DE VIDA
 
   background: var(--primary);
 }
-
+ */
 /************************************************
 FIN  DE HOJA DE VIDA
 ************************************************ */
@@ -2203,7 +2261,7 @@ INICIO DE VENCIMIENTOS
   background-color: rgba(25, 169, 201, 0.6);
       color: #FFF;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   transition: background-color 300ms; /* Agrega una transición para suavizar el cambio de fondo */
 }
 

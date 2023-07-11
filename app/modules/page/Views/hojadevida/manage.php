@@ -7,48 +7,48 @@
 		<li class="nav-item" role="presentation">
 
 			<a class=" btn-tab " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" href="#pills-home" onclick="event.preventDefault()" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home
-				<span></span>
+				<!-- <span></span> -->
 			</a>
 		</li>
 		<?php if ($this->content->id) { ?>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-profile-tab" href="#pills-profile" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Contactos de emergencia
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-contact-tab" href="#pills-contact" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Educación y formación
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-experiencia-tab" href="#pills-experiencia" data-bs-toggle="pill" data-bs-target="#pills-experiencia" type="button" role="tab" aria-controls="pills-experiencia" aria-selected="false">Experiencia laboral
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-referencias-tab" href="#pills-referencias" data-bs-toggle="pill" data-bs-target="#pills-referencias" type="button" role="tab" aria-controls="pills-referencias" aria-selected="false">Referencias
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-otros-tab" href="#pills-otros" data-bs-toggle="pill" data-bs-target="#pills-otros" type="button" role="tab" aria-controls="pills-otros" aria-selected="false">Otros datos
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-vacaciones-tab" href="#pills-vacaciones" data-bs-toggle="pill" data-bs-target="#pills-vacaciones" type="button" role="tab" aria-controls="pills-vacaciones" aria-selected="false">Vacaciones
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-dotaciones-tab" href="#pills-dotaciones" data-bs-toggle="pill" data-bs-target="#pills-dotaciones" type="button" role="tab" aria-controls="pills-dotaciones" aria-selected="false">Dotaciones
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 			<li class="nav-item" role="presentation">
 				<a class=" btn-tab" id="pills-documentos-tab" href="#pills-documentos" data-bs-toggle="pill" data-bs-target="#pills-documentos" type="button" role="tab" aria-controls="pills-documentos" aria-selected="false">Documentos
-					<span></span>
+					<!-- <span></span> -->
 				</a>
 			</li>
 		<?php } ?>
