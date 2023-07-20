@@ -73,7 +73,7 @@
         </div>
 
         <div class="">
-            <a href="/page/facturacion">
+            <a href="/page/facturacion?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infofac.jpg" alt="Informe facturación">
@@ -93,7 +93,7 @@
             </a>
         </div>
         <div class="">
-            <a href="/page/segurosocial">
+            <a href="/page/segurosocial?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infoseguro.jpg" alt="Informe de seguro social">

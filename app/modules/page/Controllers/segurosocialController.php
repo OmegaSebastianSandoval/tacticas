@@ -183,31 +183,7 @@ class Page_segurosocialController extends Page_mainController
 
 		$TOTAL = 0;
 		$TOTAL_DECIMO = 0;
-		$total_bruta = [];
-		$totales = [
-			'normal' => 0,
-			'extra' => 0,
-			'nocturna' => 0,
-			'festivo' => 0,
-			'dominical' => 0,
-			'bruta' => 0,
-			'seguridad_social' => 0,
-			'seguro_educativo' => 0,
-			'seguridad_social2' => 0,
-			'seguro_educativo2' => 0,
-			'riesgos' => 0,
-			'total_seguro' => 0
-		];
 
-		$total_normal = [];
-		$total_extra = [];
-		$total_nocturna = [];
-		$total_festivo = [];
-		$total_dominical = [];
-		$tipo = '0';
-		$aumento = 0;
-
-		$horas = 0;
 
 
 
@@ -215,101 +191,59 @@ class Page_segurosocialController extends Page_mainController
 			$planilla = $value->id;
 			$fecha1 = $value->fecha1;
 			$fecha2 = $value->fecha2;
-
+			$total_bruta = [];
+			$totales = [];
+	
+			$total_normal = [];
+			$total_extra = [];
+			$total_nocturna = [];
+			$total_festivo = [];
+			$total_dominical = [];
+			$tipo = '0';
+			$aumento = 0;
+	
+			$horas = 0;
 			// Filtrar los empleados que tienen la misma planilla
-			$empleadosPlanilla = array_filter($cedulas, function ($empleado) use ($planilla) {
+			/* $empleadosPlanilla = array_filter($cedulas, function ($empleado) use ($planilla) {
 				return $empleado->planilla === $planilla;
-			});
+			}); */
 
-			foreach ($empleadosPlanilla as $empleado) {
+			foreach ($cedulas as $empleado) {
 				$cedula = $empleado->cedula;
 				// Aquí puedes realizar el código correspondiente para cada empleado de la planilla actual
 				// Acceder a los datos del empleado: $empleado->cedula, $empleado->planilla, etc.
 
-
-				// 223206
 				$cedulasAsignacion = $planillaAsignacionModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "cedula ASC")[0];
-				//SEGURIDAD SOCIAL
-				/* echo '<pre>';
-							print_r($cedulasAsignacion);
-							echo '</pre>'; */
-				//PARAMETROS
-
-				$f1 = " AND ( (fecha >= '" . $fecha1 . "' AND fecha<='" . $fecha2 . "') OR fecha='0000-00-00' ) ";
-				$f2 = " AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') ";
-
-
-				/* --------------------------------------------
-							INICIO HORA NORMAL
-							-------------------------------------------- */
-				$tipo = '1'; //NORMAL
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalarioNew($planilla, $cedula, $fecha1, $fecha2);
+	
 				$aumento = 1;
-
-				$horas = $planillaHorasModel->getSumPlanillaHoras(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '$tipo ' $f1  $f2", "")[0];
-
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_normal[$cedula] += $horas->total * $valor_hora * 1;
-				$totales['normal'] += $horas->total * $valor_hora * 1;
-				/* --------------------------------------------
-							FIN HORA NORMAL
-							-------------------------------------------- */
-
-
-
-				/* --------------------------------------------
-							INICIO HORA EXTRA
-							-------------------------------------------- */
-				$tipo = '2'; //EXTRA
+				$total_normal[$cedula] += $horas[0]->total * $valor_hora * 1;
+				$totales['normal'] += $horas[0]->total * $valor_hora * 1;
+	
 				$aumento = 1 + ($planillaParametros->horas_extra / 100);
-
-				$horas = $planillaHorasModel->getSumPlanillaHoras(" planilla = $planilla  AND cedula = '$cedula' AND tipo = '$tipo ' $f1  $f2", "")[0];
-
+	
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_extra[$cedula] += $horas->total * $valor_hora * 1;
-				$totales['extra'] += $horas->total * $valor_hora * 1;
-				/* --------------------------------------------
-							FIN HORA EXTRA 93-22
-							-------------------------------------------- */
-
-				/* --------------------------------------------
-							INICIO HORA NOCTURNA
-							-------------------------------------------- */
-				$tipo = '3'; //NOCTURNA
+				$total_extra[$cedula] += $horas[1]->total * $valor_hora * 1;
+				$totales['extra'] += $horas[1]->total * $valor_hora * 1;
+	
 				$aumento = 1 + ($planillaParametros->horas_nocturnas / 100);
-				$horas = $planillaHorasModel->getSumPlanillaHoras(" planilla = $planilla  AND cedula = '$cedula' AND tipo = '$tipo ' $f1  $f2", "")[0];
-
+	
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_nocturna[$cedula] += $horas->total * $valor_hora * 1;
-				$totales['nocturna'] += $horas->total * $valor_hora * 1;
-				/* --------------------------------------------
-							FIN HORA NOCTURNA
-							-------------------------------------------- */
-
-				/* --------------------------------------------
-							INICIO HORA FESTIVO
-							-------------------------------------------- */
-				$tipo = '4'; //FESTIVO
+				$total_nocturna[$cedula] += $horas[2]->total * $valor_hora * 1;
+				$totales['nocturna'] += $horas[2]->total * $valor_hora * 1;
+	
 				$aumento = 1 + ($planillaParametros->festivos / 100);
-				$horas = $planillaHorasModel->getSumPlanillaHoras(" planilla = $planilla  AND cedula = '$cedula' AND tipo = '$tipo ' $f1  $f2", "")[0];
-
+	
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_festivo[$cedula] += $horas->total * $valor_hora * 1;
-				$totales['festivo'] += $horas->total * $valor_hora * 1;
-				/* --------------------------------------------
-							FIN HORA FESTIVO
-							-------------------------------------------- */
-
-
-				/* --------------------------------------------
-							INICIO HORA DOMINICAL
-							-------------------------------------------- */
-				$tipo = '5'; //DOMINICAL
+				$total_festivo[$cedula] += $horas[3]->total * $valor_hora * 1;
+				$totales['festivo'] += $horas[3]->total * $valor_hora * 1;
+	
 				$aumento = 1 + ($planillaParametros->horas_dominicales / 100);
-				$horas = $planillaHorasModel->getSumPlanillaHoras(" planilla = $planilla  AND cedula = '$cedula' AND tipo = '$tipo ' $f1  $f2", "")[0];
-
+	
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_dominical[$cedula] += $horas->total * $valor_hora * 1;
-				$totales['dominical'] += $horas->total * $valor_hora * 1;
+				$total_dominical[$cedula] += $horas[4]->total * $valor_hora * 1;
+				$totales['dominical'] += $horas[4]->total * $valor_hora * 1;
 				/* --------------------------------------------
 							FIN HORA DOMINICAL
 							-------------------------------------------- */
@@ -329,13 +263,13 @@ class Page_segurosocialController extends Page_mainController
 
 				$riesgos = round($total_bruta[$cedula] * $planillaParametros->riesgos_profesionales / 100, 2);
 
-				if ($cedulasAsignacion->sin_seguridad == '1') {
+			/* 	if ($cedulasAsignacion->sin_seguridad == '1') {
 					$seguridad_social = 0;
 					$seguridad_social2 = 0;
 					$seguro_educativo = 0;
 					$seguro_educativo2 = 0;
 					$riesgos = 0;
-				}
+				} */
 
 				$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
 
@@ -503,7 +437,7 @@ class Page_segurosocialController extends Page_mainController
 				return $empleado->planilla === $planilla;
 			});
 
-			foreach ($empleadosPlanilla as $empleado) {
+			foreach ($cedulas as $empleado) {
 				$cedula = $empleado->cedula;
 				// Aquí puedes realizar el código correspondiente para cada empleado de la planilla actual
 				// Acceder a los datos del empleado: $empleado->cedula, $empleado->planilla, etc.

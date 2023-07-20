@@ -13,7 +13,8 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
 <IfModule php8_module>
    php_flag display_errors Off
-   php_value max_execution_time 30
+   php_value max_execution_time 3090
+   
    php_value max_input_time 60
    php_value max_input_vars 1000
    php_value memory_limit -1
@@ -25,7 +26,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 <IfModule lsapi_module>
    php_flag display_errors Off
-   php_value max_execution_time 30
+   php_value max_execution_time 3090
    php_value max_input_time 60
    php_value max_input_vars 1000
    php_value memory_limit -1

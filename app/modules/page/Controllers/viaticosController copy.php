@@ -3,7 +3,7 @@
 /**
  * Controlador de Localizaciones que permite la  creacion, edicion  y eliminacion de los locaci&oacute;n del Sistema
  */
-class Page_provisionesController extends Page_mainController
+class Page_viaticosController extends Page_mainController
 {
 	public $botonpanel = 6;
 	/**
@@ -34,7 +34,7 @@ class Page_provisionesController extends Page_mainController
 	 * $_csrf_section  nombre de la variable general csrf  que se va a almacenar en la session
 	 * @var string
 	 */
-	protected $_csrf_section = "page_provisiones";
+	protected $_csrf_section = "page_viaticos";
 
 	/**
 	 * $namepages nombre de la pvariable en la cual se va a guardar  el numero de seccion en la paginacion del controlador
@@ -42,10 +42,6 @@ class Page_provisionesController extends Page_mainController
 	 */
 	protected $namepages;
 
-	/**
-	 * $namepages nombre de la pvariable en la cual se va a guardar  el numero de seccion en la paginacion del controlador
-	 * @var string
-	 */
 
 
 	/**
@@ -56,13 +52,13 @@ class Page_provisionesController extends Page_mainController
 	public function init()
 	{
 		/* if ((Session::getInstance()->get("kt_login_level") == '2' )) {
-				  header('Location: /page/panel');
-			  } */
-		$this->mainModel = new Page_Model_DbTable_Planilla();
-		$this->namefilter = "parametersfilterprovisiones";
-		$this->route = "/page/provisiones";
-		$this->namepages = "pages_provisiones";
-		$this->namepageactual = "page_actual_provisiones";
+			header('Location: /page/panel');
+		} */
+		$this->mainModel = new Page_Model_DbTable_Localizaciones();
+		$this->namefilter = "parametersfilterviaticos";
+		$this->route = "/page/viaticos";
+		$this->namepages = "pages_viaticos";
+		$this->namepageactual = "page_actual_viaticos";
 		$this->_view->route = $this->route;
 		if (Session::getInstance()->get($this->namepages)) {
 			$this->pages = Session::getInstance()->get($this->namepages);
@@ -70,7 +66,6 @@ class Page_provisionesController extends Page_mainController
 			$this->pages = 50;
 		}
 		parent::init();
-		// Session::getInstance()->set($this->namefilter, '');
 	}
 
 
@@ -81,33 +76,22 @@ class Page_provisionesController extends Page_mainController
 	 */
 	public function indexAction()
 	{
-		$title = "Informe de provisiones";
+		$title = "Informe de viaticos";
 		$this->getLayout()->setTitle($title);
 		$this->_view->titlesection = $title;
 		$this->filters();
-
 		$this->_view->list_empresa = $this->getEmpresa();
-
 		$filters = (object) Session::getInstance()->get($this->namefilter);
 		$this->_view->filters = $filters;
-		/* 		print_r($filters);
-		echo "|||||||||||||||||||||||||"; */
+		// print_r($filters);
 		$resultado = $this->getFilter();
 		$filtros = $resultado['filtros'];
 		$filtros2 = $resultado['filtros2'];
-
-
-		/* echo($filtros);
-	
- */
-		/* echo $filtros;
-		echo "|||||||||||||||||||||||||";
-
-		echo $filtros2;
-
- */
+		/* 		echo $filtros;
+		echo '<br>';
+		echo $filtros2; */
+		$this->_view->empresas = $this->mainModel->getList("", "nombre");
 		$planillaHorasModel = new Page_Model_DbTable_Planillahoras();
-
 
 		$planillaParametrosModel = new Page_Model_DbTable_Parametros();
 		$planillaModel = new Page_Model_DbTable_Planilla();
@@ -116,93 +100,147 @@ class Page_provisionesController extends Page_mainController
 
 
 
-		$cedulas = $planillaHorasModel->getPlanillaHorasProvisiones($filtros, "nombre1 ASC");
+		$cedulas = $planillaHorasModel->getPlanillaHorasViaticos($filtros, "nombre1 ASC");
 		$planillaParametros = $planillaParametrosModel->getById(1);
-
 		$planillas = $planillaModel->getList($filtros2, "");
-		/* 	echo '<pre>';
-print_r($cedulas);
-		echo '</pre>'; */
-		$total_neta = [];
-		$total_neta2 = [];
-		$totales = [];
+				echo '<pre>';
+		print_r($planillas);
+		print_r($cedulas);
 
-		$i = 0;
+		echo '</pre>';
 
 
 
-		foreach ($planillas as $value) {
-			$i++;
-			$planilla = $value->id;
-			$fecha1 = $value->fecha1;
-			$fecha2 = $value->fecha2;
-			$vacaciones = [];
-			$antiguedad = [];
-			$total_provisiones = [];
+	$TOTAL = 0;
+			$viaticos = [];
+			$totales = [];
 			$total_normal = [];
 			$total_extra = [];
 			$total_nocturna = [];
 			$total_festivo = [];
-			$total_dominical = [];
 			$total_bruta = [];
+			$total_dominical = [];
 			$decimo = [];
+			$vacaciones = [];
+			$antiguedad = [];
+
+			$total_provisiones = [];
+
+		$i = 0;
+		foreach ($planillas as $value) {
+			$planilla = $value->id;
+			$fecha1 = $value->fecha1;
+			$fecha2 = $value->fecha2;
+
+
+		
+			$f1 = " AND ( (fecha >= '" . $fecha1 . "' AND fecha<='" . $fecha2 . "') OR fecha='0000-00-00' ) ";
+			$f2 = " AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') ";
+
+
+
+
+			// Filtrar los empleados que tienen la misma planilla
+			$empleadosPlanilla = array_filter($cedulas, function ($empleado) use ($planilla) {
+				return $empleado->planilla === $planilla;
+			});
+
 			foreach ($cedulas as $empleado) {
-
-				/* if ($empleado->planilla !== $planilla) {
-					continue;
-				} */
-
 				$cedula = $empleado->cedula;
-
+				$i++;
 				$cedulasAsignacion = $planillaAsignacionModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "cedula ASC")[0];
-				$horas = $planillaHorasModel->getSumPlanillaHorasSalarioNew($planilla, $cedula, $fecha1, $fecha2);
 
+
+				/* --------------------------------------------
+							INICIO HORA NORMAL
+						-------------------------------------------- */
+				$tipo = 1; //NORMAL
 				$aumento = 1;
-				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_normal[$cedula] += $horas[0]->total * $valor_hora * 1;
-				$totales['normal'] += $horas[0]->total * $valor_hora * 1;
 
+				$horas = $planillaHorasModel->getSumPlanillaHorasViaticos(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2 ")[0];
+
+				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
+				$total_normal[$cedula] += $horas->total * $valor_hora * 1;
+				$totales['normal'] += $horas->total * $valor_hora * 1;
+				/* --------------------------------------------
+									FIN HORA NORMAL
+									-------------------------------------------- */
+
+				/* --------------------------------------------
+									INICIO HORA EXTRA
+									-------------------------------------------- */
+				$tipo = 2; //EXTRA
 				$aumento = 1 + ($planillaParametros->horas_extra / 100);
 
-				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_extra[$cedula] += $horas[1]->total * $valor_hora * 1;
-				$totales['extra'] += $horas[1]->total * $valor_hora * 1;
+				$horas = $planillaHorasModel->getSumPlanillaHorasViaticos(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2 ")[0];
 
+				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
+				$total_extra[$cedula] += $horas->total * $valor_hora * 1;
+				$totales['extra'] += $horas->total * $valor_hora * 1;
+				/* --------------------------------------------
+									FIN HORA EXTRA 93-22
+									-------------------------------------------- */
+
+
+				/* --------------------------------------------
+									INICIO HORA NOCTURNA
+									-------------------------------------------- */
+				$tipo = 3;
 				$aumento = 1 + ($planillaParametros->horas_nocturnas / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasViaticos(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_nocturna[$cedula] += $horas[2]->total * $valor_hora * 1;
-				$totales['nocturna'] += $horas[2]->total * $valor_hora * 1;
+				$total_nocturna[$cedula] += $horas->total * $valor_hora * 1;
+				$totales['nocturna'] += $horas->total * $valor_hora * 1;
+				/* --------------------------------------------
+									FIN HORA NOCTURNA
+									-------------------------------------------- */
 
+				/* --------------------------------------------
+									INICIO HORA FESTIVO
+									-------------------------------------------- */
+				$tipo = 4;
 				$aumento = 1 + ($planillaParametros->festivos / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasViaticos(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_festivo[$cedula] += $horas[3]->total * $valor_hora * 1;
-				$totales['festivo'] += $horas[3]->total * $valor_hora * 1;
+				$total_festivo[$cedula] += $horas->total * $valor_hora * 1;
+				$totales['festivo'] += $horas->total * $valor_hora * 1;
+				/* --------------------------------------------
+									FIN HORA FESTIVO
+									-------------------------------------------- */
 
+
+				/* --------------------------------------------
+									INICIO HORA DOMINICAL
+									-------------------------------------------- */
+				$tipo = 5; //DOMINICAL
 				$aumento = 1 + ($planillaParametros->horas_dominicales / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasViaticos(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
-				$total_dominical[$cedula] += $horas[4]->total * $valor_hora * 1;
-				$totales['dominical'] += $horas[4]->total * $valor_hora * 1;
-
-
-
+				$total_dominical[$cedula] += $horas->total * $valor_hora * 1;
+				$totales['dominical'] += $horas->total * $valor_hora * 1;
+				/* --------------------------------------------
+									FIN HORA DOMINICAL
+									-------------------------------------------- */
 
 				$total_bruta[$cedula] += $total_normal[$cedula] + $total_extra[$cedula] + $total_nocturna[$cedula] + $total_festivo[$cedula] + $total_dominical[$cedula];
 				$totales['bruta'] += $total_bruta[$cedula];
 
-
-
 				$seguridad_social = round($total_bruta[$cedula] * $planillaParametros->seguridad_social / 100, 2);
-
 				$seguro_educativo = round($total_bruta[$cedula] * $planillaParametros->seguro_educativo / 100, 2);
-
 				$seguridad_social2 = round($total_bruta[$cedula] * $planillaParametros->seguridad_social2 / 100, 2);
-
 				$seguro_educativo2 = round($total_bruta[$cedula] * $planillaParametros->seguro_educativo2 / 100, 2);
-
 				$riesgos = round($total_bruta[$cedula] * $planillaParametros->riesgos_profesionales / 100, 2);
+
+				if ($cedulasAsignacion->sin_seguridad == '1') {
+					$seguridad_social = 0;
+					$seguridad_social2 = 0;
+					$seguro_educativo = 0;
+					$seguro_educativo2 = 0;
+					$riesgos = 0;
+				}
 
 				$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
 
@@ -212,12 +250,11 @@ print_r($cedulas);
 				$totales['seguro_educativo2'] += $seguro_educativo2;
 				$totales['riesgos'] += $riesgos;
 				$totales['total_seguro'] += $total_seguro;
-
 				/* --------------------------------------------
-					PROVISION
-					-------------------------------------------- */
-				/* $planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
- */
+				PROVISION
+				-------------------------------------------- */
+				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
+
 				$decimo[$cedula] += round($total_bruta[$cedula] * $planillaParametros->decimo / 100, 2);
 				$vacaciones[$cedula] += round($total_bruta[$cedula] * $planillaParametros->vacaciones / 100, 2);
 				$antiguedad[$cedula] += round($total_bruta[$cedula] * $planillaParametros->antiguedad / 100, 2);
@@ -228,86 +265,41 @@ print_r($cedulas);
 				$totales['antiguedad'] += $antiguedad[$cedula];
 				$totales['total_provisiones'] += $total_provisiones[$cedula];
 
-
-				/* $total_neta[$cedula] = $total_bruta[$cedula] - $seguridad_social - $seguro_educativo + $planillaTotales->viaticos - $planillaTotales->prestamos - $planillaTotales->prestamos_financiera;
-				$totales['neta'] += $total_neta[$cedula]; 
-
-				$total_neta2[$empresa] += $total_neta[$cedula]; */
+				$viaticos[$cedula] += $planillaTotales->viaticos;
+				$TOTAL += $viaticos[$cedula];
 				$this->_view->tabla  .= '
 				<tr>
-				<td> ' . $i  . '</td>
-				<td> ' . $cedula . '</td>
+				<td> ' . $i . '</td>
+				<td> ' . $empleado->cedula . '</td>
 				<td> ' . $empleado->nombre1 . '</td>
-				<td> ' . $this->formato_numero($decimo[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($vacaciones[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($antiguedad[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($total_provisiones[$cedula]) . '</td>
+				<td> ' . $this->formato_numero($viaticos[$empleado->cedula]) . '</td>
 				</tr>';
 			}
+
 		}
-		$this->_view->decimo = $decimo[$cedula];
-		$this->_view->vacaciones = $vacaciones[$cedula];
-		$this->_view->antiguedad = $antiguedad[$cedula];
-		$this->_view->total_provisiones = $total_provisiones[$cedula];
-		$this->_view->tabla2  .= '
+		$this->_view->tabla2  = '
 		<tr>
 		<td> </td>
 		<td> </td>
-		<td class="text-end" ><strong>TOTAL</strong></td>
-		<td> ' . $this->formato_numero($totales['decimo']) . '</td>
-		<td> ' . $this->formato_numero($totales['vacaciones']) . '</td>
-		<td> ' . $this->formato_numero($totales['antiguedad']) . '</td>
-		<td> ' . $this->formato_numero($totales['total_provisiones']) . '</td>
-		
-
+		<td> TOTAL </td>
+		<td> ' . $this->formato_numero2($TOTAL) . '</td>
 		</tr>';
-		// $TOTAL += $total_neta2[$empresa];
-
-		/* $TOTAL += $total_neta2[$empresa];
-					$this->_view->tabla  .= '
-					<tr>
-					<td> ' . $i  . '</td>
-					<td> ' . $list_empresa[$empresa] . '</td>
-					<td> ' . $this->formato_numero2($total_neta2[$empresa]) . '</td>
-					</tr>';
-			$this->_view->tabla2  .= '
-			<tr>
-			<td></td>
-			<td class="text-end"><strong>TOTAL</strong> </td>
-			<td> ' . $this->formato_numero2($TOTAL) . '</td>
-			</tr>'; */
-
+		$this->_view->viaticos = $viaticos;
+		$this->_view->TOTAL = $TOTAL;
 		$this->_view->cedulas = $cedulas;
-		//$this->_view->total_neta2 = $total_neta2;
 	}
 
-
-
-
-
-
-
-	function obtenerIds($array)
-	{
-		$ids = array(); // Array para almacenar los valores de los ids
-
-		foreach ($array as $obj) {
-			$ids[] = $obj->id; // Agregar el valor del id al array
-		}
-
-		$ids_str = implode(',', $ids); // Convertir el array en una cadena separada por comas
-
-		return $ids_str;
-	}
-
-	public function formato_numero2($n)
-	{
-		return number_format($n, 2, '.', ',');
-	}
-	public function formato_numero($n)
+	function formato_numero($n)
 	{
 		return number_format($n, 2, ',', '');
 	}
+
+
+	function formato_numero2($n)
+	{
+		return number_format($n, 2, '.', ',');
+	}
+
 	private function getEmpresa()
 	{
 		$modelData = new Page_Model_DbTable_Dependempresa();
@@ -346,7 +338,6 @@ print_r($cedulas);
 
 			if ($filters->empresa != '') {
 				$filtros = $filtros . " AND planilla.empresa ='" . $filters->empresa . "'";
-
 				$filtros2 = $filtros2 . " AND planilla.empresa ='" . $filters->empresa . "'";
 			}
 
@@ -355,9 +346,8 @@ print_r($cedulas);
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}
-		} else if (Session::getInstance()->get($this->namefilter) == "" || !(Session::getInstance()->get($this->namefilter))) {
+		} else {
 			$filters = (object) Session::getInstance()->get($this->namefilter);
-
 			if ($filters->fecha_inicio == '' && $filters->fecha_fin == '') {
 				$currentDate = date('Y-m-d'); // Obtener la fecha actual en formato Y-m-d
 
@@ -370,15 +360,13 @@ print_r($cedulas);
 								   echo "Fecha 2: " . $previousMonth30 . "<br>"; */
 				} else {
 
-
 					// Si estamos después del día 15 del mes actual
 					$this->_view->fecha_inicio = 	$filters->fecha_inicio = date('Y-m-01'); // Fecha del primer día del mes actual
 					$this->_view->fecha_fin =	$filters->fecha_fin = date('Y-m-15'); // Fecha del día 15 del mes actual
 
-
-
 				}
-				$filtros = $filtros . " AND  planilla_horas.fecha >= '" . $filters->fecha_inicio . "' AND planilla_horas.fecha<='" . $filters->fecha_fin . "' ";
+
+				$filtros = $filtros . "  AND planilla_horas.fecha >= '" . $filters->fecha_inicio . "' AND planilla_horas.fecha<='" . $filters->fecha_fin . "' ";
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}

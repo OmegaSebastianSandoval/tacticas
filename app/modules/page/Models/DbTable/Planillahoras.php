@@ -101,7 +101,7 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 	/* --------------------------------------------
    IFORME SALARIO
    -------------------------------------------- */
-	public function getPlanillaHorasSalario($filters = '', $order = '')
+	public function getPlanillaHorasSalarioOLD($filters = '', $order = '')
 	{
 		$filter = '';
 		if ($filters != '') {
@@ -111,8 +111,23 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		 $select = 'SELECT planilla_horas.* FROM planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id   ' . $filter . ' GROUP BY cedula ' . $orders;
+		  $select = 'SELECT planilla_horas.* FROM planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id   ' . $filter . ' GROUP BY planilla_horas.cedula ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+		public function getPlanillaHorasSalario($filters = '', $order = '')
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		   $select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' GROUP BY cedula ' . $orders;
+		$res = $this->_conn->query($select)->fetchAsObject();
+
 		return $res;
 	}
 	public function getSumPlanillaHorasSalario($filters = '')
@@ -122,10 +137,48 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 			$filter = ' WHERE ' . $filters;
 		}
 
-			$select = ' SELECT SUM(horas) AS total FROM planilla_horas  ' . $filter;
+		$select = ' SELECT SUM(horas) AS total FROM planilla_horas  ' . $filter;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
+	public function getSumPlanillaHorasSalarioNew($planilla, $cedula, $fecha1, $fecha2)
+	{
+		
+
+		$select = "SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
+		FROM (
+		  SELECT '1' AS tipo UNION ALL
+		  SELECT '2' AS tipo UNION ALL
+		  SELECT '3' AS tipo UNION ALL
+		  SELECT '4' AS tipo UNION ALL
+		  SELECT '5' AS tipo
+		) AS t
+		LEFT JOIN planilla_horas p ON p.planilla = $planilla
+								  AND p.cedula = '$cedula'
+								  AND p.tipo = t.tipo
+								  AND ((p.fecha >= '$fecha1' AND p.fecha <= '$fecha2') OR p.fecha = '0000-00-00')
+								  AND p.loc NOT IN ('DESCANSO', 'VACACIONES', 'PERMISO', 'FALTA')
+		GROUP BY t.tipo; ";
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+		/* 	
+
+SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
+	FROM (
+	  SELECT '1' AS tipo UNION ALL
+	  SELECT '2' AS tipo UNION ALL
+	  SELECT '3' AS tipo UNION ALL
+	  SELECT '4' AS tipo UNION ALL
+	  SELECT '5' AS tipo
+	) AS t
+	LEFT JOIN planilla_horas p ON p.planilla = 2316
+							  AND p.cedula = 'AT909186'
+							  AND p.tipo = t.tipo
+							  AND ((p.fecha >= '2023-04-01' AND p.fecha <= '2023-04-15') OR p.fecha = '0000-00-00')
+							  AND p.loc NOT IN ('DESCANSO', 'VACACIONES', 'PERMISO', 'FALTA')
+	GROUP BY t.tipo;
+	 */
 	public function getPlanillaHorasViaticos($filters = '', $order = '')
 	{
 		$filter = '';
@@ -147,18 +200,61 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 			$filter = ' WHERE ' . $filters;
 		}
 
-			$select = ' SELECT SUM(horas) AS total FROM planilla_horas  ' . $filter;
+		$select = ' SELECT SUM(horas) AS total FROM planilla_horas  ' . $filter;
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getPlanillaHorasProvisiones($filters = '', $order = '')
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		 $select = 'SELECT planilla_horas.*,  CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getPlanillaHorasFacturacion($filters = '', $order = '')
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		$select = 'SELECT planilla_horas.*,  CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
 }
 
-
+/* "SELECT planilla_horas.*,  CONCAT(hoja_vida.apellidos,' ',hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula */
 
 
 
 
 /* 
+SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2316 AND cedula = 'AT909186' AND tipo = '1' AND ( (fecha >= '2023-04-01' AND fecha<='2023-04-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') 
+
+
+SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2316 AND cedula = 'AT909186' AND tipo = '2' AND ( (fecha >= '2023-04-01' AND fecha<='2023-04-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') 
+
+
+SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2316 AND cedula = 'AT909186' AND tipo = '3' AND ( (fecha >= '2023-04-01' AND fecha<='2023-04-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') 
+
+
+SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2316 AND cedula = 'AT909186' AND tipo = '4' AND ( (fecha >= '2023-04-01' AND fecha<='2023-04-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') 
+
+
+SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2316 AND cedula = 'AT909186' AND tipo = '5' AND ( (fecha >= '2023-04-01' AND fecha<='2023-04-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA')
+
+
 
  SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = 2197 AND cedula = 'AN47180' AND tipo = '1 ' AND ( (fecha >= '2023-01-01' AND fecha<='2023-01-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
  
@@ -180,16 +276,16 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 
 /* 
 SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = '2337' AND cedula = '8-919-1420' AND tipo = '1 ' AND ( (fecha >= '2023-05-01' AND fecha<='2023-05-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
-104.0 104.0
+
 
 SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = '2337' AND cedula = '8-919-1420' AND tipo = '2 ' AND ( (fecha >= '2023-05-01' AND fecha<='2023-05-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
-0 0
+
 
 SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = '2337' AND cedula = '8-919-1420' AND tipo = '3 ' AND ( (fecha >= '2023-05-01' AND fecha<='2023-05-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
-00
+
 
 SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = '2337' AND cedula = '8-919-1420' AND tipo = '4 ' AND ( (fecha >= '2023-05-01' AND fecha<='2023-05-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
-00
+
 
 SELECT SUM(horas) AS total FROM planilla_horas WHERE planilla = '2337' AND cedula = '8-919-1420' AND tipo = '5 ' AND ( (fecha >= '2023-05-01' AND fecha<='2023-05-15') OR fecha='0000-00-00' ) AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') GROUP BY cedula 
 

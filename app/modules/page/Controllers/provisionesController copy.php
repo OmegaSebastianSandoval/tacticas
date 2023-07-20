@@ -85,9 +85,7 @@ class Page_provisionesController extends Page_mainController
 		$this->getLayout()->setTitle($title);
 		$this->_view->titlesection = $title;
 		$this->filters();
-
-		$this->_view->list_empresa = $this->getEmpresa();
-
+		$list_empresa = $this->getEmpresa();
 		$filters = (object) Session::getInstance()->get($this->namefilter);
 		$this->_view->filters = $filters;
 		/* 		print_r($filters);
@@ -120,25 +118,17 @@ class Page_provisionesController extends Page_mainController
 		$planillaParametros = $planillaParametrosModel->getById(1);
 
 		$planillas = $planillaModel->getList($filtros2, "");
-		/* 	echo '<pre>';
-print_r($cedulas);
-		echo '</pre>'; */
+
 		$total_neta = [];
 		$total_neta2 = [];
-		$totales = [];
 
 		$i = 0;
 
-
-
 		foreach ($planillas as $value) {
 			$i++;
-			$planilla = $value->id;
-			$fecha1 = $value->fecha1;
-			$fecha2 = $value->fecha2;
-			$vacaciones = [];
-			$antiguedad = [];
-			$total_provisiones = [];
+
+
+			$totales = [];
 			$total_normal = [];
 			$total_extra = [];
 			$total_nocturna = [];
@@ -146,12 +136,15 @@ print_r($cedulas);
 			$total_dominical = [];
 			$total_bruta = [];
 			$decimo = [];
+			$vacaciones = [];
+			$antiguedad = [];
+			$total_provisiones = [];
+
 			foreach ($cedulas as $empleado) {
-
-				/* if ($empleado->planilla !== $planilla) {
-					continue;
-				} */
-
+				$planilla = $value->id;
+				$fecha1 = $value->fecha1;
+				$fecha2 = $value->fecha2;
+				$empresa = $value->empresa;
 				$cedula = $empleado->cedula;
 
 				$cedulasAsignacion = $planillaAsignacionModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "cedula ASC")[0];
@@ -216,8 +209,8 @@ print_r($cedulas);
 				/* --------------------------------------------
 					PROVISION
 					-------------------------------------------- */
-				/* $planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
- */
+				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
+
 				$decimo[$cedula] += round($total_bruta[$cedula] * $planillaParametros->decimo / 100, 2);
 				$vacaciones[$cedula] += round($total_bruta[$cedula] * $planillaParametros->vacaciones / 100, 2);
 				$antiguedad[$cedula] += round($total_bruta[$cedula] * $planillaParametros->antiguedad / 100, 2);
@@ -234,33 +227,19 @@ print_r($cedulas);
 
 				$total_neta2[$empresa] += $total_neta[$cedula]; */
 				$this->_view->tabla  .= '
-				<tr>
-				<td> ' . $i  . '</td>
-				<td> ' . $cedula . '</td>
-				<td> ' . $empleado->nombre1 . '</td>
-				<td> ' . $this->formato_numero($decimo[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($vacaciones[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($antiguedad[$cedula]) . '</td>
-				<td> ' . $this->formato_numero($total_provisiones[$cedula]) . '</td>
-				</tr>';
+					<tr>
+					<td> ' . $i  . '</td>
+					<td> ' . $cedula . '</td>
+					<td> ' . $empleado->nombres1 . '</td>
+					<td> ' . $this->formato_numero($decimo[$cedula]) . '</td>
+					<td> ' . $this->formato_numero($vacaciones[$cedula]) . '</td>
+					<td> ' . $this->formato_numero($antiguedad[$cedula]) . '</td>
+					<td> ' . $this->formato_numero($total_provisiones[$cedula]) . '</td>
+					
+
+					</tr>';
 			}
 		}
-		$this->_view->decimo = $decimo[$cedula];
-		$this->_view->vacaciones = $vacaciones[$cedula];
-		$this->_view->antiguedad = $antiguedad[$cedula];
-		$this->_view->total_provisiones = $total_provisiones[$cedula];
-		$this->_view->tabla2  .= '
-		<tr>
-		<td> </td>
-		<td> </td>
-		<td class="text-end" ><strong>TOTAL</strong></td>
-		<td> ' . $this->formato_numero($totales['decimo']) . '</td>
-		<td> ' . $this->formato_numero($totales['vacaciones']) . '</td>
-		<td> ' . $this->formato_numero($totales['antiguedad']) . '</td>
-		<td> ' . $this->formato_numero($totales['total_provisiones']) . '</td>
-		
-
-		</tr>';
 		// $TOTAL += $total_neta2[$empresa];
 
 		/* $TOTAL += $total_neta2[$empresa];
@@ -277,7 +256,7 @@ print_r($cedulas);
 			<td> ' . $this->formato_numero2($TOTAL) . '</td>
 			</tr>'; */
 
-		$this->_view->cedulas = $cedulas;
+		// $this->_view->cedulas = $cedulas;
 		//$this->_view->total_neta2 = $total_neta2;
 	}
 
@@ -306,7 +285,7 @@ print_r($cedulas);
 	}
 	public function formato_numero($n)
 	{
-		return number_format($n, 2, ',', '');
+		return number_format($n,2,',','');
 	}
 	private function getEmpresa()
 	{

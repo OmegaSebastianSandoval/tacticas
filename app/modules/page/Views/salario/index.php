@@ -1,7 +1,11 @@
 <div class="container-fluid">
-    <div class=" d-flex justify-content-start mb-4 ">
+
+    <div class=" d-flex justify-content-between ">
+        <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
+            <?php echo $this->titlesection; ?>
+        </h3>
         <a href="/page/nomina">
-            <button class="btn-primary mt-2" type="submit">
+            <button class="btn-primary-home btn-primary-volver  mt-2" type="submit">
                 <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
                     <path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z" />
                 </svg>
@@ -9,11 +13,7 @@
             </button>
         </a>
     </div>
-    <div class=" d-flex justify-content-start ">
-        <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
-            <?php echo $this->titlesection; ?>
-        </h3>
-    </div>
+
     <form action="<?php echo $this->route; ?>" method="post">
         <div class="content-dashboard p-0">
             <div class="row">
@@ -79,7 +79,7 @@
     </form>
 
     <div class="content-dashboard">
-         <div class="franja-paginas">
+        <div class="franja-paginas">
             <div class="d-flex justify-content-end">
 
 
@@ -89,7 +89,7 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
 
 
 
@@ -103,11 +103,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- <?php
+                            echo $this->tabla;
+                            echo $this->tabla2;
 
+                            ?> -->
                     <?php
-                    /*  echo '<pre>';
-                    print_r($this->cedulas);
-                    echo '</pre>'; */
+
                     $key = 1;
 
                     foreach ($this->empresas as $key => $content) {
@@ -116,14 +118,9 @@
                     ?>
 
                         <tr>
-                            <td>
-                                <?php echo $key ?>
-                            </td>
-                            <td>
-                                <?php echo $content->nombre ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero2($this->total_neta2[$content->id]) ?>
+                            <td> <?php echo $key ?></td>
+                            <td><?php echo $content->nombre ?></td>
+                            <td><?php echo formato_numero2($this->total_neta2[$content->id]) ?>
                                 <?php $TOTAL += $this->total_neta2[$content->id];   ?>
 
                             </td>
@@ -136,7 +133,7 @@
                             <td>
                                 <div align="right"><strong>TOTAL</strong></div>
                             </td>
-                            <td><strong><?php echo formato_numero2($this->TOTAL) ?></strong></td>
+                            <td><strong><?php echo formato_numero2($TOTAL) ?></strong></td>
                         </tr>
 
 
@@ -145,6 +142,7 @@
         </div>
         <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
     </div>
+
 </div>
 
 <?php

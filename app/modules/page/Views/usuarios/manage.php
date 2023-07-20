@@ -159,7 +159,10 @@
 </div>
 
 <script>
-	// selectorUsuario()
+$(document).ready(function () {
+selectorUsuario()
+})
+	// 
 	//guardar asignacion, empresas
 	// Array para almacenar los checkboxes marcados
 	let asignacion = document.getElementById('asignacion')

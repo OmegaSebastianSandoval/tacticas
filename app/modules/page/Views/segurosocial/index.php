@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  
+
     <div class=" d-flex justify-content-between ">
         <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
             <?php echo $this->titlesection; ?>
@@ -40,7 +40,11 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text input-icono fondo-verde-claro "><i class="fas fa-calendar-alt"></i></span>
                         </div>
-                        <input type="date" class="form-control" name="fecha_inicio" value="<?php  if($this->fecha_inicio){echo $this->fecha_inicio;} else{ echo $this->getObjectVariable($this->filters, 'fecha_inicio');} ?>" required></input>
+                        <input type="date" class="form-control" name="fecha_inicio" value="<?php if ($this->fecha_inicio) {
+                                                                                                echo $this->fecha_inicio;
+                                                                                            } else {
+                                                                                                echo $this->getObjectVariable($this->filters, 'fecha_inicio');
+                                                                                            } ?>" required></input>
                     </label>
                 </div>
                 <div class="col-12  col-md-4 col-lg-3">
@@ -49,7 +53,11 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text input-icono fondo-verde-claro "><i class="fas fa-calendar-alt"></i></span>
                         </div>
-                        <input type="date" class="form-control" name="fecha_fin" value="<?php if($this->fecha_fin){echo $this->fecha_fin;}else{ echo $this->getObjectVariable($this->filters, 'fecha_fin'); } ?>" required></input>
+                        <input type="date" class="form-control" name="fecha_fin" value="<?php if ($this->fecha_fin) {
+                                                                                            echo $this->fecha_fin;
+                                                                                        } else {
+                                                                                            echo $this->getObjectVariable($this->filters, 'fecha_fin');
+                                                                                        } ?>" required></input>
                     </label>
                 </div>
 
@@ -139,7 +147,7 @@
                 </div>
             </div>
         </div>
-      
+
 
 
         <div class="content-table table-responsive">
@@ -152,16 +160,15 @@
                         <td class="text-start">Empresa</td>
 
                         <td>Salario bruto</td>
-                        <?php if ($this->mes == 4 or $this->mes == 8 or $this->mes == 12 or $this->mes2 == 4 or $this->mes2 == 8 or $this->mes2 == 12) { ?>
-                            <td>Decimo</td>
-                        <?php } ?>
+                        <td>Decimo</td>
+
 
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $key = 1;
-                     /* echo '<pre>';
+                    /* echo '<pre>';
                     print_r($this->cedulas);
 echo '</pre>'; */
                     foreach ($this->cedulas as $key => $content) {
@@ -185,13 +192,11 @@ echo '</pre>'; */
                                 <?php echo formato_numero($this->total_bruta[$content->cedula]) ?>
                                 <?php $TOTAL += ($this->total_bruta[$content->cedula]) ?>
                             </td>
-                            <?php if ($this->mes == 4 or $this->mes == 8 or $this->mes == 12 or $this->mes2 == 4 or $this->mes2 == 8 or $this->mes2 == 12) { ?>
-                                <td>
-                                    <?php echo formato_numero($this->decimo[$content->cedula]) ?>
-                                    <?php $TOTAL_DECIMO += ($this->decimo[$content->cedula]) ?>
+                            <td>
+                                <?php echo formato_numero($this->decimo[$content->cedula]) ?>
+                                <?php $TOTAL_DECIMO += ($this->decimo[$content->cedula]) ?>
 
-                                </td>
-                            <?php } ?>
+                            </td>
 
                         </tr>
                     <?php } ?>
@@ -206,14 +211,12 @@ echo '</pre>'; */
                         <td> <strong>
                                 <?php echo formato_numero($this->TOTAL) ?>
                             </strong> </td>
-                        <?php if ($this->mes == 4 or $this->mes == 8 or $this->mes == 12 or $this->mes2 == 4 or $this->mes2 == 8 or $this->mes2 == 12) { ?>
 
                             <td> <strong>
                                     <?php echo formato_numero($this->TOTAL_DECIMO) ?>
                                 </strong> </td>
 
 
-                        <?php } ?>
                         <td> </td>
 
                     </tr>

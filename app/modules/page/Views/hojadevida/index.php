@@ -116,7 +116,7 @@
 
 				<div class="col-12 col-lg-1 d-flex align-items-end     px-0 mx-0">
 					<label>&nbsp;</label>
-					<a class="btn  btn-azul-claro w-100" href="<?php echo $this->route; ?>?cleanfilter=1" style="font-size: 14px;"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
+					<a class="btn  btn-azul-claro w-100" href="<?php echo $this->route; ?>?cleanfilter=1" style="font-size: 14px;"> <i class="fas fa-eraser"></i> Limpiar</a>
 				</div>
 			</div>
 		</div>

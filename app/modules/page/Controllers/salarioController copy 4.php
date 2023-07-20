@@ -97,13 +97,13 @@ class Page_salarioController extends Page_mainController
 
 		/* echo($filtros);
 	
- */
-		/* echo $filtros;
+
+	echo $filtros;
 		echo "|||||||||||||||||||||||||";
 
-		echo $filtros2;
+		echo $filtros2; */
 
- */
+
 		$planillaHorasModel = new Page_Model_DbTable_Planillahoras();
 		$this->_view->empresas = $this->mainModel->getList("", "nombre");
 
@@ -114,35 +114,29 @@ class Page_salarioController extends Page_mainController
 
 
 
-		//$cedulas = $planillaHorasModel->getPlanillaHorasSalarioOLD($filtros, "");
+		$cedulas = $planillaHorasModel->getPlanillaHorasSalario($filtros, "");
 		$planillaParametros = $planillaParametrosModel->getById(1);
-
 		$planillas = $planillaModel->getList($filtros2, "");
-
-		$total_neta = [];
-		$total_neta2 = [];
-
-		$i = 0;
-		$planillasSeparadas = $this->obtenerIds($planillas);
-		$horas_list = $planillaHorasModel->getPlanillaHorasSalarioOLD(" $filtros AND  planilla.id IN ($planillasSeparadas)   ", "");
-
-		foreach ($horas_list as $hora1) {
-			$cedulas[$hora1->planilla][] = $hora1;
-		} 
-	/* 	echo '<pre>';
-		//print_r($planillas);
+		 echo '<pre>';
+		print_r($planillas);
 		print_r($cedulas);
 
-		echo '</pre>'; */
+		echo '</pre>';
+
+		$TOTAL = 0;
+		$i = 0;
+		$decimo = [];
 		$total_neta = [];
 		$total_neta2 = [];
-		foreach ($planillas as $key => $value) {
-			$planillaId = $value->id;
-			$arrayCedulas = $cedulas[$planillaId]; 
-
+		foreach ($planillas as $value) {
+			$i++;
+			$planilla = $value->id;
 			$fecha1 = $value->fecha1;
 			$fecha2 = $value->fecha2;
 			$empresa = $value->empresa;
+			$tipo = 0;
+			$aumento = 0;
+			$valor_hora = 0;
 			$totales = [];
 			$total_normal = [];
 			$total_extra = [];
@@ -150,47 +144,116 @@ class Page_salarioController extends Page_mainController
 			$total_festivo = [];
 			$total_dominical = [];
 			$total_bruta = [];
-			$decimo = [];
+
 
 			$vacaciones = [];
 			$antiguedad = [];
 			$total_provisiones = [];
-			foreach ($arrayCedulas as $empleado) {
+
+			$f1 = " AND ( (fecha >= '" . $fecha1 . "' AND fecha<='" . $fecha2 . "') OR fecha='0000-00-00' ) ";
+			$f2 = " AND (loc != 'DESCANSO' AND loc != 'VACACIONES' AND loc != 'PERMISO' AND loc != 'FALTA') ";
+
+			// Filtrar los empleados que tienen la misma planilla
+			/* 	$empleadosPlanilla = array_filter($cedulas, function ($empleado) use ($planilla) {
+				return $empleado->planilla === $planilla;
+			}); */
+
+			foreach ($cedulas as $empleado) {
 				$cedula = $empleado->cedula;
 
-				$cedulasAsignacion = $planillaAsignacionModel->getList(" planilla = $planillaId AND cedula = '" . $cedula . "' ", "cedula ASC")[0];
-				$horas = $planillaHorasModel->getSumPlanillaHorasSalarioNew($planillaId, $cedula, $fecha1, $fecha2);
 
+
+				$cedulasAsignacion = $planillaAsignacionModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "cedula ASC")[0];
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalarioNew($planilla, $cedula, $fecha1, $fecha2);
+				// print_r($horas);
+
+				/* echo '<pre>';
+					print_r($horas);
+					print_r($cedulasAsignacion);
+
+					echo '</pre>';*/
+				/* --------------- -----------------------------
+							INICIO HORA NORMAL
+						-------------------------------------------- */
+				/* 				$tipo = 1; //NORMAL
+				$aumento = 1;
+
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalario(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2 ")[0];
+ */
 				$aumento = 1;
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
 				$total_normal[$cedula] += $horas[0]->total * $valor_hora * 1;
 				$totales['normal'] += $horas[0]->total * $valor_hora * 1;
+				/* --------------------------------------------
+							FIN HORA NORMAL
+							-------------------------------------------- */
 
+				/* --------------------------------------------
+							INICIO HORA EXTRA
+							-------------------------------------------- */
+				/* 				$tipo = 2; //EXTRA
+				$aumento = 1 + ($planillaParametros->horas_extra / 100);
+
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalario(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2 ")[0];
+*/
 				$aumento = 1 + ($planillaParametros->horas_extra / 100);
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
 				$total_extra[$cedula] += $horas[1]->total * $valor_hora * 1;
 				$totales['extra'] += $horas[1]->total * $valor_hora * 1;
+				/* --------------------------------------------
+							FIN HORA EXTRA 93-22
+							-------------------------------------------- */
 
+
+				/* --------------------------------------------
+							INICIO HORA NOCTURNA
+							-------------------------------------------- */
+				/* 	$tipo = 3;
+				$aumento = 1 + ($planillaParametros->horas_nocturnas / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalario(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
+ */
 				$aumento = 1 + ($planillaParametros->horas_nocturnas / 100);
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
 				$total_nocturna[$cedula] += $horas[2]->total * $valor_hora * 1;
 				$totales['nocturna'] += $horas[2]->total * $valor_hora * 1;
+				/* --------------------------------------------
+							FIN HORA NOCTURNA
+							-------------------------------------------- */
 
+				/* --------------------------------------------
+							INICIO HORA FESTIVO
+							-------------------------------------------- */
+				/* 		$tipo = 4;
+				$aumento = 1 + ($planillaParametros->festivos / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalario(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
+*/
 				$aumento = 1 + ($planillaParametros->festivos / 100);
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
 				$total_festivo[$cedula] += $horas[3]->total * $valor_hora * 1;
 				$totales['festivo'] += $horas[3]->total * $valor_hora * 1;
+				/* --------------------------------------------
+							FIN HORA FESTIVO
+							-------------------------------------------- */
 
+
+				/* --------------------------------------------
+							INICIO HORA DOMINICAL
+							-------------------------------------------- */
+				/* 	$tipo = 5; //DOMINICAL
+				$aumento = 1 + ($planillaParametros->horas_dominicales / 100);
+				$horas = $planillaHorasModel->getSumPlanillaHorasSalario(" planilla = $planilla  AND cedula = '" . $cedula . "' AND tipo = '" . $tipo . "' $f1  $f2")[0];
+*/
 				$aumento = 1 + ($planillaParametros->horas_dominicales / 100);
 
 				$valor_hora = round($cedulasAsignacion->valor_hora * $aumento, 2);
 				$total_dominical[$cedula] += $horas[4]->total * $valor_hora * 1;
 				$totales['dominical'] += $horas[4]->total * $valor_hora * 1;
-
-
+				/* --------------------------------------------
+							FIN HORA DOMINICAL
+							-------------------------------------------- */
 
 
 				$total_bruta[$cedula] += $total_normal[$cedula] + $total_extra[$cedula] + $total_nocturna[$cedula] + $total_festivo[$cedula] + $total_dominical[$cedula];
@@ -201,37 +264,73 @@ class Page_salarioController extends Page_mainController
 				$seguridad_social = round($total_bruta[$cedula] * $planillaParametros->seguridad_social / 100, 2);
 
 				$seguro_educativo = round($total_bruta[$cedula] * $planillaParametros->seguro_educativo / 100, 2);
+/* 
+				$seguridad_social2 = round($total_bruta[$cedula] * $planillaParametros->seguridad_social2 / 100, 2);
 
-				
-				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planillaId AND cedula = '" . $cedula . "' ", "")[0];
-				
+				$seguro_educativo2 = round($total_bruta[$cedula] * $planillaParametros->seguro_educativo2 / 100, 2);
 
+				$riesgos = round($total_bruta[$cedula] * $planillaParametros->riesgos_profesionales / 100, 2);
+ */
+				/* if ($cedulasAsignacion->sin_seguridad == '1') {
+					$seguridad_social = 0;
+					$seguridad_social2 = 0;
+					$seguro_educativo = 0;
+					$seguro_educativo2 = 0;
+					$riesgos = 0;
+				} */
 
+				/* $total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
+
+				$totales['seguridad_social'] += $seguridad_social;
+				$totales['seguro_educativo'] += $seguro_educativo;
+				$totales['seguridad_social2'] += $seguridad_social2;
+				$totales['seguro_educativo2'] += $seguro_educativo2;
+				$totales['riesgos'] += $riesgos;
+				$totales['total_seguro'] += $total_seguro; */
+
+				/* --------------------------------------------
+				PROVISION
+				-------------------------------------------- */
+				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
+
+		/* 		$decimo[$cedula] += round($total_bruta[$cedula] * $planillaParametros->decimo / 100, 2);
+				$vacaciones[$cedula] += round($total_bruta[$cedula] * $planillaParametros->vacaciones / 100, 2);
+				$antiguedad[$cedula] += round($total_bruta[$cedula] * $planillaParametros->antiguedad / 100, 2);
+				$total_provisiones[$cedula] += $decimo[$cedula] + $vacaciones[$cedula] + $antiguedad[$cedula]; */
+
+		/* 		$totales['decimo'] += $decimo[$cedula];
+				$totales['vacaciones'] += $vacaciones[$cedula];
+				$totales['antiguedad'] += $antiguedad[$cedula];
+				$totales['total_provisiones'] += $total_provisiones[$cedula];
+
+ */
 				$total_neta[$cedula] = $total_bruta[$cedula] - $seguridad_social - $seguro_educativo + $planillaTotales->viaticos - $planillaTotales->prestamos - $planillaTotales->prestamos_financiera;
-								$totales['neta'] += $total_neta[$cedula];
+				// $totales['neta'] += $total_neta[$cedula];
 
 				$total_neta2[$empresa] += $total_neta[$cedula];
 			}
 		}
 		// $TOTAL += $total_neta2[$empresa];
 
-		// $TOTAL += $total_neta2[$empresa];
-		// 			$this->_view->tabla  .= '
-		// 			<tr>
-		// 			<td> ' . $i  . '</td>
-		// 			<td> ' . $list_empresa[$empresa] . '</td>
-		// 			<td> ' . $this->formato_numero2($total_neta2[$empresa]) . '</td>
-		// 			</tr>';
-		// 	$this->_view->tabla2  .= '
-		// 	<tr>
-		// 	<td></td>
-		// 	<td class="text-end"><strong>TOTAL</strong> </td>
-		// 	<td> ' . $this->formato_numero2($TOTAL) . '</td>
-		// 	</tr>'; 
-
-		// $this->_view->cedulas = $cedulas;
+		/* $TOTAL += $total_neta2[$empresa];
+				$this->_view->tabla  .= '
+				<tr>
+				<td> ' . $i  . '</td>
+				<td> ' . $list_empresa[$empresa] . '</td>
+				<td> ' . $this->formato_numero2($total_neta2[$empresa]) . '</td>
+				</tr>';
+		$this->_view->tabla2  .= '
+		<tr>
+		<td></td>
+		<td class="text-end"><strong>TOTAL</strong> </td>
+		<td> ' . $this->formato_numero2($TOTAL) . '</td>
+		</tr>'; */
+	
+		$this->_view->cedulas = $cedulas;
 		$this->_view->total_neta2 = $total_neta2;
 	}
+
+
 
 
 
@@ -506,19 +605,6 @@ echo '</pre>';
 		header('Content-Disposition: attachment; filename=Informe_salario_neto' . $hoy . '.xls');
 		echo $output;
 	}
-	public function obtenerIds($array)
-	{
-		$ids = array(); // Array para almacenar los valores de los ids
-
-		foreach ($array as $obj) {
-			$ids[] = $obj->id; // Agregar el valor del id al array
-		}
-
-		$ids_str = implode(', ', $ids); // Convertir el array en una cadena separada por comas
-
-		return $ids_str;
-	}
-
 	public function formato_numero2($n)
 	{
 		return number_format($n, 2, '.', ',');
