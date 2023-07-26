@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  
+
     <div class=" d-flex justify-content-between ">
         <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
             <?php echo $this->titlesection; ?>
@@ -16,7 +16,7 @@
     <form action="<?php echo $this->route; ?>" method="post">
         <div class="content-dashboard p-0">
             <div class="row">
-                
+
                 <div class="col-12  col-md-4 col-lg-2">
                     <label>Empresa</label>
                     <label class="input-group">
@@ -32,7 +32,7 @@
                             <?php endforeach ?>
                         </select>
                     </label>
-                </div> 
+                </div>
                 <div class="col-12  col-md-4 col-lg-3">
                     <label>Fecha de inicio</label>
                     <label class="input-group">
@@ -76,7 +76,50 @@
             </div>
         </div>
     </form>
-    <div class="content-table table-responsive mb-5 pb-5">
+    <?php if (!$this->noContent) { ?>
+
+    <div class="content-dashboard m-0 p-0">
+        <div class="franja-paginas">
+            <div class="d-flex justify-content-between">
+                <div class="">
+                    <div class="titulo-registro">Se encontraron <?php echo count($this->cedulas); ?> Registros</div>
+                </div>
+                <!--    <div class="d-flex gap-2 align-items-center">
+                    <div>
+
+
+                        <span class="texto-paginas">Registros por pagina:</span>
+                    </div>
+                    <div>
+
+                        <select class="form-control form-control-sm selectpagination">
+
+                            <option value="100" <?php if ($this->pages == 100) {
+                                                    echo 'selected';
+                                                } ?>>100</option>
+
+                            <option value="200" <?php if ($this->pages == 200) {
+                                                    echo 'selected';
+                                                } ?>>200</option>
+                            <option value="300" <?php if ($this->pages == 300) {
+                                                    echo 'selected';
+                                                } ?>>300</option>
+                            <option value="Todos" <?php if ($this->pages == 'Todos') {
+                                                        echo 'selected';
+                                                    } ?>>Todos</option>
+                        </select>
+                    </div>
+                </div> -->
+
+                <div class="d-flex gap-2">
+
+                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="content-table table-responsive mb-5 pb-5">
             <table class=" table table-striped  table-hover table-administrator text-center">
                 <thead>
                     <tr class="text-center">
@@ -133,13 +176,15 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <?php } ?>
 </div>
 
 <?php
 
 function formato_numero($n)
 {
-  return number_format($n, 2, ',', '');
+    return number_format($n, 2, ',', '');
 }
 
 

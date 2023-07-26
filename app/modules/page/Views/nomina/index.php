@@ -28,9 +28,17 @@
             gap: 40px;
         }
     </style>
-
-    <div class="home-nomina mt-3">
-
+        <div class="home-nomina">
+        <div class="">
+            <a href="/page/planilla">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/parametros.jpg" alt="Administrar parámetros">
+                    </div>
+                    <h2 class="title p-2">Planilla</h2>
+                </div>
+            </a>
+        </div>
         <div class="">
             <a href="/page/parametros/manage?id=1">
                 <div class="card-vencimiento mx-auto ">
@@ -83,7 +91,7 @@
             </a>
         </div>
         <div class="">
-            <a href="/page/provisiones">
+            <a href="/page/provisiones?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infoprov.jpg" alt="Informe de provisiones">
@@ -103,7 +111,7 @@
             </a>
         </div>
         <div class="">
-            <a href="/page/viaticos">
+            <a href="/page/viaticos?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infovia.jpg" alt="Informe de viaticos">
@@ -113,7 +121,7 @@
             </a>
         </div>
         <div class="">
-            <a href="/page/salario">
+            <a href="/page/salario?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infosala.jpg" alt="Informe salario neto cliente">
@@ -123,7 +131,7 @@
             </a>
         </div>
         <div class="">
-            <a href="/page/infolocalizacion">
+            <a href="/page/infolocalizacion?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
                         <img src="/skins/page/images/infoloca.jpg" alt="Localizaciones">
@@ -135,11 +143,12 @@
 
 
     </div>
+
 </div>
 
 <style>
-     .card-vencimiento {
-         max-width: 200px; 
+    .card-vencimiento {
+        max-width: 200px;
         height: 250px;
     }
 
@@ -155,5 +164,11 @@
 
     .card-vencimiento:hover .title {
         background-color: rgba(25, 169, 201, 1);
-    } 
+    }
 </style>
+<script>
+  Fancybox.bind("[data-fancybox]", {
+        //
+      }) 
+
+    </script>

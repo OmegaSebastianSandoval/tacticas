@@ -111,11 +111,11 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		  $select = 'SELECT planilla_horas.* FROM planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id   ' . $filter . ' GROUP BY planilla_horas.cedula ' . $orders;
+		$select = 'SELECT planilla_horas.* FROM planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id   ' . $filter . ' GROUP BY planilla_horas.cedula ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
-		public function getPlanillaHorasSalario($filters = '', $order = '')
+	public function getPlanillaHorasSalario($filters = '', $order = '')
 	{
 		$filter = '';
 		if ($filters != '') {
@@ -125,7 +125,7 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		   $select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' GROUP BY cedula ' . $orders;
+		$select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' GROUP BY cedula ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 
 		return $res;
@@ -143,7 +143,7 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 	}
 	public function getSumPlanillaHorasSalarioNew($planilla, $cedula, $fecha1, $fecha2)
 	{
-		
+
 
 		$select = "SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 		FROM (
@@ -162,7 +162,7 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
-		/* 	
+	/* 	
 
 SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 	FROM (
@@ -214,7 +214,21 @@ SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		 $select = 'SELECT planilla_horas.*,  CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
+		$select = 'SELECT planilla_horas.*, hoja_vida.tipo_contrato,  CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getPlanillaHorasProvisionesPages($filters = '', $order = '', $page, $amount)
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		$select = 'SELECT planilla_horas.*, hoja_vida.tipo_contrato,  CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders . ' LIMIT ' . $page . ' , ' . $amount;;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
@@ -229,6 +243,96 @@ SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 			$orders = ' ORDER BY ' . $order;
 		}
 		$select = 'SELECT planilla_horas.*,  CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getSumHorasLocalizacion($filters = '', $order = '')
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		$select = 'SELECT SUM(horas) AS total FROM planilla_horas LEFT JOIN planilla ON planilla.id = planilla_horas.planilla   ' . $filter  . $orders;
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getSumHorasLocalizacionNew($localizacion, $fecha1, $fecha2)
+	{
+
+		$select = "SELECT tipos.tipo, COALESCE(SUM(total_horas.horas), 0) AS total
+		 FROM (
+		   SELECT 1 AS tipo UNION ALL
+		   SELECT 2 AS tipo UNION ALL
+		   SELECT 3 AS tipo UNION ALL
+		   SELECT 4 AS tipo UNION ALL
+		   SELECT 5 AS tipo
+		 ) AS tipos
+		 LEFT JOIN (
+		   SELECT planilla_horas.tipo, SUM(horas) AS horas
+		   FROM planilla_horas
+		   LEFT JOIN planilla ON planilla.id = planilla_horas.planilla
+		   WHERE loc = '$localizacion'
+			 AND (
+			   (planilla_horas.fecha >= '$fecha1' AND planilla_horas.fecha <= '$fecha2')
+			   OR planilla_horas.fecha = '0000-00-00'
+			 )
+			 AND (
+			   (planilla.fecha1 >= '$fecha1' AND planilla.fecha2 <= '$fecha2' AND planilla_horas.fecha = '0000-00-00')
+			   OR planilla_horas.fecha != '0000-00-00'
+			 )
+		   GROUP BY planilla_horas.tipo
+		 ) AS total_horas ON tipos.tipo = total_horas.tipo
+		 GROUP BY tipos.tipo;";
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getSumHorasLocalizacionNew2( $fecha1, $fecha2)
+	{
+
+		 $select = "SELECT 
+		loc.nombre AS localizacion,
+		SUM(CASE WHEN tipos.tipo = 1 THEN COALESCE(total_horas.horas, 0) ELSE 0 END) AS total_tipo_1,
+		SUM(CASE WHEN tipos.tipo = 2 THEN COALESCE(total_horas.horas, 0) ELSE 0 END) AS total_tipo_2,
+		SUM(CASE WHEN tipos.tipo = 3 THEN COALESCE(total_horas.horas, 0) ELSE 0 END) AS total_tipo_3,
+		SUM(CASE WHEN tipos.tipo = 4 THEN COALESCE(total_horas.horas, 0) ELSE 0 END) AS total_tipo_4,
+		SUM(CASE WHEN tipos.tipo = 5 THEN COALESCE(total_horas.horas, 0) ELSE 0 END) AS total_tipo_5
+	  FROM (
+		  SELECT 1 AS tipo UNION ALL
+		  SELECT 2 AS tipo UNION ALL
+		  SELECT 3 AS tipo UNION ALL
+		  SELECT 4 AS tipo UNION ALL
+		  SELECT 5 AS tipo
+	  ) AS tipos
+	  CROSS JOIN localizacion AS loc
+	  LEFT JOIN (
+		  SELECT planilla_horas.loc, planilla_horas.tipo, SUM(horas) AS horas
+		  FROM planilla_horas
+		  LEFT JOIN planilla ON planilla.id = planilla_horas.planilla
+		  WHERE ((planilla_horas.fecha >= '$fecha1' AND planilla_horas.fecha<='$fecha2') OR planilla_horas.fecha='0000-00-00')
+		  AND ((planilla.fecha1 >= '$fecha1' AND planilla.fecha2<='$fecha2' AND planilla_horas.fecha='0000-00-00') OR planilla_horas.fecha!='0000-00-00') 
+		  GROUP BY planilla_horas.loc, planilla_horas.tipo
+	  ) AS total_horas ON loc.nombre = total_horas.loc AND tipos.tipo = total_horas.tipo
+	  WHERE loc.nombre NOT IN ('DESCANSO', 'PERMISO', 'FALTA', 'VACACIONES')
+	  GROUP BY loc.nombre
+	  ";
+		$res = $this->_conn->query($select)->fetchAsObject();
+		return $res;
+	}
+	public function getSumHorasLocalizacionInfo($filters = '', $order = '')
+	{
+		$filter = '';
+		if ($filters != '') {
+			$filter = ' WHERE ' . $filters;
+		}
+		$orders = "";
+		if ($order != '') {
+			$orders = ' ORDER BY ' . $order;
+		}
+		$select = 'SELECT SUM(horas) AS total, planilla.* FROM planilla_horas LEFT JOIN planilla ON planilla.id = planilla_horas.planilla  ' . $filter  . ' GROUP BY planilla ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}

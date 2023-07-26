@@ -90,6 +90,11 @@ class Page_viaticosController extends Page_mainController
 		/* 	echo $filtros;
 		echo '<br>';
 		echo $filtros2; */
+		if ($filtros == ' 1 ' && $filtros2 == ' 1 ') {
+			$this->_view->noContent = 1;
+			return;
+		}
+
 		$this->_view->empresas = $this->mainModel->getList("", "nombre");
 		$planillaHorasModel = new Page_Model_DbTable_Planillahoras();
 
@@ -103,7 +108,7 @@ class Page_viaticosController extends Page_mainController
 		$cedulas = $planillaHorasModel->getPlanillaHorasViaticos($filtros, "nombre1 ASC");
 		$planillaParametros = $planillaParametrosModel->getById(1);
 		$planillas = $planillaModel->getList($filtros2, "");
-	/* 	echo '<pre>';
+		/* 	echo '<pre>';
 		print_r($planillas);
 		print_r($cedulas);
 
@@ -134,7 +139,7 @@ class Page_viaticosController extends Page_mainController
 			}); */
 			foreach ($cedulas as $empleado) {
 				$cedula = $empleado->cedula;
-			
+
 
 
 				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
@@ -145,6 +150,108 @@ class Page_viaticosController extends Page_mainController
 		$this->_view->viaticos = $viaticos;
 		$this->_view->TOTAL = $TOTAL;
 		$this->_view->cedulas = $cedulas;
+	}
+
+
+
+
+	public function exportarAction()
+	{
+		$this->setLayout('blanco');
+		header("Content-Type: text/html;charset=utf-8");
+		$this->filters();
+		$list_empresa = $this->getEmpresa();
+		$filters = (object) Session::getInstance()->get($this->namefilter);
+		$this->_view->filters = $filters;
+		// print_r($filters);
+		$resultado = $this->getFilter();
+		$filtros = $resultado['filtros'];
+		$filtros2 = $resultado['filtros2'];
+		$empresa = $resultado['empresa'];
+		$fecha_inicio = $resultado['fecha_inicio'];
+		$fecha_fin = $resultado['fecha_fin'];
+		/* 	echo $filtros;
+	echo '<br>';
+	echo $filtros2; */
+		$this->_view->empresas = $this->mainModel->getList("", "nombre");
+		$planillaHorasModel = new Page_Model_DbTable_Planillahoras();
+
+		$planillaModel = new Page_Model_DbTable_Planilla();
+		$planillaTotalesModel = new Page_Model_DbTable_Planillatotales();
+
+
+
+		$cedulas = $planillaHorasModel->getPlanillaHorasViaticos($filtros, "nombre1 ASC");
+		$planillas = $planillaModel->getList($filtros2, "");
+
+		$viaticos = [];
+
+
+		$TOTAL = 0;
+		if ($empresa == '') {
+			$output = '<div align="center" style="font-size:18px;color:#0158A8;font-weight:700;">Informe de vi&aacute;ticos</div>';
+		} else {
+			$output = '<div align="center" style="font-size:18px;color:#0158A8;font-weight:700;">Informe de vi&aacute;ticos de la empresa ' . $list_empresa[$empresa] . '</div>';
+		}
+		$output .= '<div align="center">Desde: <strong>' . $fecha_inicio . '</strong> - Hasta: <strong>' . $fecha_fin . '</strong></div>';
+
+		$output .= '<table border="1" cellpadding="3" cellspacing="0">';
+		$output .= '
+	<tr>
+	<td>Item</td>
+	<td>Documento</td>
+	<td>Nombre</td>
+	<td>Vi&aacute;ticos</td>
+	</tr>';
+		$i = 0;
+		foreach ($planillas as $value) {
+			$planilla = $value->id;
+			/* 	// Filtrar los empleados que tienen la misma planilla
+		$empleadosPlanilla = array_filter($cedulas, function ($empleado) use ($planilla) {
+			return $empleado->planilla === $planilla;
+		}); */
+			foreach ($cedulas as $empleado) {
+				$i++;
+				$cedula = $empleado->cedula;
+
+				$planillaTotales = $planillaTotalesModel->getList(" planilla = $planilla AND cedula = '" . $cedula . "' ", "")[0];
+				$viaticos[$cedula] += $planillaTotales->viaticos;
+				$TOTAL += $viaticos[$cedula];
+
+				$output .= '
+	<tr>
+	<td>' . $i . '</td>
+	<td>' . $cedula . '</td>
+	<td>' . $empleado->nombre1 . '</td>
+	<td>' . $this->formato_numero($viaticos[$cedula]) . '</td>
+	</tr>';
+			}
+		}
+		$output .= '
+	<tr>
+	<td></td>
+	<td></td>
+	<td style="text-align:right;"><strong>TOTAL</strong></td>
+	<td style="text-align:right;"><strong>' . $this->formato_numero2($TOTAL) . '</strong></td>
+	</tr>';
+		$output .= '</table>';
+		$hoy = date('Ym-d h:m:s');
+
+
+		header('Content-Type: application/xls');
+		header('Content-Disposition: attachment; filename=Informe_de_viaticos' . $hoy . '.xls');
+		echo $output;
+	}
+
+	 function formato_numero($n)
+	{
+		return number_format($n, 2, ',', '');
+	}
+
+
+	public	function formato_numero2($n)
+	{
+		return number_format($n, 2, '.', ',');
 	}
 	private function getEmpresa()
 	{
@@ -192,7 +299,7 @@ class Page_viaticosController extends Page_mainController
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}
-		} else {
+		} /* else {
 			$filters = (object) Session::getInstance()->get($this->namefilter);
 			if ($filters->fecha_inicio == '' && $filters->fecha_fin == '') {
 				$currentDate = date('Y-m-d'); // Obtener la fecha actual en formato Y-m-d
@@ -202,8 +309,7 @@ class Page_viaticosController extends Page_mainController
 					// Si estamos antes o en el día 15 del mes actual
 					$this->_view->fecha_inicio = $filters->fecha_inicio  = date('Y-m-15', strtotime('previous month')); // Fecha del día 15 del mes anterior
 					$this->_view->fecha_fin = $filters->fecha_fin = date('Y-m-t', strtotime('previous month')); // Fecha del último día del mes anterior
-					/* 	echo "Fecha 1: " . $previousMonth15 . "<br>";
-								   echo "Fecha 2: " . $previousMonth30 . "<br>"; */
+				
 				} else {
 
 					// Si estamos después del día 15 del mes actual
@@ -216,8 +322,8 @@ class Page_viaticosController extends Page_mainController
 
 				$filtros2 = $filtros2 . " AND fecha1>='" . $filters->fecha_inicio . "' AND fecha1 <='" . $filters->fecha_fin . "' AND fecha2>='" . $filters->fecha_inicio . "' AND fecha2 <='" . $filters->fecha_fin . "'  ";
 			}
-		}
-		return array('filtros' => $filtros, 'filtros2' => $filtros2);
+		} */
+		return array('filtros' => $filtros, 'filtros2' => $filtros2, 'fecha_inicio' => $filters->fecha_inicio, 'fecha_fin' => $filters->fecha_fin, 'empresa' => $filters->empresa);
 	}
 
 	/**

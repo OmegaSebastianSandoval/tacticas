@@ -45,6 +45,15 @@ class Page_Model_DbTable_Facturadas extends Db_Table
         return mysqli_insert_id($this->_conn->getConnection());
 	}
 
+	public function insert2($data){
+		$fecha1 = $data['fecha1'];
+		$fecha2 = $data['fecha2'];
+		$localizacion = $data['localizacion'];
+		
+		$query = "INSERT INTO facturadas( fecha1, fecha2, localizacion) VALUES ( '$fecha1', '$fecha2', '$localizacion')";
+		$res = $this->_conn->query($query);
+        return mysqli_insert_id($this->_conn->getConnection());
+	}
 	/**
 	 * update Recibe la informacion de un facturadas  y actualiza la informacion en la base de datos
 	 * @param  array Array Array con la informacion con la cual se va a realizar la actualizacion en la base de datos

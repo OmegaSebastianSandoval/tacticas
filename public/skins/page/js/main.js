@@ -1,5 +1,7 @@
 let videos = [];
 $(document).ready(function () {
+  $(".fancybox").fancybox();
+  $("[data-fancybox]").fancybox();
   $(".dropdown-toggle").dropdown();
   $(".carouselsection").carousel({
     quantity: 4,
@@ -58,7 +60,6 @@ $(document).ready(function () {
   let passwordField = document.getElementById("clave_principal");
   let confirmPasswordField = document.getElementById("clave_principal-r");
   let submitButton = document.getElementById("submitButton");
-  
 
   // Función para verificar si las contraseñas coinciden
   function checkPasswordsMatch() {
@@ -80,7 +81,6 @@ $(document).ready(function () {
     let conditionsList = document.getElementById("conditions"); // Elemento para mostrar la lista de condiciones cumplidas
     var submitButton = document.getElementById("submitButton");
     var botonesAcciones = document.getElementById("botones-acciones"); // Elemento para ocultar o mostrar
-
 
     let conditions = []; // Lista para almacenar las condiciones cumplidas
     let conditionsNotMet = []; // Lista para almacenar las condiciones no cumplidas
@@ -139,12 +139,10 @@ $(document).ready(function () {
         li.textContent = condition;
         li.classList.add("condition-met");
         conditionsList.appendChild(li);
-
       });
     } else {
       messageText = "Las contraseñas no coinciden.";
       conditionsList.innerHTML = "";
-
     }
 
     // Agregar estilos a las condiciones no cumplidas
@@ -163,16 +161,13 @@ $(document).ready(function () {
     if (conditionsNotMet.length > 0) {
       submitButton.disabled = true;
       botonesAcciones.style.display = "none"; // Ocultar el elemento
-
     } else {
       submitButton.disabled = false;
       // Ocultar el texto y la lista después de un segundo
-     
-        message.textContent = "";
-        conditionsList.innerHTML = "";
-      botonesAcciones.style.display = "block"; // Mostrar el elemento
 
-      
+      message.textContent = "";
+      conditionsList.innerHTML = "";
+      botonesAcciones.style.display = "block"; // Mostrar el elemento
     }
   }
 

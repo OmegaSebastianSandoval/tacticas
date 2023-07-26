@@ -25,6 +25,13 @@
     <link rel="stylesheet" href="/skins/administracion/css/global.css">
     <link rel="shortcut icon" href="/images/<?= $infopage->info_pagina_favicon; ?>">
 
+    <!-- Fancybox -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="/fancybox/jquery.easing-1.4.pack.js"></script>
+
+
     <script type="text/javascript">
         var map;
         var longitude = 0;
@@ -109,7 +116,7 @@
     <!-- File Input -->
     <script src="/components/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="/components/bootstrap-fileinput/js/locales/es.js"></script>
-    <!-- Tiny --> 
+    <!-- Tiny -->
     <script src="/components/tinymce/tinymce.min.js"></script>
     <script src="/components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
     <script src="/components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>

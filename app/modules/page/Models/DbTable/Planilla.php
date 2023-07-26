@@ -52,4 +52,34 @@ class Page_Model_DbTable_Planilla extends Db_Table
 		$query = "UPDATE planilla SET  fecha1 = '$fecha1', fecha2 = '$fecha2', empresa = '$empresa', cerrada = '$cerrada', fecha_cerrada = '$fecha_cerrada', limite_horas = '$limite_horas', limite_dominicales = '$limite_dominicales' WHERE id = '".$id."'";
 		$res = $this->_conn->query($query);
 	}
+	public function getListPlanillas($filters = '', $order = '')
+	{
+	  $filter = '';
+	  if ($filters != '') {
+		$filter = ' WHERE ' . $filters;
+	  }
+	  $orders = "";
+	  if ($order != '') {
+		$orders = ' ORDER BY ' . $order;
+	  }
+		$select = 'SELECT planilla.*, empresa.nombre AS empresa FROM planilla LEFT JOIN empresa ON planilla.empresa = empresa.id ' . $filter . ' ' . $orders;
+	  $res = $this->_conn->query($select)->fetchAsObject();
+	  return $res;
+	}
+  
+	public function getListPagesPlanillas($filters = '', $order = '', $page, $amount)
+	{
+	  $filter = '';
+	  if ($filters != '') {
+		$filter = ' WHERE ' . $filters;
+	  }
+	  $orders = "";
+	  if ($order != '') {
+		$orders = ' ORDER BY ' . $order;
+	  }
+	  $select = 'SELECT planilla.*, empresa.nombre AS empresa FROM planilla LEFT JOIN empresa ON planilla.empresa = empresa.id ' . $filter . ' ' . $orders . ' LIMIT ' . $page . ' , ' . $amount;
+	  $res = $this->_conn->query($select)->fetchAsObject();
+	  return $res;
+	}
+  
 }

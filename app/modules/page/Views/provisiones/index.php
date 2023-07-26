@@ -77,84 +77,205 @@
         </div>
     </form>
 
-    <div class="content-dashboard mt-5 mb-5">
-        <div class="franja-paginas">
-            <div class="d-flex justify-content-end">
+    <?php if (!$this->noContent) { ?>
+        <?php if ($this->amount != 'Todos') { ?>
+
+            <div class="container-fluid overflow-auto">
 
 
-                <div class="d-flex gap-2">
-
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
-
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="content-table table-responsive">
-            <table class=" table table-striped  table-hover table-administrator text-center">
-                <thead>
-                    <tr class="text-center">
-                        <td>Item</td>
-                        <td>Cédula</td>
-                        <td>Nombre</td>
-                        <td>DÉCIMO</td>
-                        <td>VACACIONES</td>
-                        <td>P. ANTIGUEDAD</td>
-                        <td>TOTAL PROVISIONES</td>
-
-                    </tr>
-                </thead>
-                <tbody>
-                   <!--  <?php
-
-                    $key = 1;
-
-                    foreach ($this->cedulas as $key => $content) {
-
-                        $key++;
-                    ?>
-
-                        <tr>
-                            <td>
-                                <?php echo $key ?>
-                            </td>
-                            <td>
-                                <?php echo $content->cedula ?>
-                            </td>
-                            <td>
-                                <?php echo $content->nombre1 ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->decimo[$content->cedula]) ?>                   
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->vacaciones[$content->cedula]) ?>                   
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->antiguedad[$content->cedula]) ?>                   
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->total_provisiones[$content->cedula]) ?>                   
-                            </td>
-
-                        <?php } ?> -->
+                <div align="center">
+                    <ul class="pagination py-0 my-0 justify-content-center">
                         <?php
-                        echo $this->tabla;
-                        echo $this->tabla2;
+
+                        $url = $this->route;
+                        if ($this->amount == 'Todos') {
+                        }
+                        $min = $this->page - 10;
+
+                        if ($min < 0) {
+                            $min = 1;
+                        }
+                        $max = $this->page + 10;
+                        if ($this->totalpages > 1) {
+                            if ($this->page != 1)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+                            for ($i = 1; $i <= $this->totalpages; $i++) {
+                                if ($this->page == $i)
+                                    echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+                                else {
+                                    if ($i <= $max and $i >= $min) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+                                    }
+                                }
+                            }
+                            if ($this->page != $this->totalpages)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
+                        }
 
                         ?>
+                    </ul>
+                </div>
+            </div>
 
-                </tbody>
-            </table>
+        <?php } ?>
+
+        <div class="content-dashboard mb-5">
+            <div class="franja-paginas">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <div class="titulo-registro">Se encontraron <?php echo $this->register_number; ?> Registros</div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div>
+
+
+                            <span class="texto-paginas">Registros por pagina:</span>
+                        </div>
+                        <div>
+
+                            <select class="form-control form-control-sm selectpagination">
+
+                                <option value="100" <?php if ($this->pages == 100) {
+                                                        echo 'selected';
+                                                    } ?>>100</option>
+
+                                <option value="200" <?php if ($this->pages == 200) {
+                                                        echo 'selected';
+                                                    } ?>>200</option>
+                                <option value="300" <?php if ($this->pages == 300) {
+                                                        echo 'selected';
+                                                    } ?>>300</option>
+                                <option value="Todos" <?php if ($this->pages == 'Todos') {
+                                                            echo 'selected';
+                                                        } ?>>Todos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+
+                        <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar XLS</a></div>
+                        <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarxlsx"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar XLSX</a></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="content-table table-responsive">
+                <table class=" table table-striped  table-hover table-administrator text-center">
+                    <thead>
+                        <tr class="text-center">
+                            <td>Item</td>
+                            <td>Cédula</td>
+                            <td>Nombre</td>
+                            <td>DÉCIMO</td>
+                            <td>VACACIONES</td>
+                            <td>P. ANTIGUEDAD</td>
+                            <td>TOTAL PROVISIONES</td>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+
+                        $key = 1;
+
+                        foreach ($this->cedulas as $key => $content) {
+
+                            $key++;
+                        ?>
+
+                            <tr>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $content->cedula ?>
+                                </td>
+                                <td>
+                                    <?php echo $content->nombre1 ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($this->decimo[$content->cedula]);
+                                    $total_decimo += $this->decimo[$content->cedula]; ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($this->vacaciones[$content->cedula]);
+                                    $total_vacaciones += $this->vacaciones[$content->cedula]; ?>
+                                </td>
+                                <td>
+                                    <?php if ($content->tipo_contrato == 1) {
+                                        echo formato_numero($this->antiguedad[$content->cedula]);
+                                    }
+                                    $total_antiguedad += $this->antiguedad[$content->cedula]; ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($this->total_provisiones[$content->cedula]);
+                                    $total_provisiones += $this->total_provisiones[$content->cedula]; ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <?php if ($this->amount == 'Todos'  || $this->empresa) { ?>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-end"><strong>TOTAL</strong></td>
+                                <td><?php echo $total_decimo ?></td>
+                                <td><?php echo $total_vacaciones ?></td>
+                                <td><?php echo $total_antiguedad ?></td>
+                                <td><?php echo $total_provisiones ?></td>
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+                </table>
+            </div>
+            <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
         </div>
-        <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
-    </div>
+        <?php if ($this->amount != 'Todos') { ?>
+
+            <div class="container-fluid overflow-auto">
+
+                <div align="center">
+                    <ul class="pagination py-0 my-0 justify-content-center">
+                        <?php
+
+                        $url = $this->route;
+                        $min = $this->page - 10;
+                        if ($min < 0) {
+                            $min = 1;
+                        }
+                        $max = $this->page + 10;
+                        if ($this->totalpages > 1) {
+                            if ($this->page != 1)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+                            for ($i = 1; $i <= $this->totalpages; $i++) {
+                                if ($this->page == $i)
+                                    echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+                                else {
+                                    if ($i <= $max and $i >= $min) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+                                    }
+                                }
+                            }
+                            if ($this->page != $this->totalpages)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
+                        }
+
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        <?php } ?>
+    <?php } ?>
+
+
 </div>
 
 <?php
- function formato_numero($n)
+function formato_numero($n)
 {
     return number_format($n, 2, ',', '');
 }

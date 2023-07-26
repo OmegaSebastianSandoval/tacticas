@@ -72,7 +72,10 @@ if (!file_exists(FILE_PATH)) {
 }
 
 // require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
-require_once '../vendor/tcpdf/tcpdf.php';
+require '../vendor/autoload.php';
+ require_once '../vendor/tcpdf/tcpdf.php';
+ require '../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php';
+
 require '../vendor/phpmailer/phpmailer/src/Exception.php';
 require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../vendor/phpmailer/phpmailer/src/SMTP.php';

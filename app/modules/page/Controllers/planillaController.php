@@ -79,8 +79,8 @@ class Page_planillaController extends Page_mainController
 		$filters =(object)Session::getInstance()->get($this->namefilter);
         $this->_view->filters = $filters;
 		$filters = $this->getFilter();
-		$order = "";
-		$list = $this->mainModel->getList($filters,$order);
+		$order = "fecha1 DESC, empresa.nombre ASC";
+		$list = $this->mainModel->getListPlanillas($filters,$order);
 		$amount = $this->pages;
 		$page = $this->_getSanitizedParam("page");
 		if (!$page && Session::getInstance()->get($this->namepageactual)) {
@@ -98,8 +98,13 @@ class Page_planillaController extends Page_mainController
 		$this->_view->pages = $this->pages;
 		$this->_view->totalpages = ceil(count($list)/$amount);
 		$this->_view->page = $page;
-		$this->_view->lists = $this->mainModel->getListPages($filters,$order,$start,$amount);
+		$this->_view->lists = $this->mainModel->getListPagesPlanillas($filters,$order,$start,$amount);
 		$this->_view->csrf_section = $this->_csrf_section;
+		$this->_view->list_empresa = $this->getEmpresa();
+		$this->_view->list_meses = $this->getMeses();
+		$this->_view->list_quincena = $this->getQuincenas();
+
+
 	}
 
 	/**
@@ -114,6 +119,11 @@ class Page_planillaController extends Page_mainController
 		$this->_csrf->generateCode($this->_csrf_section);
 		$this->_view->csrf_section = $this->_csrf_section;
 		$this->_view->csrf = Session::getInstance()->get('csrf')[$this->_csrf_section];
+		$this->_view->list_empresa = $this->getEmpresa();
+		$this->_view->list_meses = $this->getMeses();
+		$this->_view->list_quincena = $this->getQuincenas();
+
+
 		$id = $this->_getSanitizedParam("id");
 		if ($id > 0) {
 			$content = $this->mainModel->getById($id);
@@ -238,6 +248,51 @@ class Page_planillaController extends Page_mainController
 		}
 		return $data;
 	}
+
+	/**
+     * Genera los valores del campo Empresa.
+     *
+     * @return array cadena con los valores del campo Empresa.
+     */
+	private function getEmpresa()
+	{
+		$modelData = new Page_Model_DbTable_Dependempresa();
+		$data = $modelData->getList();
+		$array = array();
+		foreach ($data as $key => $value) {
+			$array[$value->id] = $value->nombre;
+		}
+		return $array;
+	}
+	private function getMeses()
+	{
+		$array = array(
+			1 => 'Enero',
+			2 => 'Febrero',
+			3 => 'Marzo',
+			4 => 'Abril',
+			5 => 'Mayo',
+			6 => 'Junio',
+			7 => 'Julio',
+			8 => 'Agosto',
+			9 => 'Septiembre',
+			10 => 'Octubre',
+			11 => 'Noviembre',
+			12 => 'Diciembre'
+		);
+	
+		return $array;
+	}
+	private function getQuincenas()
+	{
+		$array = array(
+			1 => '1',
+			2 => '2',
+
+		);
+	
+		return $array;
+	}
 	/**
      * Genera la consulta con los filtros de este controlador.
      *
@@ -266,9 +321,6 @@ class Page_planillaController extends Page_mainController
             if ($filters->limite_horas != '') {
                 $filtros = $filtros." AND limite_horas LIKE '%".$filters->limite_horas."%'";
             }
-            if ($filters->limite_dominicales != '') {
-                $filtros = $filtros." AND limite_dominicales LIKE '%".$filters->limite_dominicales."%'";
-            }
 		}
         return $filtros;
     }
@@ -288,8 +340,7 @@ class Page_planillaController extends Page_mainController
 					$parramsfilter['empresa'] =  $this->_getSanitizedParam("empresa");
 					$parramsfilter['cerrada'] =  $this->_getSanitizedParam("cerrada");
 					$parramsfilter['fecha_cerrada'] =  $this->_getSanitizedParam("fecha_cerrada");
-					$parramsfilter['limite_horas'] =  $this->_getSanitizedParam("limite_horas");
-					$parramsfilter['limite_dominicales'] =  $this->_getSanitizedParam("limite_dominicales");Session::getInstance()->set($this->namefilter, $parramsfilter);
+					$parramsfilter['limite_horas'] =  $this->_getSanitizedParam("limite_horas");Session::getInstance()->set($this->namefilter, $parramsfilter);
         }
         if ($this->_getSanitizedParam("cleanfilter") == 1) {
             Session::getInstance()->set($this->namefilter, '');

@@ -34,7 +34,7 @@
                         </select>
                     </label>
                 </div> -->
-                <div class="col-12  col-md-4 col-lg-3">
+                <div class="col-12   col-md-6  col-lg-3">
                     <label>Fecha de inicio</label>
                     <label class="input-group">
                         <div class="input-group-prepend">
@@ -48,7 +48,7 @@
                                                                                             } ?>" required></input>
                     </label>
                 </div>
-                <div class="col-12  col-md-4 col-lg-3">
+                <div class="col-12   col-md-6  col-lg-3">
                     <label>Fecha final</label>
                     <label class="input-group">
                         <div class="input-group-prepend">
@@ -65,11 +65,11 @@
 
 
 
-                <div class="col-12   col-md-6 col-lg-2  d-grid align-items-end mb-2">
+                <div class="col-12   col-md-6 col-lg-3  d-grid align-items-end mb-2">
                     <label>&nbsp;</label>
                     <button type="submit" class="btn btn-block btn-azul"> <i class="fas fa-filter"></i> Filtrar</button>
                 </div>
-                <div class="col-12   col-md-6  col-lg-2  d-grid align-items-end mb-2">
+                <div class="col-12   col-md-6  col-lg-3  d-grid align-items-end mb-2">
 
                     <a class="btn btn-block btn-azul-claro " href="<?php echo $this->route; ?>?cleanfilter=1"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
                 </div>
@@ -77,15 +77,16 @@
             </div>
         </div>
     </form>
+    <?php if (!$this->noContent) { ?>
 
-    <div class="content-dashboard">
+    <div class="content-dashboard pt-0">
         <div class="franja-paginas">
             <div class="d-flex justify-content-end">
 
 
                 <div class="d-flex gap-2">
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                    <div class="text-right"><a class="btn btn-sm btn-success2" target="_blank" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
 
                 </div>
             </div>
@@ -142,7 +143,7 @@
         </div>
         <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
     </div>
-
+<?php } ?>
 </div>
 
 <?php

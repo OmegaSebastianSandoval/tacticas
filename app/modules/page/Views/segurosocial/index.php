@@ -75,188 +75,206 @@
             </div>
         </div>
     </form>
-    <div class="container-fluid overflow-auto">
+    <?php if (!$this->noContent) { ?>
+        <?php if ($this->amount != 'Todos') { ?>
 
-        <div align="center">
-            <ul class="pagination py-0 my-0 justify-content-center">
-                <?php
-                $url = $this->route;
-                $min = $this->page - 10;
-                if ($min < 0) {
-                    $min = 1;
-                }
-                $max = $this->page + 10;
+            <div class="container-fluid overflow-auto">
 
-                if ($this->totalpages > 1) {
-                    if ($this->page != 1)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
-                    for ($i = 1; $i <= $this->totalpages; $i++) {
-                        if ($this->page == $i)
-                            echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
-                        else {
-                            if ($i <= $max and $i >= $min) {
-                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
-                            }
+                <div align="center">
+                    <ul class="pagination py-0 my-0 justify-content-center">
+                        <?php
+                        $url = $this->route;
+                        $min = $this->page - 10;
+                        if ($min < 0) {
+                            $min = 1;
                         }
-                    }
-                    if ($this->page != $this->totalpages)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
-                }
-                ?>
-            </ul>
-        </div>
-    </div>
+                        $max = $this->page + 10;
 
-    <div class="content-dashboard">
-        <div class="franja-paginas">
-            <div class="d-flex justify-content-between">
-                <div class="">
-                    <div class="titulo-registro">Se encontraron <?php echo $this->register_number; ?> Registros</div>
-                </div>
-                <div class="d-flex gap-2 align-items-ce3nter">
-                    <div>
-
-
-                        <span class="texto-paginas">Registros por pagina:</span>
-                    </div>
-                    <div>
-
-                        <select class="form-control form-control-sm selectpagination">
-
-                            <option value="100" <?php if ($this->pages == 100) {
-                                                    echo 'selected';
-                                                } ?>>100</option>
-
-                            <option value="200" <?php if ($this->pages == 200) {
-                                                    echo 'selected';
-                                                } ?>>200</option>
-                            <option value="300" <?php if ($this->pages == 300) {
-                                                    echo 'selected';
-                                                } ?>>300</option>
-                            <option value="Todos" <?php if ($this->pages == 'Todos') {
-                                                        echo 'selected';
-                                                    } ?>>Todos</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="d-flex gap-2">
-
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
-
+                        if ($this->totalpages > 1) {
+                            if ($this->page != 1)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+                            for ($i = 1; $i <= $this->totalpages; $i++) {
+                                if ($this->page == $i)
+                                    echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+                                else {
+                                    if ($i <= $max and $i >= $min) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+                                    }
+                                }
+                            }
+                            if ($this->page != $this->totalpages)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
+                        }
+                        ?>
+                    </ul>
                 </div>
             </div>
-        </div>
+        <?php } ?>
+        <div class="content-dashboard pt-3">
+            <div class="franja-paginas">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <div class="titulo-registro">Se encontraron <?php echo $this->register_number; ?> Registros</div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div>
 
 
+                            <span class="texto-paginas">Registros por pagina:</span>
+                        </div>
+                        <div>
 
-        <div class="content-table table-responsive">
-            <table class=" table table-striped  table-hover table-administrator text-start">
-                <thead>
-                    <tr class="text-start">
-                        <td>Item</td>
-                        <td>Documento</td>
-                        <td class="text-start">Nombre</td>
-                        <td class="text-start">Empresa</td>
+                            <select class="form-control form-control-sm selectpagination">
 
-                        <td>Salario bruto</td>
-                        <td>Decimo</td>
+                                <option value="100" <?php if ($this->pages == 100) {
+                                                        echo 'selected';
+                                                    } ?>>100</option>
+
+                                <option value="200" <?php if ($this->pages == 200) {
+                                                        echo 'selected';
+                                                    } ?>>200</option>
+                                <option value="300" <?php if ($this->pages == 300) {
+                                                        echo 'selected';
+                                                    } ?>>300</option>
+                                <option value="Todos" <?php if ($this->pages == 'Todos') {
+                                                            echo 'selected';
+                                                        } ?>>Todos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+
+                        <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <?php $mes = $this->mes ?>
+            <?php $mes2 =  $this->mes2 ?>
 
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $key = 1;
-                    /* echo '<pre>';
-                    print_r($this->cedulas);
-echo '</pre>'; */
-                    foreach ($this->cedulas as $key => $content) {
-                        $key++
-                    ?>
+            <div class="content-table table-responsive">
+                <table class=" table table-striped  table-hover table-administrator text-start">
+                    <thead>
+                        <tr class="text-start">
+                            <td>Item</td>
+                            <td>Documento</td>
+                            <td class="text-start">Nombre</td>
+                            <td class="text-start">Empresa</td>
 
-                        <tr>
-                            <td>
-                                <?php echo $key ?>
-                            </td>
-                            <td>
-                                <?php echo $content->cedula ?>
-                            </td>
-                            <td class="text-start">
-                                <?php echo $content->nombre1 ?>
-                            </td>
-                            <td class="text-start">
-                                <?php echo $this->list_empresa[$content->empresa] ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->total_bruta[$content->cedula]) ?>
-                                <?php $TOTAL += ($this->total_bruta[$content->cedula]) ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->decimo[$content->cedula]) ?>
-                                <?php $TOTAL_DECIMO += ($this->decimo[$content->cedula]) ?>
-
-                            </td>
+                            <td>Salario bruto</td>
+                            <?php if ($mes == 4 or $mes == 8 or $mes == 12 or $mes2 == 4 or $mes2 == 8 or $mes2 == 12) { ?>
+                                <td>Decimo</td>
+                            <?php } ?>
 
                         </tr>
-                    <?php } ?>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $key = 1;
+                        /* echo '<pre>';
+                    print_r($this->cedulas);
+echo '</pre>'; */
+                        foreach ($this->cedulas as $key => $content) {
+                            $key++
+                        ?>
+
+                            <tr>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $content->cedula ?>
+                                </td>
+                                <td class="text-start">
+                                    <?php echo $content->nombre1 ?>
+                                </td>
+                                <td class="text-start">
+                                    <?php echo $this->list_empresa[$content->empresa] ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($this->total_bruta[$content->cedula]) ?>
+                                    <?php $TOTAL += ($this->total_bruta[$content->cedula]) ?>
+                                </td>
+                                <?php if ($mes == 4 or $mes == 8 or $mes == 12 or $mes2 == 4 or $mes2 == 8 or $mes2 == 12) { ?>
+
+                                    <td>
+                                        <?php echo formato_numero($this->decimo[$content->cedula]) ?>
+                                        <?php $TOTAL_DECIMO += ($this->decimo[$content->cedula]) ?>
+
+                                    </td>
+                                <?php } ?>
 
 
-                    <tr>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
+                            </tr>
+                        <?php } ?>
 
-                        <td> <strong>TOTAL</strong> </td>
-                        <td> <strong>
-                                <?php echo formato_numero($this->TOTAL) ?>
-                            </strong> </td>
+                        <?php if ($this->amount == 'Todos'  || $this->empresa) { ?>
 
-                            <td> <strong>
-                                    <?php echo formato_numero($this->TOTAL_DECIMO) ?>
-                                </strong> </td>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
 
+                                <td> <strong>TOTAL</strong> </td>
+                                <td> <strong>
+                                        <?php echo formato_numero($TOTAL) ?>
+                                    </strong> </td>
+                                <?php if ($mes == 4 or $mes == 8 or $mes == 12 or $mes2 == 4 or $mes2 == 8 or $mes2 == 12) { ?>
 
-                        <td> </td>
+                                    <td> <strong>
+                                            <?php echo formato_numero($TOTAL_DECIMO) ?>
+                                        </strong> </td>
 
-                    </tr>
+                                <?php } ?>
 
-                </tbody>
-            </table>
+                                <td> </td>
+
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+                </table>
+            </div>
+            <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
         </div>
-        <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
-    </div>
-    <div class="container mb-5 overflow-auto">
+        <?php if ($this->amount != 'Todos') { ?>
 
-        <div align="center">
-            <ul class="pagination pagination-end justify-content-center">
-                <?php
-                $url = $this->route;
-                $min = $this->page - 10;
-                if ($min < 0) {
-                    $min = 1;
-                }
-                $max = $this->page + 10;
-                if ($this->totalpages > 1) {
-                    if ($this->page != 1)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
-                    for ($i = 1; $i <= $this->totalpages; $i++) {
-                        if ($this->page == $i)
-                            echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
-                        else {
-                            if ($i <= $max and $i >= $min) {
-                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
-                            }
+            <div class="container-fluid mb-5 overflow-auto">
+
+                <div align="center">
+                    <ul class="pagination pagination-end justify-content-center">
+                        <?php
+                        $url = $this->route;
+                        $min = $this->page - 10;
+                        if ($min < 0) {
+                            $min = 1;
                         }
-                    }
-                    if ($this->page != $this->totalpages)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
-                }
-                ?>
-            </ul>
-        </div>
-    </div>
+                        $max = $this->page + 10;
+                        if ($this->totalpages > 1) {
+                            if ($this->page != 1)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+                            for ($i = 1; $i <= $this->totalpages; $i++) {
+                                if ($this->page == $i)
+                                    echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+                                else {
+                                    if ($i <= $max and $i >= $min) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+                                    }
+                                }
+                            }
+                            if ($this->page != $this->totalpages)
+                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
 
+            </div>
+        <?php } ?>
+    <?php } ?>
 </div>
 <?php
 function formato_numero($n)
