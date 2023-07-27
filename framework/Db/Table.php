@@ -40,7 +40,7 @@ abstract class Db_Table
   {
     $filter = '';
     if ($filters != '') {
-      $filter = ' WHERE ' . $filters;
+      $filter = ' WHERE ' . $filters; 
     }
     $orders = "";
     if ($order != '') {

@@ -46,6 +46,8 @@ class Page_Model_DbTable_Planillaasignacion extends Db_Table
 		$query = "UPDATE planilla_asignacion SET  planilla = '$planilla', cedula = '$cedula', valor_hora = '$valor_hora', sin_seguridad = '$sin_seguridad' WHERE id = '".$id."'";
 		$res = $this->_conn->query($query);
 	}
+
+
 	
 	public function getListCedulas($filters = '', $order = '')
 	{
@@ -61,48 +63,5 @@ class Page_Model_DbTable_Planillaasignacion extends Db_Table
 	  $res = $this->_conn->query($select)->fetchAsObject();
 	  return $res;
 	}
-
-	public function getListWithNames($filters = '', $order = '')
-	{
-	  $filter = '';
-	  if ($filters != '') {
-		$filter = ' WHERE ' . $filters; 
-	  }
-	  $orders = "";
-	  if ($order != '') {
-		$orders = ' ORDER BY ' . $order;
-	  }
-		 $select = 'SELECT planilla_asignacion.*, CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM planilla_asignacion LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_asignacion.cedula  ' . $filter . ' ' . $orders;
-	  $res = $this->_conn->query($select)->fetchAsObject();
-	  return $res;
-	}
-  
-	public function getListWithNamesPages($filters = '', $order = '', $page, $amount)
-	{
-	  $filter = '';
-	  if ($filters != '') {
-		$filter = ' WHERE ' . $filters;
-	  }
-	  $orders = "";
-	  if ($order != '') {
-		$orders = ' ORDER BY ' . $order;
-	  }
-	  $select = 'SELECT planilla_asignacion.*, CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM planilla_asignacion LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_asignacion.cedula ' . $filter . ' ' . $orders . ' LIMIT ' . $page . ' , ' . $amount;
-	  $res = $this->_conn->query($select)->fetchAsObject();
-	  return $res;
-	}
-	public function getListHojaVida($filters = '', $order = '')
-	{
-	  $filter = '';
-	  if ($filters != '') {
-		$filter = ' WHERE ' . $filters; 
-	  }
-	  $orders = "";
-	  if ($order != '') {
-		$orders = ' ORDER BY ' . $order;
-	  }
-		$select = 'SELECT hoja_vida.*, ciudad.nombre AS ciudad, empresa.nombre AS empresa FROM (hoja_vida LEFT JOIN ciudad ON ciudad.codigo = hoja_vida.ciudad) LEFT JOIN empresa ON hoja_vida.empresa = empresa.id  ' . $filter . ' ' . $orders;
-	  $res = $this->_conn->query($select)->fetchAsObject();
-	  return $res;
-	}
+	
 }

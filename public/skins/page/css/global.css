@@ -1371,14 +1371,14 @@ thead td {
 }
 
 .btn-cafe {
-  background: #900909;
+  background: var(--primary);
   color: #ffffff !important;
-  border: 1px solid #900909;
+  background: var(--primary);
 }
 
 .btn-cafe:hover {
-  background: #ffffff;
-  color: #900909 !important;
+  background: #ffffff !important;
+  color: var(--primary) !important;
 }
 
 .btn-rojo-claro {
@@ -2324,4 +2324,39 @@ VENCIMIENTO DE VACACIONES
 
 /************************************************
 FIN DE VENCIMIENTO DE VACACIONES
+************************************************ */
+
+/************************************************
+INICIO DE CONSOLIDADO HORAS
+************************************************ */
+
+.btn-consolidado{
+  padding: 5px;
+  width: 220px;
+  font-size: 12px;
+}
+.btn-consolidado.active::before{
+ 
+  height: 637%;
+
+}
+.btn-consolidado::before {
+
+  height: 640%;
+}
+.v {
+  /*  min-width: 20px !important;
+  width: 20px;
+  min-height: 25px !important;
+  height: 25px; */
+  width: 60px;
+  padding: 7px 9px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 30px !important;
+
+}
+/************************************************
+FIN DE CONSOLIDADO HORAS
 ************************************************ */

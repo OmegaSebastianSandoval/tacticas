@@ -166,13 +166,13 @@
                 <table class=" table table-striped  table-hover table-administrator text-center">
                     <thead>
                         <tr class="text-center">
-                            <td>Item</td>
-                            <td>Cédula</td>
-                            <td>Nombre</td>
-                            <td>DÉCIMO</td>
-                            <td>VACACIONES</td>
-                            <td>P. ANTIGUEDAD</td>
-                            <td>TOTAL PROVISIONES</td>
+                            <th>Item</th>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>DÉCIMO</th>
+                            <th>VACACIONES</th>
+                            <th>P. ANTIGUEDAD</th>
+                            <th>TOTAL PROVISIONES</th>
 
                         </tr>
                     </thead>

@@ -221,7 +221,7 @@
 
 										<?php if ($content->cerrada  != 1) { ?>
 
-											<a class="btn btn-azul-claro btn-sm" href="<?php echo $this->route; ?>/planilla/asignarcolaboradores?planilla=<?= $id ?>" data-bs-toggle="tooltip" data-placement="top" title="Asignar colaboradores"><i class="fa-solid fa-user-plus"></i></a>
+											<a class="btn btn-azul-claro btn-sm" href="/page/planillaasignacion?planilla=<?= $id ?>" data-bs-toggle="tooltip" data-placement="top" title="Asignar colaboradores"><i class="fa-solid fa-user-plus"></i></a>
 										<?php } ?>
 										<a class="btn btn-azul-claro  btn-sm" href="<?php echo $enlace_horas ?>" data-bs-toggle="tooltip" data-placement="top" title="Horas"><i class="fa-solid fa-clock"></i></a>
 
@@ -258,7 +258,7 @@
 	<div class="container-fluid overflow-auto">
 
 		<div align="center">
-			<ul class="pagination py-0 my-0 justify-content-center">
+			<ul class="pagination py-0 my-0  justify-content-center">
 				<?php
 
 				$url = $this->route;

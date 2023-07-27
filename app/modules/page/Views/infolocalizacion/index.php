@@ -149,17 +149,7 @@
 
 </div>
 <style>
-    .v {
-        /*  min-width: 20px !important;
-        width: 20px;
-        min-height: 25px !important;
-        height: 25px; */
-        width: 60px;
-        padding: 7px 9px;
-        text-align: center;
-        font-size: 13px;
 
-    }
 </style>
 <script>
     Fancybox.bind("[data-fancybox]", {
