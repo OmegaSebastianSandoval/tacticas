@@ -1,7 +1,6 @@
 let videos = [];
 $(document).ready(function () {
-  $(".fancybox").fancybox();
-  $("[data-fancybox]").fancybox();
+
   $(".dropdown-toggle").dropdown();
   $(".carouselsection").carousel({
     quantity: 4,
@@ -222,3 +221,4 @@ function mostrarMetodoPago() {
   }
 }
 mostrarMetodoPago();
+

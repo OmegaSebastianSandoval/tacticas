@@ -22,12 +22,12 @@
         </a>
     </div>
     <div class="container-fluid  ">
-        <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas adicionales diurnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas adicionales nocturnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas recargo festivo</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas dominicales</a>
+    <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 1 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 2 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=2">Horas adicionales diurnas</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 3 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=3">Horas adicionales nocturnas</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 4 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=4">Horas recargo festivo</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 5 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=5">Horas dominicales</a>
         </div>
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
             <a class="btn-tab btn-consolidado active m-0  " href="/page/planilla/totalnomina?planilla=<?php echo $this->planila ?>">Total nómina

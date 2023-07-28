@@ -4,8 +4,14 @@
         vertical-align: middle;
         display: table-cell;
         text-align: center;
+        font-size: 11px;
     }
 </style>
+<!-- <script src="/skins/page/js/horas.js"></script> -->
+<?php
+include '../public/skins/page/js/horas.php';
+?>
+
 
 <div class="container-fluid">
     <div class=" d-flex justify-content-between align-items-center">
@@ -24,11 +30,11 @@
     </div>
     <div class="container-fluid  ">
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
-            <a class="btn-tab btn-consolidado active m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas adicionales diurnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas adicionales nocturnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas recargo festivo</a>
-            <a class="btn-tab btn-consolidado m-0  " href="">Horas dominicales</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 1 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 2 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=2">Horas adicionales diurnas</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 3 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=3">Horas adicionales nocturnas</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 4 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=4">Horas recargo festivo</a>
+            <a class="btn-tab btn-consolidado <?php echo $this->tipo == 5 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=5">Horas dominicales</a>
         </div>
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/totalnomina?planilla=<?php echo $this->planila ?>">Total nómina
@@ -51,30 +57,31 @@
                 </div>
 
                 <div class="d-flex gap-2">
+                <div class="text-right"><button class="btn btn-sm btn-success2" onclick="verificar_planilla();">
+                <i class="fa-solid fa-check-to-slot"></i> Verificar planilla</button></div>
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarconsolidado?planilla=" . $this->planila; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
                 </div>
             </div>
         </div>
 
-        <div class="content-table table-responsive">
-            <table class=" table table-striped table-bordered table-hover table-administrator text-center" style="font-size: 11px">
+        <div class="content-table table-responsive" id="parent">
+            <table id="fixTable" class=" table table-striped table-hover table-administrator text-center" style="font-size: 11px">
                 <thead>
 
                     <tr id="cabecera2">
-                        <th class="ancho1">
-                            <div align="left" class="ancho1">Item</div>
+                        <th class="ancho1 cabeceraitem">
+                            <div align="left" class="ancho1">ITEM</div>
                         </th>
                         <th class="ancho2">
-                            <div align="left" class="ancho2">Cedula</div>
+                            <div align="left" class="ancho2">CÉDULA</div>
                         </th>
                         <th class="ancho3">
-                            <div align="left" class="ancho3">Nombre</div>
+                            <div align="left" class="ancho3">NOMBRE</div>
                         </th>
                         <th class="ancho4">
-                            <div align="left" class="ancho4">Valor hora</div>
+                            <div align="left" class="ancho4">VALOR</div>
                         </th>
-                        <th class="ancho5">Loc General</th>
+                        <th class="ancho5">LOC GENERAL</th>
                         <th class="ancho5">Pendientes</th>
                         <?php for ($j = $this->dia1 * 1; $j <= $this->dia2 * 1; $j++) { ?>
                             <th class="ancho5">
@@ -88,7 +95,7 @@
                         <?php } ?>
                         <th class="ancho2">Incap</th>
                         <th class="ancho2">Total horas</th>
-                        <th class="ancho2">Total</th>
+                        <th class="ancho2 cabeceratotal">Total</th>
                     </tr>
                     <tr>
                         <th>&nbsp;</th>
@@ -97,33 +104,96 @@
                         <th>&nbsp;</th>
                         <th>
                             <div align="center"><span class="enlinea">
-                                    <select name="filtro_0" id="filtro_0" class="v2" onchange="filtrar_0();" multiple="multiple" style="width:100px;">
+                                    <select name="filtro_0" id="filtro_0" class="form-select v2" onchange="filtrar_0();" multiple="multiple" style="width:100px;">
                                         <option value="" <?php if (!(strcmp("", $row_rsHoras['loc']))) {
                                                                 echo "selected=\"selected\"";
                                                             } ?>></option>
                                     </select>
-                                </span></div>
+                                </span>
+                            </div>
                         </th>
                         <th>&nbsp;</th>
-                      
+                        <?php for ($j = $this->dia1 * 1; $j <= $this->dia2 * 1; $j++) { ?>
+
+
+                            <th>
+                                <div align="center"><span class="enlinea">
+                                        <select name="filtro_<?php echo $j; ?>" id="filtro_<?php echo $j; ?>" class="v form-select w-100" onchange="filtrar('<?php echo $j; ?>');">
+                                            <option value=""></option>
+
+                                            <?php foreach ($this->list_locaciones as $key => $value) : ?>
+                                                <option value="<?= $key; ?>" <?php if ($this->getObjectVariable($this->filters, 'localizacion') == $key) {
+                                                                                    echo "selected";
+                                                                                } ?>><?= $value; ?></option>
+                                            <?php endforeach ?>
+                            </th>
+                        <?php } ?>
+
+
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     <?php
                     echo $this->tabla;
                     ?>
-
 
 
                 </tbody>
             </table>
         </div>
         <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
+        <?php echo $this->resto ?>
     </div>
 </div>
+<?php if ($this->planillaAct->cerrada == 1 and ($this->planillaAct->fecha_cerrada == "" or $this->planillaAct->fecha_cerrada == "0000-00-00")) { ?>
+    <script type="text/javascript">
+        // Deshabilitar todos los elementos <input>
+        const inputs = document.getElementsByTagName("input");
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = true;
+        }
+
+        // Deshabilitar todos los elementos <select>
+        const selects = document.getElementsByTagName("select");
+        for (let i = 0; i < selects.length; i++) {
+            selects[i].disabled = true;
+        }
+    </script>
+<?php } ?>
+<?php
+$i = 0;
+foreach ($this->cedulas  as  $cedula) {
+    $i++;
+?>
+    <script type="text/javascript">
+        total_horas(<?php echo $i; ?>);
+    </script>
+
+<?php } ?>
+
+
+
+<?php
+$aux = explode("-", $this->planillaAct->fecha_cerrada);
+$dia_aux = $aux[2] * 1;
+if ($this->planillaAct->cerrada == 1 and ($this->planillaAct->fecha_cerrada != "" or $this->planillaAct->fecha_cerrada != "0000-00-00")) { ?>
+    <script type="text/javascript">
+        cerrar_nomina('<?php echo $dia_aux; ?>');
+    </script>
+<?php } ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#fixTable").tableHeadFixer({
+            left: 3
+        });
+        actualizar_filtro();
+    });
+</script>
 
 <?php
 function con_cero($mes)

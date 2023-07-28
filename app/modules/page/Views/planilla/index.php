@@ -209,7 +209,7 @@
 							<td><?= $content->limite_horas; ?></td> -->
 							<td class="text-right">
 								<div class="d-flex gap-1 justify-content-center align-items-center pt-1 pb-1"> <?php
-																												$enlace_horas = "/page/planilla/horas?planilla=$id&tipo=1";
+																												$enlace_horas = "/page/planilla/horasnormales?planilla=$id&tipo=1";
 																												if ($content->cerrada == 1) {
 																													$enlace_horas = "/page/planilla/consolidado?planilla=$id";
 																												}

@@ -1,0 +1,2 @@
+<div id="sin_conexion2" style="background:rgba(0,0,0,0.7); height:100vh; width:100%; position:fixed; top:0; z-index:9999; display:none;"></div>
+<div align="center" id="sin_conexion" style="display:none; background: #FF0000; color:#FFFFFF; padding:20px; font-family:Arial, Helvetica, sans-serif; font-size:18px; position:fixed; width:100%; top:100px; z-index:99999;"><strong> Sin conexi&oacute;n a internet, no se puede guardar.<br /><br />Verifique su conexi&oacute;n a internet y recargue la p&aacute;gina</strong></div>

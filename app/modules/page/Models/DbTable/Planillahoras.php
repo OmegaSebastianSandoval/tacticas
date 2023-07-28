@@ -35,6 +35,19 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		$res = $this->_conn->query($query);
 		return mysqli_insert_id($this->_conn->getConnection());
 	}
+	public function insert2($data)
+	{
+		$planilla = $data['planilla'];
+		$cedula = $data['cedula'];
+		$fecha = $data['fecha'];
+		$horas = $data['horas'];
+		
+		$general = $data['general'];
+		$tipo = $data['tipo'];
+		$query = "INSERT INTO planilla_horas( planilla, cedula, fecha, horas, general,tipo) VALUES ( '$planilla', '$cedula', '$fecha', '$horas', '$general', '$tipo')";
+		$res = $this->_conn->query($query);
+		return mysqli_insert_id($this->_conn->getConnection());
+	}
 
 	/**
 	 * update Recibe la informacion de un planilla horas  y actualiza la informacion en la base de datos

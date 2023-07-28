@@ -46,7 +46,7 @@ abstract class Db_Table
     if ($order != '') {
       $orders = ' ORDER BY ' . $order;
     }
-      $select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' ' . $orders;
+       $select = 'SELECT * FROM ' . $this->_name . ' ' . $filter . ' ' . $orders;
     $res = $this->_conn->query($select)->fetchAsObject();
     return $res;
   }
