@@ -27,7 +27,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text input-icono  fondo-rojo-claro "><i class="fas fa-calendar-alt"></i></span>
 						</div>
-						<input type="text" value="<?php if ($this->content->fecha1) {
+						<input type="text" onchange="set_fecha2();" onkeyup="set_fecha2();" value="<?php if ($this->content->fecha1) {
 														echo $this->content->fecha1;
 													} else {
 														echo date('Y-m-d');
@@ -43,7 +43,6 @@
 						</div>
 						<input type="text" value="<?php if ($this->content->fecha2) {
 														echo $this->content->fecha2;
-													} else {
 													} ?>" name="fecha2" id="fecha2" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
 					</label>
 					<div class="help-block with-errors"></div>
@@ -78,7 +77,6 @@
 						</div>
 						<input type="text" value="<?php if ($this->content->fecha_cerrada) {
 														echo $this->content->fecha_cerrada;
-													} else {
 													} ?>" name="fecha_cerrada" id="fecha_cerrada" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="es">
 					</label>
 					<div class="help-block with-errors"></div>
@@ -112,3 +110,50 @@
 	</form>
 </div>
 
+<script>
+	set_fecha2()
+	function set_fecha2(){
+	var fecha1 = document.getElementById('fecha1').value;
+	var days = 1;
+    fecha=new Date(fecha1);
+    tiempo=fecha.getTime();
+    milisegundos=parseInt(days*24*60*60*1000);
+    total=fecha.setTime(tiempo+milisegundos);
+    day=fecha.getDate();
+    month=fecha.getMonth()+1;
+    year=fecha.getFullYear();
+	
+
+	if(day>=15){
+		day = ultimo_dia(fecha1);
+	}
+	if(day<15){
+		day = 15;
+	}
+
+	month = con_cero(month);
+	day = con_cero(day);
+ 
+    fecha2 = year+"-"+month+"-"+day;	
+	document.getElementById('fecha2').value=fecha2;	
+}
+function  ultimo_dia(fecha1){
+	var date = new Date(fecha1);
+	var fecha = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    day=fecha.getDate();
+    month=fecha.getMonth()+1;
+    year=fecha.getFullYear();
+	
+	//month = con_cero(month);
+	//day = con_cero(day);
+	
+	return day;	
+}
+function con_cero(x){
+	if(x<10){
+		x = '0'+x;
+	}
+	return x;
+}
+</script>

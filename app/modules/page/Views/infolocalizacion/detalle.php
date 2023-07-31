@@ -21,7 +21,12 @@
     footer {
         display: none;
     }
-
+    .menu__side{
+        display: none;
+    } 
+    footer {
+        display: none;
+    }
     .contenedor-general {
       
         margin-top: 20px;

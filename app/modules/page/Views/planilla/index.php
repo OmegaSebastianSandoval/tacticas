@@ -173,8 +173,9 @@
 				</div>
 
 				<div class="d-flex gap-2">
-					<div class="text-right"><a class="btn btn-sm btn-success" href="<?php echo $this->route . "\manage"; ?>"> <i class="fas fa-plus-square"></i> Crear Nuevo</a></div>
-
+					<?php if ((Session::getInstance()->get("kt_login_level") == '1')) { ?>
+						<div class="text-right"><a class="btn btn-sm btn-success" href="<?php echo $this->route . "\manage"; ?>"> <i class="fas fa-plus-square"></i> Crear Nuevo</a></div>
+					<?php } ?>
 
 				</div>
 			</div>
@@ -228,13 +229,19 @@
 										<span data-bs-toggle="tooltip" data-placement="top" title="Eliminar"><a class="btn btn-rojo btn-sm" data-bs-toggle="modal" data-bs-target="#modal<?= $id ?>"><i class="fas fa-trash-alt"></i></a></span>
 
 									<?php } ?>
+									<?php if ($_SESSION['kt_login_level'] == 3) { ?>
+									
+										<a class="btn btn-azul-claro  btn-sm" href="<?php echo $enlace_horas ?>" data-bs-toggle="tooltip" data-placement="top" title="Horas"><i class="fa-solid fa-clock"></i></a>
+
+
+									<?php } ?>
 								</div>
 								<!-- Modal -->
 								<div class="modal fade text-left" id="modal<?= $id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 									<div class="modal-dialog modal-dialog-centered" role="document">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
+												<h5 class="modal-title" id="myModalLabel">Eliminar Registro</h5>
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">

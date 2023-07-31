@@ -20,23 +20,23 @@
     </div>
     <div class="container-fluid  ">
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=2">Horas adicionales diurnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=3">Horas adicionales nocturnas</a>
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=4">Horas recargo festivo</a>
-            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=5">Horas dominicales</a>
+            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planilla ?>&tipo=1">Horas normales </a>
+            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planilla ?>&tipo=2">Horas adicionales diurnas</a>
+            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planilla ?>&tipo=3">Horas adicionales nocturnas</a>
+            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planilla ?>&tipo=4">Horas recargo festivo</a>
+            <a class="btn-tab btn-consolidado m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planilla ?>&tipo=5">Horas dominicales</a>
         </div>
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
-            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/totalnomina?planilla=<?php echo $this->planila?>">Total nómina
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/totalnomina?planilla=<?php echo $this->planilla?>">Total nómina
             
             </a>
-            <a class="btn-tab btn-consolidado active m-0  " href="/page/planilla/consolidado?planilla=<?php echo $this->planila?>">Consolidado nómina
+            <a class="btn-tab btn-consolidado active m-0  " href="/page/planilla/consolidado?planilla=<?php echo $this->planilla?>">Consolidado nómina
             
             </a>
-            <a class="btn-tab btn-consolidado  m-0  " href="?planilla=<?php echo $this->planila?>">Recibos nómina
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planilla?>">Recibos nómina
             
             </a>
-            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/limite?planilla=<?php echo $this->planila?>">Reporte límite horas            </a>
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/limite?planilla=<?php echo $this->planilla?>">Reporte límite horas            </a>
         </div>
     </div>
 
@@ -49,7 +49,7 @@
 
                 <div class="d-flex gap-2">
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarconsolidado?planilla=" . $this->planila; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarconsolidado?planilla=" . $this->planilla; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
                 </div>
             </div>
         </div>

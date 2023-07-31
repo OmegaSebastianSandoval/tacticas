@@ -157,6 +157,13 @@ class Page_planillaasignacionController extends Page_mainController
 
 		if (Session::getInstance()->get('csrf')[$this->_getSanitizedParam("csrf_section")] == $csrf) {
 			$data = $this->getData();
+
+
+			$hojavidaModel = new Page_Model_DbTable_Hojadevida();
+			$usuario = $hojavidaModel->getList("documento = '" . $data["cedula"] . "'", "")[0];
+			if ($usuario->retirado == 1) {
+				$hojavidaModel->editField($usuario->id, "retirado", 0);
+			}
 			$id = $this->mainModel->insert($data);
 
 			$data['id'] = $id;
@@ -191,6 +198,19 @@ class Page_planillaasignacionController extends Page_mainController
 			$this->_view->cedula = $cedula = $this->_getSanitizedParam("cedula");
 			$f2 = $f2 . " AND (hoja_vida.documento LIKE '%$cedula%'   ) ";
 		}
+		if ($this->_getSanitizedParam("retirado") != "") {
+			$this->_view->retirado = $retirado = $this->_getSanitizedParam("retirado");
+
+			if ($retirado == 1) {
+				$retirado = 0;
+			}
+			if ($retirado == 2) {
+				$retirado = 1;
+			}
+
+
+			$f2 = $f2 . " AND (hoja_vida.retirado = '$retirado'   ) ";
+		}
 		if ($this->_getSanitizedParam("cleanfilter") == 1) {
 			$filtros = " 1 ";
 			$f2 = "";
@@ -204,12 +224,11 @@ class Page_planillaasignacionController extends Page_mainController
 		$this->getLayout()->setTitle($title);
 		$this->_view->titlesection = $title;
 		$this->_view->planilla = $planilla = $this->_getSanitizedParam('planilla');
-		
 	}
 
 	public function importarAction()
 	{
-				$this->setLayout('blanco');
+		$this->setLayout('blanco');
 
 		ini_set('memory_limit', '-1');
 		ini_set('max_execution_time', 600000000);
@@ -221,6 +240,8 @@ class Page_planillaasignacionController extends Page_mainController
 		$order = "nombre1 ASC";
 		$planilla = $this->_getSanitizedParam('planilla');
 		$uploadDocument =  new Core_Model_Upload_Document();
+		$hojavidaModel = new Page_Model_DbTable_Hojadevida();
+
 		// $this->_view->planilla = $planilla = $this->_getSanitizedParam('planilla');
 		if ($_FILES['colaboradores']['name'] != '') {
 			$archivo = $uploadDocument->upload("colaboradores");
@@ -238,8 +259,13 @@ class Page_planillaasignacionController extends Page_mainController
 				$cedula = $data['cedula'] = $fila['A'];
 				$valor_hora = $data['valor_hora'] = $fila['B'];
 				$sin_seguridad = $data['sin_seguridad'] = $fila['C'];
-				
+
 				if ($data['cedula'] != "") {
+
+					$usuario = $hojavidaModel->getList("documento = '" . $data["cedula"] . "'", "")[0];
+					if ($usuario->retirado == 1) {
+						$hojavidaModel->editField($usuario->id, "retirado", 0);
+					}
 					$existe = $this->mainModel->getListWithNames("$filters AND cedula = '$cedula'", $order);
 					if (count($existe) == 0) {
 						$this->mainModel->insert($data);
@@ -261,16 +287,11 @@ class Page_planillaasignacionController extends Page_mainController
 						if ($sin_seguridad != "" && $sin_seguridad != $existe[0]->sin_seguridad) {
 							$this->mainModel->editField($id, "sin_seguridad", $sin_seguridad);
 						}
-						
-					
 					}
 				}
 			}
-
 		}
-		header("Location:/page/planillaasignacion?planilla=".$planilla);
-
-	
+		header("Location:/page/planillaasignacion?planilla=" . $planilla);
 	}
 
 

@@ -24,21 +24,25 @@
         .home-nomina {
             display: grid;
             width: 100%;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 40px;
+            margin-top: 20px;
         }
     </style>
         <div class="home-nomina">
+
         <div class="">
             <a href="/page/planilla">
                 <div class="card-vencimiento mx-auto ">
                     <div class="image">
-                        <img src="/skins/page/images/parametros.jpg" alt="Administrar parámetros">
+                        <img src="/skins/page/images/planilla.jpg" alt="Administrar Planilla">
                     </div>
                     <h2 class="title p-2">Planilla</h2>
                 </div>
             </a>
         </div>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/parametros/manage?id=1">
                 <div class="card-vencimiento mx-auto ">
@@ -49,6 +53,8 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
         <div class="">
             <a href="/page/localizaciones">
                 <div class="card-vencimiento mx-auto ">
@@ -59,6 +65,9 @@
                 </div>
             </a>
         </div>
+    
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/tipodotacion">
                 <div class="card-vencimiento mx-auto ">
@@ -69,6 +78,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/cargos">
                 <div class="card-vencimiento mx-auto ">
@@ -79,6 +91,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
 
         <div class="">
             <a href="/page/facturacion?cleanfilter=1">
@@ -90,6 +105,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/provisiones?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
@@ -100,6 +118,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/segurosocial?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
@@ -110,6 +131,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/viaticos?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
@@ -120,6 +144,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/salario?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
@@ -130,6 +157,9 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
             <a href="/page/infolocalizacion?cleanfilter=1">
                 <div class="card-vencimiento mx-auto ">
@@ -140,6 +170,7 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
 
 
     </div>

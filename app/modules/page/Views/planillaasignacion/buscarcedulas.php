@@ -3,15 +3,15 @@
     <form class="text-left" enctype="multipart/form-data" method="post" action="<?php echo $this->routeform; ?>" data-bs-toggle="validator">
         <div class="content-dashboard mb-0">
 
-            <div class="row d-flex justify-content-end" >
+            <div class="row d-flex justify-content-end">
 
-                <div class="col-12 col-md-3 form-group">
+                <div class="col-12 col-md-2 form-group">
                     <label for="nombre" class="control-label">Nombre</label>
                     <label class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text input-icono  fondo-azul "><i class="fas fa-pencil-alt"></i></span>
                         </div>
-                        <input type="text" value="<?= $this->buscar?>" name="buscar" id="buscar" class="form-control" >
+                        <input type="text" value="<?= $this->buscar ?>" name="buscar" id="buscar" class="form-control">
                     </label>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -21,14 +21,29 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text input-icono  fondo-azul "><i class="fas fa-pencil-alt"></i></span>
                         </div>
-                        <input type="text" value="<?= $this->cedula?>" name="cedula" id="cedula" class="form-control" >
+                        <input type="text" value="<?= $this->cedula ?>" name="cedula" id="cedula" class="form-control">
                     </label>
                     <div class="help-block with-errors"></div>
                 </div>
-                <div class="col-12 col-md-3 form-group d-grid align-items-end" >
+                <div class="col-12 col-md-3 form-group">
+                    <label for="nombre" class="control-label">Estado</label>
+                    <label class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text input-icono  fondo-azul "><i class="fas fa-pencil-alt"></i></span>
+                        </div>
+                        <select class="form-select" name="retirado" id="retirado">
+                            <option value=""></option>
+                            <option value="1" <?= $this->retirado == 1 ? 'selected' : ''  ?> >Activo</option>
+                            <option value="2" <?= $this->retirado == 2 ? 'selected' : ''  ?> >Retirado</option>
+
+                        </select>
+                    </label>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="col-12 col-md-2 form-group d-grid align-items-end">
                     <button class="btn btn-guardar" type="submit">Buscar</button>
                 </div>
-                <div class="col-12 col-md-3 form-group d-grid align-items-end" >
+                <div class="col-12 col-md-2 form-group d-grid align-items-end">
                     <a class="btn  btn-azul-claro" href="/page/planillaasignacion/buscarcedulas?cleanfilter=1">Limpiar filtro</a>
                 </div>
 
@@ -56,7 +71,11 @@
 
                 foreach ($this->cedulas as $content) { ?>
 
-                    <?php $id =  $content->id; ?>
+                    <?php
+                    /* echo '<pre>';
+                    print_r($content);
+                    echo '</pre>'; */
+                    $id =  $content->id; ?>
                     <tr>
 
 
@@ -80,6 +99,14 @@
 
 
 <style>
+    header {
+        display: none;
+    }
+
+    .menu__side {
+        display: none;
+    }
+
     footer {
         display: none;
     }

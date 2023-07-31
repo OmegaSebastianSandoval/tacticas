@@ -131,11 +131,12 @@ class Page_salarioController extends Page_mainController
 		foreach ($horas_list as $hora1) {
 			$cedulas[$hora1->planilla][] = $hora1;
 		}  */
-		/* 	echo '<pre>';
+			/* echo '<pre>';
 		//print_r($planillas);
 		print_r($cedulas);
 
-		echo '</pre>'; */
+		echo '</pre>';
+		return; */
 		$total_neta = [];
 		$total_neta2 = [];
 		foreach ($planillas as $key => $value) {

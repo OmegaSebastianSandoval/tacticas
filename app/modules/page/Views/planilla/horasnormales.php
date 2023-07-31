@@ -43,7 +43,7 @@ include '../public/skins/page/js/horas.php';
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/consolidado?planilla=<?php echo $this->planila ?>">Consolidado nómina
 
             </a>
-            <a class="btn-tab btn-consolidado  m-0  " href="">Recibos nómina
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planila?>">Recibos nómina
 
             </a>
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/limite?planilla=<?php echo $this->planila ?>">Reporte límite horas </a>

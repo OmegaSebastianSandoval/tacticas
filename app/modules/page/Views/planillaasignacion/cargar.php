@@ -19,7 +19,7 @@
 
                 <div class="col-12 col-md-8 form-group ">
                     <label for="colaboradores"> <a class="text-primary " href="/skins/page/files/ejemplo.xls" download>Ejemplo de cargue</a></label>
-                    <input type="file" name="colaboradores" id="colaboradores" class="form-control  file-document" data-buttonName="btn-primary" onchange="validardocumento('colaboradores');" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf">
+                    <input type="file" name="colaboradores" required id="colaboradores" class="form-control  file-document" data-buttonName="btn-primary" onchange="validardocumento('colaboradores');" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf">
 
                 </div>
               
@@ -38,7 +38,7 @@
 </div>
 
 
->
+
 
 <script>
     Fancybox.bind("[data-fancybox]", {

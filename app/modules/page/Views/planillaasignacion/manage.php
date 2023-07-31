@@ -30,9 +30,7 @@
 				<div class="col-3 form-group">
 					<label for="nombre" class="control-label">Nombre</label>
 					<label class="input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text input-icono  fondo-azul "><i class="fas fa-pencil-alt"></i></span>
-						</div>
+						
 						<?php
 						$hojaVidaModel = new Page_Model_DbTable_Hojadevida();
 						$nombre = $hojaVidaModel->getList("documento = '".$this->content->cedula."'" , "")[0];
@@ -46,9 +44,7 @@
 				<div class="col-3 form-group">
 					<label for="valor_hora" class="control-label">Valor hora</label>
 					<label class="input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text input-icono  fondo-verde-claro "><i class="fas fa-pencil-alt"></i></span>
-						</div>
+						
 						<input type="text" value="<?= $this->content->valor_hora; ?>" name="valor_hora" id="valor_hora" class="form-control">
 					</label>
 					<div class="help-block with-errors"></div>

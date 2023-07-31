@@ -112,7 +112,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text input-icono  fondo-rosado "><i class="fas fa-pencil-alt"></i></span>
 								</div>
-								<input type="text" value="<?= $this->content->id; ?>" name="documento" id="documento" class="form-control" required>
+								<input type="text" value="<?= $this->content->documento; ?>" name="documento" id="documento" class="form-control" required>
 							</label>
 							<div class="help-block with-errors"></div>
 						</div>
@@ -973,6 +973,7 @@
 
 
 <script>
+	
 	document.addEventListener("DOMContentLoaded", function() {
 		// Leer el ID de la pestaña del hash de la URL
 		var hash = window.location.hash.substr(1);
@@ -1043,6 +1044,7 @@
 				window.history.replaceState(null, null, '#' + tabId);
 			});
 		});
+		mostrarMetodoPago();
 	});
 	/* 	$(document).ready(function() {
 			// Obtener el identificador de la pestaña activa desde la URL
