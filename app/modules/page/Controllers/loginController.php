@@ -83,8 +83,7 @@ class Page_loginController extends Controllers_Abstract
             $logModel = new Administracion_Model_DbTable_Log();
             $logModel->insert($data);
           } else {
-            echo $user;
-            echo $password;
+            
             $isError = true;
             $error = 2;
             //  $errorText = "El Usuario o Contraseña son incorrectos.";

@@ -105,4 +105,18 @@ class Page_Model_DbTable_Planillaasignacion extends Db_Table
 	  $res = $this->_conn->query($select)->fetchAsObject();
 	  return $res;
 	}
+	public function getListPlanillas($filters = '', $order = '')
+	{
+	  $filter = '';
+	  if ($filters != '') {
+		$filter = ' WHERE ' . $filters; 
+	  }
+	  $orders = "";
+	  if ($order != '') {
+		$orders = ' ORDER BY ' . $order;
+	  }
+		$select = 'SELECT planilla_asignacion.*, CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM planilla_asignacion LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_asignacion.cedula LEFT JOIN planilla ON planilla.id = planilla_asignacion.planilla   ' . $filter . ' ' . $orders;
+	  $res = $this->_conn->query($select)->fetchAsObject();
+	  return $res;
+	}
 }

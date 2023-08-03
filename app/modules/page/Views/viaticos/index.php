@@ -2,7 +2,11 @@
 
     <div class=" d-flex justify-content-between ">
         <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
-            <?php echo $this->titlesection; ?>
+            <?php
+
+use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
+
+ echo $this->titlesection; ?>
         </h3>
         <a href="/page/nomina">
             <button class="btn-primary-home btn-primary-volver  mt-2">
@@ -126,7 +130,10 @@
                         <td>Item</td>
                         <td>Documento</td>
                         <td>Nombre</td>
-                        <td>Viáticos</td>
+                        <td>Viáticos asignados</td>
+                        <td>Viáticos gastados</td>
+                        <td>Diferencia</td>
+
 
                     </tr>
                 </thead>
@@ -154,15 +161,23 @@
                                 <?php echo $content->nombre1 ?>
                             </td>
                             <td>
+                                <?php echo formato_numero($content->viaticos) ?>
+                            </td>
+                            <td>
                                 <?php echo formato_numero($this->viaticos[$content->cedula]) ?>
                                 <?php $TOTAL += $this->viaticos[$content->cedula];   ?>
 
+                            </td>
+                            <td class="<?php if ($content->viaticos-$this->viaticos[$content->cedula] >= 0) {echo 'verde';} else {echo 'rojo';}?>">
+                                <?php echo formato_numero($content->viaticos-$this->viaticos[$content->cedula]) ?>
                             </td>
 
                         <?php } ?>
                         </tr>
                         <tr>
 
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
 

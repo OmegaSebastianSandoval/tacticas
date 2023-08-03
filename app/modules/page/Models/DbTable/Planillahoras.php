@@ -202,7 +202,7 @@ SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		$select = 'SELECT planilla_horas.*,  CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
+		$select = 'SELECT planilla_horas.*, hoja_vida.viaticos, CONCAT(hoja_vida.apellidos," ",hoja_vida.nombres) AS nombre1 FROM (planilla_horas LEFT JOIN planilla ON planilla_horas.planilla = planilla.id) LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_horas.cedula  ' . $filter . ' GROUP BY cedula ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}
@@ -359,7 +359,7 @@ SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		 $select = 'SELECT SUM(horas) AS total FROM planilla_horas ' . $filter  . ' ' . $orders;
+		$select = 'SELECT SUM(horas) AS total FROM planilla_horas ' . $filter  . ' ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}

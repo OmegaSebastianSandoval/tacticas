@@ -45,12 +45,12 @@
 
         </div>
         <div class="col-md-6 d-flex justify-content-center  align-items-start align-items-md-center">
-            <form class="form-login shadow rounded-lg pb-4" autocomplete="off" action="/page/login/validar" method="post">
+            <form class="form-login shadow rounded-lg pb-4" autocomplete="off" action="/page/loginempleados/validar" method="post">
                 <div class="header-form"></div>
                 <h2 class="py-3">Bienvenido</h2>
                 <div class="w-100 d-flex justify-content-center">
 
-                    <img src="/images/<?php echo $this->img ?>" class="img-fluid" alt="Imagen de seguro">
+                    <img src="/skins/page/images/logotacticas.png" class="img-fluid" alt="Imagen de seguro">
                 </div>
                 <div class="body-form px-3 text-center">
                     <hr>
@@ -60,34 +60,28 @@
                     <div class="d-flex align-items-center mt-2 mb-3">
 
                         <i class="fa fa-user form-control-feedback"></i>
-                        <input type="text" placeholder="Usuario" class="form-control ml-1" id="user" name="user" required>
+                        <input type="text" placeholder="Ingrese su documento" class="form-control ml-1" id="cedula" name="cedula" required>
                     </div>
-                    <div class="d-flex align-items-center mb-3">
 
-                        <i class="fa fa-lock form-control-feedback"></i>
-                        <input type="password" placeholder="Contraseña" class="form-control ml-1" id="password" name="password" required>
-                    </div>
                     <?php if ($this->error) { ?>
 
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <strong>¡Hubo un error!</strong>
+                          
                             <?php if ($this->error == 1) { ?>
-                                Lo sentimos ocurrio un error intente de nuevo.
+                                Documento incorrectos.
                             <?php } ?>
                             <?php if ($this->error == 2) { ?>
-                                El Usuario o Contraseña son incorrectos.
+                                El usuario se encuentra retirado.
                             <?php } ?>
                             <?php if ($this->error == 3) { ?>
-                                El usuario se encuentra inactivo.
+                            
                             <?php } ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php } ?>
-                    <div class="">
-                        <a href="/page/login/recuperar" class="">¿Olvidó su contraseña?</a>
-                    </div>
+                   
                     <input type="hidden" id="csrf" name="csrf" value="<?php echo $this->csrf; ?>" />
-                    <input type="hidden" id="img" name="img" value="<?php echo $this->img; ?>" />
 
                     <button class="btn-primary mt-2" type="submit">
                         <span>Ingresar</span>

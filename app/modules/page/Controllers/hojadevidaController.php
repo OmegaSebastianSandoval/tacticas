@@ -576,6 +576,8 @@ class Page_hojadevidaController extends Page_mainController
 		$data['fecha_c'] = '';
 		$data['perfil_profesional'] = $this->_getSanitizedParamHtml("perfil_profesional");
 		$data['numero_cuenta'] = $this->_getSanitizedParamHtml("numero_cuenta");
+		$data['viaticos'] = $this->_getSanitizedParamHtml("viaticos");
+
 
 		return $data;
 	}

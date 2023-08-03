@@ -109,7 +109,7 @@ class Page_viaticosController extends Page_mainController
 		$planillaParametros = $planillaParametrosModel->getById(1);
 		$planillas = $planillaModel->getList($filtros2, "");
 		/* 	echo '<pre>';
-		print_r($planillas);
+		//print_r($planillas);
 		print_r($cedulas);
 
 		echo '</pre>'; */
@@ -201,7 +201,10 @@ class Page_viaticosController extends Page_mainController
 	<td>Item</td>
 	<td>Documento</td>
 	<td>Nombre</td>
-	<td>Vi&aacute;ticos</td>
+	<td>Vi&aacute;ticos asginados</td>
+	<td>Vi&aacute;ticos gastados</td>
+	<td>Diferencia</td>
+
 	</tr>';
 		$i = 0;
 		foreach ($planillas as $value) {
@@ -223,12 +226,18 @@ class Page_viaticosController extends Page_mainController
 	<td>' . $i . '</td>
 	<td>' . $cedula . '</td>
 	<td>' . $empleado->nombre1 . '</td>
+	<td>' . $this->formato_numero($empleado->viaticos) . '</td>
 	<td>' . $this->formato_numero($viaticos[$cedula]) . '</td>
+
+	<td style="color:'. ($empleado->viaticos-$viaticos[$cedula] < 0 ? '#FFF' : '').';background-color:'. ($empleado->viaticos-$viaticos[$cedula] < 0 ? '#ff0000' : '#00ff00').';text-align:right">' . $this->formato_numero($empleado->viaticos-$viaticos[$cedula] ) . '</td>
+
 	</tr>';
 			}
 		}
 		$output .= '
 	<tr>
+	<td></td>
+	<td></td>
 	<td></td>
 	<td></td>
 	<td style="text-align:right;"><strong>TOTAL</strong></td>

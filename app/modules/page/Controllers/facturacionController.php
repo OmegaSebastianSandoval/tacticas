@@ -127,7 +127,7 @@ class Page_facturacionController extends Page_mainController
 		//print_r($resultado);
 		//	print_r($empresa);
 
-		echo '</pre>';
+	//	echo '</pre>';
 		$filtro_loc = "";
 		if ($localizacion != '') {
 			$filtro_loc = " AND (loc = '$localizacion' OR loc = 'DESCANSO' AND loc = 'VACACIONES' AND loc = 'INCAPACIDAD' AND loc='FALTA' AND loc='PERMISO' )  ";

@@ -2,7 +2,7 @@
   <div class="container">
   </div>
 </div> -->
-<header class="d-none">
+<header class="d-non">
 
     <div class="container-fluid  d-flex  order-1 order-md-2 ">
 
@@ -20,20 +20,26 @@
                 </a>
             </div> -->
             <div class="d-flex  justify-content-end align-items-center ">
-                <a href="/page/login/logout" class="btn-salir">
+                <?php if ((Session::getInstance()->get("kt_login_level") == '4')) { ?>
+                    <a href="/page/loginempleados/logout" class="btn-salir">
 
-                    <div class="sign"><svg viewBox="0 0 512 512">
-                            <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-                        </svg></div>
+                    <?php } else { ?>
 
-                    <div class="text">Salir</div>
-                </a>
+                        <a href="/page/login/logout" class="btn-salir">
+                        <?php } ?>
+
+                        <div class="sign"><svg viewBox="0 0 512 512">
+                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                            </svg></div>
+
+                        <div class="text">Salir</div>
+                        </a>
             </div>
         </div>
     </div>
 </header>
 <!-- <hr class="separador-header"> -->
-<div class="menu__side d-none" id="menu_side">
+<div class="menu__side d-non" id="menu_side">
     <!--    <div class="icon__menu " id="btn_open">
         <i class="fas fa-bars"></i>
     </div> -->
@@ -57,6 +63,7 @@
 
     </div>
     <div class="options__menu mt-5">
+    <?php if (Session::getInstance()->get("kt_login_level") != 4) { ?>
 
         <a href="/page/panel" <?php if ($this->botonpanel == 0) { ?>class="selected" <?php } ?>>
             <div class="option">
@@ -67,6 +74,8 @@
                 </div>
             </div>
         </a>
+        <?php } ?>
+
         <?php if (Session::getInstance()->get("kt_login_level") == 1) { ?>
 
             <a href="/page/empresas" <?php if ($this->botonpanel == 1) { ?>class="selected" <?php } ?>>
@@ -91,8 +100,16 @@
             </a>
         <?php } ?>
 
-        <a href="/page/hojadevida" <?php if ($this->botonpanel == 3) { ?>class="selected" <?php } ?>>
-            <div class="option">
+
+
+    <?php if (Session::getInstance()->get("kt_login_level") == 4) { ?>
+        <a href="/page/hojadevida/manage?cc=<?php echo Session::getInstance()->get("kt_login_id") ?>#pills-documentos" <?php if ($this->botonpanel == 3) { ?>class="selected" <?php } ?>>
+
+        <?php } else{ ?>        
+            <a href="/page/hojadevida" <?php if ($this->botonpanel == 3) { ?>class="selected" <?php } ?>>
+        <?php } ?>
+
+        <div class="option">
                 <i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
                 <h5>Hojas de vida</h5>
                 <div class=" d-flex justify-content-end">
@@ -100,17 +117,20 @@
                 </div>
             </div>
         </a>
+        <?php if (Session::getInstance()->get("kt_login_level") != 4) { ?>
+            <a href="/page/vencimientos" <?php if ($this->botonpanel == 4) { ?>class="selected" <?php } ?>>
 
-        <a href="/page/vencimientos" <?php if ($this->botonpanel == 4) { ?>class="selected" <?php } ?>>
-
-            <div class="option">
-                <i class="fa-solid fa-calendar-xmark" title="Vencimientos"></i>
-                <h5>Vencimientos</h5>
-                <div class="w-100 d-flex justify-content-end">
-                    <i class="fa-solid fa-chevron-right"></i>
+                <div class="option">
+                    <i class="fa-solid fa-calendar-xmark" title="Vencimientos"></i>
+                    <h5>Vencimientos</h5>
+                    <div class="w-100 d-flex justify-content-end">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php } ?>
+
+        <?php if (Session::getInstance()->get("kt_login_level") != 4) { ?>
 
         <a href="/page/reportes" <?php if ($this->botonpanel == 5) { ?>class="selected" <?php } ?>>
 
@@ -122,6 +142,8 @@
                 </div>
             </div>
         </a>
+        <?php } ?>
+
         <?php if ((Session::getInstance()->get("kt_login_level") != '2')) { ?>
 
             <a href="/page/nomina" <?php if ($this->botonpanel == 6) { ?>class="selected" <?php } ?>>

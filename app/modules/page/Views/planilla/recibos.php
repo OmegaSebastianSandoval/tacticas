@@ -21,7 +21,7 @@
 </style>
 <div class="container-fluid">
     <div class=" d-flex justify-content-between align-items-center">
-        <h3 class="my-0 d-flex text-start gap-2 align-items-center"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
+        <h3 class="my-0 d-flex text-start gap-2 align-items-center"><i class="fa-regular fa-newspaper" title="Planilla"></i> <?php echo $this->titlesection; ?></h3>
         <a href="/page/planilla">
             <button class="btn-primary-home  btn-primary-volver  mt-2" type="submit">
                 <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
@@ -117,7 +117,7 @@
 
                 <div class="d-flex gap-2">
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarrecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>""> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarrecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
                     <div class="text-right"><a target="_blank"  class="btn btn-sm d-flex align-items-center gap-2 btn-secondary" href="<?php echo $this->route . "/imprimirRecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>">  <i class="fa-solid fa-print"></i></i>Imprimir</a></div>
                 
                 </div>

@@ -16,14 +16,12 @@
 
     <form action="<?php echo $this->route; ?>" method="post">
         <div class="content-dashboard p-0">
-            <div class="row d-flex justify-content-end">
+            <div class="row d-flex justify-content-start">
 
-                <div class="col-12  col-md-4 col-lg-2">
+                <div class="col-12  col-md-4 col-lg-1">
                     <label>Empresa</label>
                     <label class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text input-icono fondo-rosado "><i class="far fa-list-alt"></i></span>
-                        </div>
+                      
                         <select class="form-control" name="empresa">
                             <option value="">Todas</option>
                             <?php foreach ($this->list_empresa as $key => $value) : ?>
@@ -37,9 +35,7 @@
                 <div class="col-12  col-md-4 col-lg-2">
                     <label>Tipo</label>
                     <label class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text input-icono fondo-rosado "><i class="far fa-list-alt"></i></span>
-                        </div>
+                      
                         <select class="form-control" name="tipo">
 
                             <?php foreach ($this->list_tipo as $key => $value) : ?>
@@ -53,9 +49,7 @@
                 <div class="col-12  col-md-4 col-lg-2">
                     <label>Localización</label>
                     <label class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text input-icono fondo-rosado "><i class="far fa-list-alt"></i></span>
-                        </div>
+                      
                         <select class="form-control" name="localizacion">
                             <option value="">Todas</option>
                             <?php foreach ($this->list_localizacion as $key => $value) : ?>
@@ -69,9 +63,7 @@
                 <div class="col-12  col-md-4 col-lg-2">
                     <label>Fecha de inicio</label>
                     <label class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text input-icono fondo-verde-claro "><i class="fas fa-calendar-alt"></i></span>
-                        </div>
+                        
                         <input type="date" class="form-control" name="fecha_inicio" value="<?php
                                                                                             if ($this->fecha_inicio) {
                                                                                                 echo $this->fecha_inicio;
@@ -83,9 +75,7 @@
                 <div class="col-12  col-md-4 col-lg-2">
                     <label>Fecha final</label>
                     <label class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text input-icono fondo-verde-claro "><i class="fas fa-calendar-alt"></i></span>
-                        </div>
+                        
                         <input type="date" class="form-control" name="fecha_fin" value="<?php
                                                                                         if ($this->fecha_fin) {
                                                                                             echo $this->fecha_fin;
@@ -97,13 +87,13 @@
 
 
 
-                <div class="col-12   col-md-6 col-lg-2  d-grid align-items-end mb-2">
+                <div class="col-12   col-md-6 col-lg-1  d-grid align-items-end mb-2">
                     <label>&nbsp;</label>
-                    <button type="submit" class="btn btn-block btn-azul"> <i class="fas fa-filter"></i> Filtrar</button>
+                    <button type="submit" class="btn btn-block btn-azul"> </i> Filtrar</button>
                 </div>
                 <div class="col-12   col-md-6  col-lg-2  d-grid align-items-end mb-2">
 
-                    <a class="btn btn-block btn-azul-claro " href="<?php echo $this->route; ?>?cleanfilter=1"> <i class="fas fa-eraser"></i> Limpiar Filtro</a>
+                    <a class="btn btn-block btn-azul-claro " href="<?php echo $this->route; ?>?cleanfilter=1"> </i> Limpiar Filtro</a>
                 </div>
 
             </div>

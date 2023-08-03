@@ -59,7 +59,7 @@ class Page_Model_DbTable_Planillaasignacion extends Db_Table
 	  if ($order != '') {
 		$orders = ' ORDER BY ' . $order;
 	  }
-		$select = 'SELECT planilla_asignacion.*, CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM planilla_asignacion LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_asignacion.cedula ' . $filter . ' ' . $orders;
+	$select = 'SELECT planilla_asignacion.*, CONCAT(hoja_vida.nombres," ",hoja_vida.apellidos) AS nombre1 FROM planilla_asignacion LEFT JOIN hoja_vida ON hoja_vida.documento = planilla_asignacion.cedula ' . $filter . ' ' . $orders;
 	  $res = $this->_conn->query($select)->fetchAsObject();
 	  return $res;
 	}

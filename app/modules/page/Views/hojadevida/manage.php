@@ -4,13 +4,19 @@
 
 
 	<ul class=" autoplay nav nav-pills mb-3 gap-3 " id="pills-tab" role="tablist">
+    <?php if (Session::getInstance()->get("kt_login_level") != 4) { ?>
+
 		<li class="nav-item" role="presentation">
 
 			<a class="btn-tab " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" href="#pills-home" onclick="event.preventDefault()" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home
 				<!-- <span></span> -->
 			</a>
 		</li>
+		<?php } ?>
+	
+
 		<?php if ($this->content->id) { ?>
+			<?php if (Session::getInstance()->get("kt_login_level") != 4) { ?>
 			<li class="nav-item" role="presentation">
 				<a class="btn-tab" id="pills-profile-tab" href="#pills-profile" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Contactos de emergencia
 					<!-- <span></span> -->
@@ -46,6 +52,8 @@
 					<!-- <span></span> -->
 				</a>
 			</li>
+		<?php } ?>
+
 			<li class="nav-item" role="presentation">
 				<a class="btn-tab" id="pills-documentos-tab" href="#pills-documentos" data-bs-toggle="pill" data-bs-target="#pills-documentos" type="button" role="tab" aria-controls="pills-documentos" aria-selected="false">Documentos
 					<!-- <span></span> -->
@@ -286,8 +294,6 @@
 								</div>
 								<input type="date" value="<?php if ($this->content->fecha_ingreso) {
 																echo $this->content->fecha_ingreso;
-															} else {
-																/* echo date('Y-m-d'); */
 															} ?>" name="fecha_ingreso" id="fecha_ingreso" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
 							</label>
 							<div class="help-block with-errors"></div>
@@ -300,8 +306,6 @@
 								</div>
 								<input type="date" value="<?php if ($this->content->fecha_salida) {
 																echo $this->content->fecha_salida;
-															} else {
-																/* echo date('Y-m-d'); */
 															} ?>" name="fecha_salida" id="fecha_salida" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
 							</label>
 							<div class="help-block with-errors"></div>
@@ -315,9 +319,7 @@
 									</div>
 									<input type="date" value="<?php if ($this->content->inicio) {
 																	echo $this->content->inicio;
-																} else {
-																	/* echo date('Y-m-d'); */
-																} ?>" name="inicio" id="inicio" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
+																}  ?>" name="inicio" id="inicio" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
 								</label>
 								<div class="help-block with-errors"></div>
 							</div>
@@ -329,8 +331,6 @@
 									</div>
 									<input type="date" value="<?php if ($this->content->fin) {
 																	echo $this->content->fin;
-																} else {
-																	/* echo date('Y-m-d'); */
 																} ?>" name="fin" id="fin" class="form-control" data-date-format="yyyy-mm-dd" data-date-language="es">
 								</label>
 								<div class="help-block with-errors"></div>
@@ -403,6 +403,16 @@
 									<div><button class="btn btn-danger btn-sm" type="button" onclick="eliminarImagen('foto','<?php echo $this->route . "/deleteimage"; ?>')"><i class="glyphicon glyphicon-remove"></i> Eliminar Imagen</button></div>
 								</div>
 							<?php } ?>
+						</div>
+						<div class="col-12 col-md-4 col-lg-3 form-group">
+							<label for="viaticos" class="control-label">Vi&aacute;ticos</label>
+							<label class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text input-icono  fondo-azul-claro "><i class="fas fa-pencil-alt"></i></span>
+								</div>
+								<input type="text" value="<?= $this->content->viaticos; ?>" name="viaticos" id="viaticos" class="form-control">
+							</label>
+							<div class="help-block with-errors"></div>
 						</div>
 						<?php $hoy = date('Y-m-d') ?>
 						<?php if ($this->content->id) { ?>
@@ -973,7 +983,6 @@
 
 
 <script>
-	
 	document.addEventListener("DOMContentLoaded", function() {
 		// Leer el ID de la pestaña del hash de la URL
 		var hash = window.location.hash.substr(1);

@@ -51,8 +51,10 @@ class Page_Model_DbTable_Hojadevida extends Db_Table
 		$metodo_pago = $data['metodo_pago'];
 		$numero_cuenta = $data['numero_cuenta'];
 		$cargo = $data['cargo'];
+		$viaticos = $data['viaticos'];
 
-		$query = "INSERT INTO hoja_vida( foto, nombres, apellidos, tipo_documento, documento, fecha_nacimiento, ciudad_nacimiento, email, direccion, telefono, celular, ciudad, estado_civil, fecha_m, fecha_ingreso, numero_seguro, retirado, tipo_contrato, fecha_salida, inicio, fin, empresa, fecha_c, perfil_profesional, metodo_pago, numero_cuenta, cargo) VALUES ( '$foto', '$nombres', '$apellidos', '$tipo_documento', '$documento', '$fecha_nacimiento', '$ciudad_nacimiento', '$email', '$direccion', '$telefono', '$celular', '$ciudad', '$estado_civil', '$fecha_m', '$fecha_ingreso', '$numero_seguro', '$retirado', '$tipo_contrato', '$fecha_salida', '$inicio', '$fin', '$empresa', '$fecha_c', '$perfil_profesional', '$metodo_pago', '$numero_cuenta', '$cargo')";
+
+		$query = "INSERT INTO hoja_vida( foto, nombres, apellidos, tipo_documento, documento, fecha_nacimiento, ciudad_nacimiento, email, direccion, telefono, celular, ciudad, estado_civil, fecha_m, fecha_ingreso, numero_seguro, retirado, tipo_contrato, fecha_salida, inicio, fin, empresa, fecha_c, perfil_profesional, metodo_pago, numero_cuenta, cargo, viaticos) VALUES ( '$foto', '$nombres', '$apellidos', '$tipo_documento', '$documento', '$fecha_nacimiento', '$ciudad_nacimiento', '$email', '$direccion', '$telefono', '$celular', '$ciudad', '$estado_civil', '$fecha_m', '$fecha_ingreso', '$numero_seguro', '$retirado', '$tipo_contrato', '$fecha_salida', '$inicio', '$fin', '$empresa', '$fecha_c', '$perfil_profesional', '$metodo_pago', '$numero_cuenta', '$cargo', $viaticos)";
 		$res = $this->_conn->query($query);
 		return mysqli_insert_id($this->_conn->getConnection());
 	}
@@ -93,9 +95,11 @@ class Page_Model_DbTable_Hojadevida extends Db_Table
 		$numero_cuenta = $data['numero_cuenta'];
 		$perfil_profesional = $data['perfil_profesional'];
 		$cargo = $data['cargo'];
+		$viaticos = $data['viaticos'];
 
 
-		$query = "UPDATE hoja_vida SET  foto = '$foto', nombres = '$nombres', apellidos = '$apellidos', tipo_documento = '$tipo_documento', documento = '$documento', fecha_nacimiento = '$fecha_nacimiento', ciudad_nacimiento = '$ciudad_nacimiento', email = '$email', direccion = '$direccion', telefono = '$telefono', celular = '$celular', ciudad = '$ciudad', estado_civil = '$estado_civil', fecha_m = '$fecha_m', fecha_ingreso = '$fecha_ingreso', numero_seguro = '$numero_seguro', retirado = '$retirado', tipo_contrato = '$tipo_contrato', fecha_salida = '$fecha_salida', inicio = '$inicio', fin = '$fin', empresa = '$empresa', fecha_c = '$fecha_c', perfil_profesional = '$perfil_profesional', metodo_pago = '$metodo_pago', numero_cuenta = '$numero_cuenta', cargo = '$cargo' WHERE id = '" . $id . "'";
+
+		$query = "UPDATE hoja_vida SET  foto = '$foto', nombres = '$nombres', apellidos = '$apellidos', tipo_documento = '$tipo_documento', documento = '$documento', fecha_nacimiento = '$fecha_nacimiento', ciudad_nacimiento = '$ciudad_nacimiento', email = '$email', direccion = '$direccion', telefono = '$telefono', celular = '$celular', ciudad = '$ciudad', estado_civil = '$estado_civil', fecha_m = '$fecha_m', fecha_ingreso = '$fecha_ingreso', numero_seguro = '$numero_seguro', retirado = '$retirado', tipo_contrato = '$tipo_contrato', fecha_salida = '$fecha_salida', inicio = '$inicio', fin = '$fin', empresa = '$empresa', fecha_c = '$fecha_c', perfil_profesional = '$perfil_profesional', metodo_pago = '$metodo_pago', numero_cuenta = '$numero_cuenta', cargo = '$cargo' , viaticos = '$viaticos' WHERE id = '" . $id . "'";
 		$res = $this->_conn->query($query);
 	}
 	public function totalPersonas($filtro)

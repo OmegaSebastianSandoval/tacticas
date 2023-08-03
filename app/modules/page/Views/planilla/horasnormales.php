@@ -28,6 +28,30 @@ include '../public/skins/page/js/horas.php';
             </button>
         </a>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalFaltantes" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-transparent border border-0">
+                <div class="modal-header bg-transparent border border-0">
+                    <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1> -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+          
+                    <div class="alert alert-warning " role="alert">
+                        
+                        <div>
+                            <span class="text-center" id="txtfaltantes"></span>
+                        </div>
+                    </div>
+
+                </div>
+            
+            </div>
+        </div>
+    </div>
     <div class="container-fluid  ">
         <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
             <a class="btn-tab btn-consolidado <?php echo $this->tipo == 1 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
@@ -43,7 +67,7 @@ include '../public/skins/page/js/horas.php';
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/consolidado?planilla=<?php echo $this->planila ?>">Consolidado nómina
 
             </a>
-            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planila?>">Recibos nómina
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planila ?>">Recibos nómina
 
             </a>
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/limite?planilla=<?php echo $this->planila ?>">Reporte límite horas </a>
@@ -57,8 +81,8 @@ include '../public/skins/page/js/horas.php';
                 </div>
 
                 <div class="d-flex gap-2">
-                <div class="text-right"><button class="btn btn-sm btn-success2" onclick="verificar_planilla();">
-                <i class="fa-solid fa-check-to-slot"></i> Verificar planilla</button></div>
+                    <div class="text-right"><button class="btn btn-sm btn-success2" onclick="verificar_planilla();">
+                            <i class="fa-solid fa-check-to-slot"></i> Verificar planilla</button></div>
 
                 </div>
             </div>
@@ -149,6 +173,7 @@ include '../public/skins/page/js/horas.php';
         <?php echo $this->resto ?>
     </div>
 </div>
+
 <?php if ($this->planillaAct->cerrada == 1 and ($this->planillaAct->fecha_cerrada == "" or $this->planillaAct->fecha_cerrada == "0000-00-00")) { ?>
     <script type="text/javascript">
         // Deshabilitar todos los elementos <input>

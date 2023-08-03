@@ -219,35 +219,70 @@
 		limpiar_filtros(j);
 	}
 
+	/* function verificar_planilla() {
+		var total = 0;
+
+		for (var i = 1; i <= 200; i++) {
+			for (var j = 1; j <= 31; j++) {
+				var inputHoras = document.getElementById('horas_' + i + '_' + j);
+				var selectLoc = document.getElementById('loc_' + i + '_' + j);
+
+				if (inputHoras && selectLoc) {
+					var horas = inputHoras.value;
+					var loc = selectLoc.options[selectLoc.selectedIndex].value;
+
+					if (horas > 0 && loc === "") {
+						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#FFCCCC';
+						total++;
+					} else {
+						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#E7F6F9';
+					}
+				}
+			}
+		}
+
+		if (total > 0) {
+			Swal.fire({
+				icon: 'info',
+				title: 'Oops...',
+				text: 'Tiene ' + total + ' casillas por llenar',
+			});
+		}
+	} */
+
 	function verificar_planilla() {
-  var total = 0;
+		var i = 0;
+		var j = 0;
+		var horas = 0;
+		var e;
+		var loc = "";
+		var total = 0;
 
-  for (var i = 1; i <= 200; i++) {
-    for (var j = 1; j <= 31; j++) {
-      var inputHoras = document.getElementById('horas_' + i + '_' + j);
-      var selectLoc = document.getElementById('loc_' + i + '_' + j);
+		for (i = 1; i <= 200; i++) {
+			for (j = 1; j <= 31; j++) {
+				if (document.getElementById('horas_' + i + '_' + j)) {
+					horas = document.getElementById('horas_' + i + '_' + j).value;
+					e = document.getElementById('loc_' + i + '_' + j);
+					loc = e.options[e.selectedIndex].value;
+					if (horas > 0 && loc == "") {
+						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#FFCCCC';
+						total++;
+					} else {
+						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#E7F6F9';
+					}
+				}
+			}
+		}
+		if (total > 0) {
+		alert("Tiene "+total+" casillas por llenar");
 
-      if (inputHoras && selectLoc) {
-        var horas = inputHoras.value;
-        var loc = selectLoc.options[selectLoc.selectedIndex].value;
 
-        if (horas > 0 && loc === "") {
-          document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#FFCCCC';
-          total++;
-        } else {
-          document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#E7F6F9';
-        }
-      }
-    }
-  }
+		/* 	// Muestra el modal utilizando jQuery
+			$('#modalFaltantes').modal('show');
 
-  if (total > 0) {
-    Swal.fire({
-      icon: 'info',
-      title: 'Oops...',
-      text: 'Tiene ' + total + ' casillas por llenar',
-    });
-  }
-}
-
+			let txtfaltantes = document.getElementById('txtfaltantes');
+			txtfaltantes.innerText = "Faltan " + total + " casillas por llenar"
+ */
+		}
+	}
 </script>

@@ -30,6 +30,21 @@
         }
     </style>
         <div class="home-nomina">
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '4' )) { ?>
+
+        <div class="">
+            <a href="/page/planilla/reciboempleado">
+                <div class="card-vencimiento mx-auto ">
+                    <div class="image">
+                        <img src="/skins/page/images/planilla.jpg" alt="Administrar Planilla">
+                    </div>
+                    <h2 class="title p-2">Recibos de pago</h2>
+                </div>
+            </a>
+        </div>
+        <?php 	}?>
+
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' ) || (Session::getInstance()->get("kt_login_level") == '2' )) { ?>
 
         <div class="">
             <a href="/page/planilla">
@@ -41,6 +56,7 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
 
         <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
         <div class="">
@@ -54,6 +70,7 @@
             </a>
         </div>
         <?php 	}?>
+        <?php  if ((Session::getInstance()->get("kt_login_level") == '1' ) && (Session::getInstance()->get("kt_login_level") == '2' )) { ?>
 
         <div class="">
             <a href="/page/localizaciones">
@@ -65,6 +82,7 @@
                 </div>
             </a>
         </div>
+        <?php 	}?>
     
 
         <?php  if ((Session::getInstance()->get("kt_login_level") == '1' )) { ?>
