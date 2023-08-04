@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <form action="<?php echo $this->route; ?>" method="post">
+    <form action="<?php echo $this->route; ?>" method="post" id="form-infolocalizacion">
         <div class="content-dashboard p-0">
             <div class="row">
 
@@ -67,62 +67,76 @@
             </div>
         </div>
     </form>
+    <?php if (!$this->noContent) { ?>
 
-    <div class="container-fluid mb-5 overflow-auto">
+        <div class="container-fluid mb-5 overflow-auto">
 
-        <div align="center">
-            <ul class="pagination m-0 pagination-end justify-content-center">
-                <?php
-                $url = $this->route;
-                $min = $this->page - 10;
-                if ($min < 0) {
-                    $min = 1;
-                }
-                $max = $this->page + 15;
-                if ($this->totalpages > 1) {
-                    if ($this->page != 1)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
-                    for ($i = 1; $i <= $this->totalpages; $i++) {
-                        if ($this->page == $i)
-                            echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
-                        else {
-                            if ($i <= $max and $i >= $min) {
-                                echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+            <div align="center">
+                <ul class="pagination m-0 pagination-end justify-content-center">
+                    <?php
+                    $url = $this->route;
+                    $min = $this->page - 10;
+                    if ($min < 0) {
+                        $min = 1;
+                    }
+                    $max = $this->page + 15;
+                    if ($this->totalpages > 1) {
+                        if ($this->page != 1)
+                            echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page - 1) . '"> &laquo; Anterior </a></li>';
+                        for ($i = 1; $i <= $this->totalpages; $i++) {
+                            if ($this->page == $i)
+                                echo '<li class="active page-item"><a class="page-link">' . $this->page . '</a></li>';
+                            else {
+                                if ($i <= $max and $i >= $min) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . $i . '">' . $i . '</a></li>  ';
+                                }
                             }
                         }
+                        if ($this->page != $this->totalpages)
+                            echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
                     }
-                    if ($this->page != $this->totalpages)
-                        echo '<li class="page-item"><a class="page-link" href="' . $url . '?page=' . ($this->page + 1) . '">Siguiente &raquo;</a></li>';
-                }
-                ?>
-            </ul>
-        </div>
+                    ?>
+                </ul>
+            </div>
+            <div class="content-dashboard pt-0">
 
-        <div class="content-table table-responsive">
-            <table class=" table table-striped  table-hover table-administrator text-center">
-                <thead style="font-size: 0.8rem;">
-                    <tr class="text-center">
-                        <th>LOCALIZACIÓN</th>
-                        <th>H NORMALES</th>
-                        <th>H NORMALES FACTURADAS</th>
-                        <th>H DIURNAS </th>
-                        <th>H DIURNAS FACTURADAS</th>
-                        <th>H NOCTURNAS </th>
-                        <th>H NOCTURNAS FACTURADAS</th>
-                        <th>FESTIVOS </th>
-                        <th>FESTIVOS FACTURADAS</th>
-                        <th>DOMINICALES </th>
-                        <th>DOMINACALES FACTURADAS</th>
+                <div class="franja-paginas d-none">
+                    <div class="d-flex justify-content-end">
 
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- <?php echo $this->tabla2; ?> -->
+                        <div class="d-flex gap-2">
 
-                    <?php echo $this->tabla; ?>
+                            <div class="text-right"><a class="btn btn-sm btn-success2" target="_blank" href="/page/facturadas/?fecha_inicio=<?php echo $this->getObjectVariable($this->filters, 'fecha_inicio') ?>&fecha_fin=<?php echo $this->getObjectVariable($this->filters, 'fecha_fin') ?>"> <i class="fa-regular fa-file-excel"></i> Informe de reportadas vs facturadas</a></div>
 
-                    <!--   <?php foreach ($this->localizaciones as $key => $content) { ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-table table-responsive">
+                    <table class=" table table-striped  table-hover table-administrator text-center">
+                        <thead style="font-size: 0.8rem;">
+                            <tr class="text-center">
+                                <th>LOCALIZACIÓN</th>
+                                <th>H NORMALES</th>
+                                <th>H NORMALES FACTURADAS</th>
+                                <th>H DIURNAS </th>
+                                <th>H DIURNAS FACTURADAS</th>
+                                <th>H NOCTURNAS </th>
+                                <th>H NOCTURNAS FACTURADAS</th>
+                                <th>FESTIVOS </th>
+                                <th>FESTIVOS FACTURADAS</th>
+                                <th>DOMINICALES </th>
+                                <th>DOMINACALES FACTURADAS</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <?php echo $this->tabla2; ?> -->
+
+                            <?php echo $this->tabla; ?>
+
+                            <!--   <?php foreach ($this->localizaciones as $key => $content) { ?>
                        
 
 
@@ -141,11 +155,14 @@
                     <?php  }  ?> -->
 
 
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
+            </div>
         </div>
-        <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
-    </div>
+
+    <?php } ?>
 
 </div>
 <style>
@@ -181,4 +198,13 @@
 
         }
     }
+
+    // Función que se ejecutará al enviar el formulario
+    function onSubmitForm() {
+        const contentloader = document.getElementById('content-loader')
+        const loader = document.getElementById('loader')
+        contentloader.style.display = 'flex'
+        loader.style.display = 'block'
+    }
+    document.getElementById('form-infolocalizacion').addEventListener('submit', onSubmitForm);
 </script>

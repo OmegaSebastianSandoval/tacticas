@@ -56,6 +56,7 @@ class Page_panelController extends Page_mainController
 	}
     public function indexAction()
     {
+	
         $title = "Panel Tácticas Panama";
 		Session::getInstance()->set($this->namefilter, '');
 

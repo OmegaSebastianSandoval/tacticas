@@ -148,28 +148,22 @@ class Page_facturadasController extends Page_mainController
 
 			$tabla.='
 			<tr>
-			<td><div align="center">'.$nombre.'</div></td>
-
-
+			<td>
+			<div align="center">'.$nombre.'</div></td>
 			<td><a href="/page/infolocalizacion/detalle?loc=' . $nombre . '&fecha1=' . $fecha1 . '&fecha2=' . $fecha2 . '&tipo=1" data-fancybox data-type="iframe" class="enlace_archivo2">'. $localizacion->tipo1.'</a></td>
-
 			<td><div align="center">'. $total1.'</div></td>
-
 			<td><a href="/page/infolocalizacion/detalle?loc=' . $nombre . '&fecha1=' . $fecha1 . '&fecha2=' . $fecha2 . '&tipo=2" data-fancybox data-type="iframe" class="enlace_archivo2">'.$localizacion->tipo2.'</a></td>
 
 
     		<td><div align="center">'.$total2.'</div></td>
 
       		<td><a href="/page/infolocalizacion/detalle?loc=' . $nombre . '&fecha1=' . $fecha1 . '&fecha2=' . $fecha2 . '&tipo=3" data-fancybox data-type="iframe" class="enlace_archivo2">'. $localizacion->tipo3.'</a></td>
-
 			<td><div align="center">'.$total3.'</div></td>
 
 			<td><a href="/page/infolocalizacion/detalle?loc=' . $nombre . '&fecha1=' . $fecha1 . '&fecha2=' . $fecha2 . '&tipo=4" data-fancybox data-type="iframe" class="enlace_archivo2">'. $localizacion->tipo4.'</a></td>
-
-			<td><div align="center">'.$total4.'</div></td>
+			<td><div align="center">'.$total4.'</div></td>1
 
 			<td><a href="/page/infolocalizacion/detalle?loc=' . $nombre . '&fecha1=' . $fecha1 . '&fecha2=' . $fecha2 . '&tipo=5" data-fancybox data-type="iframe" class="enlace_archivo2">'. $localizacion->tipo5.'</a></td>
-			
 			<td><div align="center">'.$total5.'</div></td>
 
 			</tr>';

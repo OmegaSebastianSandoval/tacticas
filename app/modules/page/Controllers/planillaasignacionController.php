@@ -151,7 +151,7 @@ class Page_planillaasignacionController extends Page_mainController
 		$this->setLayout('blanco');
 		$csrf = $this->_getSanitizedParam("csrf");
 
-
+		$planilla = $this->_getSanitizedParam("planilla");
 
 
 
@@ -160,10 +160,19 @@ class Page_planillaasignacionController extends Page_mainController
 
 
 			$hojavidaModel = new Page_Model_DbTable_Hojadevida();
+
+			/* $planillaModel = new Page_Model_DbTable_Planilla();
+			$planillaAct = $planillaModel->getById($planilla); */
+		
 			$usuario = $hojavidaModel->getList("documento = '" . $data["cedula"] . "'", "")[0];
+			
 			if ($usuario->retirado == 1) {
 				$hojavidaModel->editField($usuario->id, "retirado", 0);
 			}
+
+			// $hojavidaModel->editField($usuario->id, "empresa", $planillaAct->empresa);
+
+
 			$id = $this->mainModel->insert($data);
 
 			$data['id'] = $id;
@@ -172,7 +181,7 @@ class Page_planillaasignacionController extends Page_mainController
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);
 		}
-		$planilla = $this->_getSanitizedParam("planilla");
+		
 		header('Location: ' . $this->route . '?planilla=' . $planilla . '');
 	}
 

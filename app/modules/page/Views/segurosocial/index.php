@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <form action="<?php echo $this->route; ?>" method="post">
+    <form action="<?php echo $this->route; ?>" method="post" id="form-segurosocial">
         <div class="content-dashboard p-0">
             <div class="row">
 
@@ -145,7 +145,7 @@
 
                     <div class="d-flex gap-2">
 
-                        <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                        <div class="text-right"><a class="btn btn-sm btn-success2" target="_blank" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
 
                     </div>
                 </div>
@@ -282,3 +282,17 @@ function formato_numero($n)
     return number_format($n, 2, ',', '');
 }
 ?>
+
+<script>
+    
+    // Función que se ejecutará al enviar el formulario
+    function onSubmitForm() {
+      const contentloader = document.getElementById('content-loader')
+      const loader = document.getElementById('loader')
+      contentloader.style.display = 'flex'
+      loader.style.display = 'block'
+    }
+    document.getElementById('form-segurosocial').addEventListener('submit', onSubmitForm);
+    
+    
+    </script>

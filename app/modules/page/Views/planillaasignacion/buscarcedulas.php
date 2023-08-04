@@ -41,7 +41,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="col-12 col-md-2 form-group d-grid align-items-end">
-                    <button class="btn btn-guardar" type="submit">Buscar</button>
+                    <button class="btn btn-guardar btn-azul" type="submit">Buscar</button>
                 </div>
                 <div class="col-12 col-md-2 form-group d-grid align-items-end">
                     <a class="btn  btn-azul-claro" href="/page/planillaasignacion/buscarcedulas?cleanfilter=1">Limpiar filtro</a>

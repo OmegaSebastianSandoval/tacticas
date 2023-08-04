@@ -39,12 +39,12 @@ $(document).ready(function () {
     });
   });
 
-  function onAutoPlay(event) {
+  function onAutoPlay (event) {
     event.target.playVideo();
     event.target.mute();
   }
 
-  function onFinish(event) {
+  function onFinish (event) {
     if (event.data === 0) {
       event.target.playVideo();
     }
@@ -61,7 +61,7 @@ $(document).ready(function () {
   let submitButton = document.getElementById("submitButton");
 
   // Función para verificar si las contraseñas coinciden
-  function checkPasswordsMatch() {
+  function checkPasswordsMatch () {
     let password = passwordField.value;
     let confirmPassword = confirmPasswordField.value;
 
@@ -176,7 +176,7 @@ $(document).ready(function () {
 });
 
 //texto validacion de contraseñas en recuperacion
-function validarPassword() {
+function validarPassword () {
   let pass1 = document.querySelector("#password");
   let pass2 = document.querySelector("#repassword");
   let texto = document.querySelector("#text-alert");
@@ -197,7 +197,7 @@ function validarPassword() {
 
 //Seleccionar nivel
 selectorUsuario();
-function selectorUsuario() {
+function selectorUsuario () {
   let contenedorEmpresa = document.querySelector(".contenedor-empresa");
   let contenedorOcupacion = document.querySelector(".contenedor-ocupacion");
   const nivel = document.getElementById("nivel");
@@ -212,7 +212,7 @@ function selectorUsuario() {
 
 //ocultar o mostrar metodo de pago
 
-function mostrarMetodoPago() {
+function mostrarMetodoPago () {
   let metodoPago = document.getElementById("metodo_pago").value;
   if (metodoPago === "2") {
     $(".no-numero").attr("style", "display:block!important");

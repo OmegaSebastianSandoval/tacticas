@@ -1,12 +1,13 @@
+
 <div class="container-fluid">
 
     <div class=" d-flex justify-content-between ">
         <h3 class="my-0"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i>
             <?php
 
-use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
+            use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
 
- echo $this->titlesection; ?>
+            echo $this->titlesection; ?>
         </h3>
         <a href="/page/nomina">
             <button class="btn-primary-home btn-primary-volver  mt-2">
@@ -17,7 +18,7 @@ use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
             </button>
         </a>
     </div>
-    <form action="<?php echo $this->route; ?>" method="post">
+    <form action="<?php echo $this->route; ?>" method="post" id="form-viaticos">
         <div class="content-dashboard p-0">
             <div class="row">
 
@@ -82,13 +83,13 @@ use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
     </form>
     <?php if (!$this->noContent) { ?>
 
-    <div class="content-dashboard m-0 p-0">
-        <div class="franja-paginas">
-            <div class="d-flex justify-content-between">
-                <div class="">
-                    <div class="titulo-registro">Se encontraron <?php echo count($this->cedulas); ?> Registros</div>
-                </div>
-                <!--    <div class="d-flex gap-2 align-items-center">
+        <div class="content-dashboard m-0 p-0">
+            <div class="franja-paginas">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <div class="titulo-registro">Se encontraron <?php echo count($this->cedulas); ?> Registros</div>
+                    </div>
+                    <!--    <div class="d-flex gap-2 align-items-center">
                     <div>
 
 
@@ -115,83 +116,87 @@ use PHP_CodeSniffer\Standards\Squiz\Sniffs\Strings\EchoedStringsSniff;
                     </div>
                 </div> -->
 
-                <div class="d-flex gap-2">
+                    <div class="d-flex gap-2">
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                        <div class="text-right"><a class="btn btn-sm btn-success2"  target="_blank" href="<?php echo $this->route . "/exportar"; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
 
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="content-table table-responsive mb-5 pb-5">
-            <table class=" table table-striped  table-hover table-administrator text-center">
-                <thead>
-                    <tr class="text-center">
-                        <td>Item</td>
-                        <td>Documento</td>
-                        <td>Nombre</td>
-                        <td>Viáticos asignados</td>
-                        <td>Viáticos gastados</td>
-                        <td>Diferencia</td>
+            <div class="content-table table-responsive mb-5 pb-5">
+                <table class=" table table-striped  table-hover table-administrator text-center">
+                    <thead>
+                        <tr class="text-center">
+                            <td>Item</td>
+                            <td>Documento</td>
+                            <td>Nombre</td>
+                            <td>Viáticos asignados</td>
+                            <td>Viáticos gastados</td>
+                            <td>Diferencia</td>
 
 
-                    </tr>
-                </thead>
-                <tbody>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <?php
-                    /*  echo '<pre>';
+                        <?php
+                        /*  echo '<pre>';
                     print_r($this->cedulas);
                     echo '</pre>'; */
-                    $key = 1;
+                        $key = 1;
 
-                    foreach ($this->cedulas as $key => $content) {
+                        foreach ($this->cedulas as $key => $content) {
 
-                        $key++;
-                    ?>
+                            $key++;
+                        ?>
 
-                        <tr>
-                            <td>
-                                <?php echo $key ?>
-                            </td>
-                            <td>
-                                <?php echo $content->cedula ?>
-                            </td>
-                            <td>
-                                <?php echo $content->nombre1 ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero($content->viaticos) ?>
-                            </td>
-                            <td>
-                                <?php echo formato_numero($this->viaticos[$content->cedula]) ?>
-                                <?php $TOTAL += $this->viaticos[$content->cedula];   ?>
+                            <tr>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $content->cedula ?>
+                                </td>
+                                <td>
+                                    <?php echo $content->nombre1 ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($content->viaticos) ?>
+                                </td>
+                                <td>
+                                    <?php echo formato_numero($this->viaticos[$content->cedula]) ?>
+                                    <?php $TOTAL += $this->viaticos[$content->cedula];   ?>
 
-                            </td>
-                            <td class="<?php if ($content->viaticos-$this->viaticos[$content->cedula] >= 0) {echo 'verde';} else {echo 'rojo';}?>">
-                                <?php echo formato_numero($content->viaticos-$this->viaticos[$content->cedula]) ?>
-                            </td>
+                                </td>
+                                <td class="<?php if ($content->viaticos - $this->viaticos[$content->cedula] >= 0) {
+                                                echo 'verde';
+                                            } else {
+                                                echo 'rojo';
+                                            } ?>">
+                                    <?php echo formato_numero($content->viaticos - $this->viaticos[$content->cedula]) ?>
+                                </td>
 
-                        <?php } ?>
-                        </tr>
-                        <tr>
+                            <?php } ?>
+                            </tr>
+                            <tr>
 
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
 
-                            <td>
-                                <div align="right"><strong>TOTAL</strong></div>
-                            </td>
-                            <td><strong><?php echo formato_numero2($TOTAL) ?></strong></td>
-                        </tr>
+                                <td>
+                                    <div align="right"><strong>TOTAL</strong></div>
+                                </td>
+                                <td><strong><?php echo formato_numero2($TOTAL) ?></strong></td>
+                            </tr>
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     <?php } ?>
 </div>
 
@@ -209,4 +214,8 @@ function formato_numero2($n)
 }
 
 
+?>
+
+<?php
+include '../public/skins/page/js/informes.php';
 ?>
