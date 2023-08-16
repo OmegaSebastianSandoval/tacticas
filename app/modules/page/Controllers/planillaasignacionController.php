@@ -5,6 +5,8 @@
  */
 class Page_planillaasignacionController extends Page_mainController
 {
+
+	public $botonpanel = 6;
 	/**
 	 * $mainModel  instancia del modelo de  base de datos planilla asignaci&oacute;n
 	 * @var modeloContenidos
@@ -161,16 +163,16 @@ class Page_planillaasignacionController extends Page_mainController
 
 			$hojavidaModel = new Page_Model_DbTable_Hojadevida();
 
-			/* $planillaModel = new Page_Model_DbTable_Planilla();
-			$planillaAct = $planillaModel->getById($planilla); */
-		
+			$planillaModel = new Page_Model_DbTable_Planilla();
+			$planillaAct = $planillaModel->getById($planilla);
+
 			$usuario = $hojavidaModel->getList("documento = '" . $data["cedula"] . "'", "")[0];
-			
+
 			if ($usuario->retirado == 1) {
 				$hojavidaModel->editField($usuario->id, "retirado", 0);
 			}
 
-			// $hojavidaModel->editField($usuario->id, "empresa", $planillaAct->empresa);
+			$hojavidaModel->editField($usuario->id, "empresa", $planillaAct->empresa);
 
 
 			$id = $this->mainModel->insert($data);
@@ -181,7 +183,7 @@ class Page_planillaasignacionController extends Page_mainController
 			$logModel = new Administracion_Model_DbTable_Log();
 			$logModel->insert($data);
 		}
-		
+
 		header('Location: ' . $this->route . '?planilla=' . $planilla . '');
 	}
 

@@ -83,4 +83,18 @@ class Page_Model_DbTable_Planillatotales extends Db_Table
 		$res = $this->_conn->query($query);
 	}
 
+	public function insert2($data){
+		$planilla = $data['planilla'];
+		$cedula = $data['cedula'];
+		$viaticos = $data['viaticos'];
+		$prestamos = $data['prestamos'];
+		$prestamos_financiera = $data['prestamos_financiera'];
+		$decimo = $data['decimo'];
+		$neta = $data['neta'];
+		
+		$query = "INSERT INTO planilla_totales( planilla, cedula, viaticos, prestamos, prestamos_financiera, decimo, neta) VALUES ( '$planilla', '$cedula', '$viaticos', '$prestamos', '$prestamos_financiera', '$decimo', '$neta')";
+		$res = $this->_conn->query($query);
+        return mysqli_insert_id($this->_conn->getConnection());
+	}
+
 }

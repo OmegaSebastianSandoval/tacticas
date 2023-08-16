@@ -88,27 +88,27 @@
 			general: general
 		}); */
 
-		$.post("/page/planilla/guardarhoras", {
-			"fecha": fecha,
-			"horas": horas,
-			"loc": loc,
-			"cedula": cedula,
-			"planilla": planilla,
-			"tipo": tipo,
-			"general": general
-		}, function(res) {
-			console.log(res);
-		})
+			$.post("/page/planilla/guardarhoras", {
+				"fecha": fecha,
+				"horas": horas,
+				"loc": loc,
+				"cedula": cedula,
+				"planilla": planilla,
+				"tipo": tipo,
+				"general": general
+			}, function(res) {
+				//	console.log(res);
+			})
 
 		total_horas(i);
 
-		<?php if ($this->tipo == 1) { ?>
-			if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
-				if (general == "1" || j > 0) {
-					llenar_fila(loc, i, j);
-				}
+
+		if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
+			if (general == "1" || j > 0) {
+				llenar_fila(loc, i, j);
 			}
-		<?php } ?>
+		}
+
 
 		if (general == "1") {
 			actualizar_filtro();
@@ -116,7 +116,65 @@
 
 	}
 
+	function guardar_hora_pendiente(i, j) {
+
+		verificar_conexion();
+		console.log(i);
+		console.log(j);
+		var general = "0";
+		if (j == "G") {
+			j = "0";
+			general = "1";
+		}
+		var fecha = document.getElementById('fechapend_' + i + '_' + j).value;
+		var horas = document.getElementById('horas_' + i + '_' + j).value;
+		var e = document.getElementById('loc_' + i + '_' + j);
+		if (general == "1") {
+			e = document.getElementById('loc_' + i + '_G');
+		}
+		var loc = e.options[e.selectedIndex].value;
+		var cedula = document.getElementById('cedula' + i).value;
+		var planilla = document.getElementById('planilla').value;
+		var tipo = document.getElementById('tipo').value;
+		var pendiente = 'pendiente'+j
+
+		console.log(pendiente);
+	
+ 
+
+
+
+			$.post("/page/planilla/guardarhoraspendientes", {
+			"fecha": fecha,
+			"horas": horas,
+			"loc": loc,
+			"cedula": cedula,
+			"planilla": planilla,
+			"tipo": tipo,
+			"general": general,
+			"pendiente": pendiente
+		}, function(res) {
+			//	console.log(res);
+		})
+
+		/* 		total_horas(i);
+
+
+				if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
+					if (general == "1" || j > 0) {
+						llenar_fila(loc, i, j);
+					}
+				}
+
+
+				if (general == "1") {
+					actualizar_filtro();
+				} */
+
+	}
+
 	function llenar_fila(loc, i, j) {
+		//console.log(loc);
 		var aux = 0;
 		if (loc == "") {
 			aux = Number(j) - 1;
@@ -274,15 +332,97 @@
 			}
 		}
 		if (total > 0) {
-		alert("Tiene "+total+" casillas por llenar");
+			alert("Tiene " + total + " casillas por llenar");
 
 
-		/* 	// Muestra el modal utilizando jQuery
+			/* 	// Muestra el modal utilizando jQuery
 			$('#modalFaltantes').modal('show');
 
 			let txtfaltantes = document.getElementById('txtfaltantes');
 			txtfaltantes.innerText = "Faltan " + total + " casillas por llenar"
  */
 		}
+	}
+
+	function guardar_neta(i) {
+		var viaticos = 0;
+		var prestamos = 0;
+		var prestamos2 = 0;
+		var decimo = 0;
+		var cedula = document.getElementById('cedula' + i).value;
+		var planilla = document.getElementById('planilla').value;
+
+		viaticos = document.getElementById('viaticos' + i).value;
+		prestamos = document.getElementById('prestamos' + i).value;
+		prestamos2 = document.getElementById('prestamos_financiera' + i).value;
+		decimo = document.getElementById('decimo' + i).value;
+		neta = Number(viaticos) + Number(prestamos) + Number(decimo);
+
+		/* $('#consulta_neta').load('mod_nomina/consulta_neta.php', {
+			cedula: cedula,
+			planilla: planilla,
+			viaticos: viaticos,
+			prestamos: prestamos,
+			prestamos2: prestamos2,
+			decimo: decimo,
+			neta: neta
+		}); */
+		$.post("/page/planilla/consultaneta", {
+
+			"cedula": cedula,
+			"planilla": planilla,
+			"viaticos": viaticos,
+			"prestamos": prestamos,
+			"prestamos2": prestamos2,
+			"decimo": decimo,
+			"neta": neta
+		}, function(res) {
+			console.log(res);
+		})
+
+		total_horas(i);
+	}
+
+	function total_neta() {
+		var i = 1;
+		var viaticos = 0;
+		var prestamos = 0;
+		var prestamos2 = 0;
+		var decimo = 0;
+		var neta = 0;
+		var total_neta1 = 0;
+		var total_viaticos = 0;
+		var total_prestamos = 0;
+		var total_prestamos2 = 0;
+		var total_decimo = 0;
+		var total_bruta = 0;
+		var seguridad_social = 0;
+		var seguro_educativo = 0;
+
+		for (i = 1; i <= 500; i++) {
+			if (document.getElementById('viaticos' + i)) {
+				total_bruta = document.getElementById('total_bruta' + i).value;
+				seguridad_social = document.getElementById('seguridad_social' + i).value;
+				seguro_educativo = document.getElementById('seguro_educativo' + i).value;
+
+				viaticos = document.getElementById('viaticos' + i).value;
+				prestamos = document.getElementById('prestamos' + i).value;
+				prestamos2 = document.getElementById('prestamos_financiera' + i).value;
+				decimo = document.getElementById('decimo' + i).value;
+				neta = Number(total_bruta) + Number(viaticos) - Number(prestamos) - Number(prestamos2) - Number(seguridad_social) - Number(seguro_educativo);
+				document.getElementById('neta' + i).innerHTML = neta.toFixed(2);
+
+				total_viaticos += Number(viaticos);
+				total_prestamos += Number(prestamos);
+				total_prestamos2 += Number(prestamos2);
+				total_decimo += Number(decimo);
+				total_neta1 += Number(neta);
+			}
+		}
+		document.getElementById('total_viaticos').innerHTML = total_viaticos.toFixed(2);
+		document.getElementById('total_prestamos').innerHTML = total_prestamos.toFixed(2);
+		document.getElementById('total_prestamos2').innerHTML = total_prestamos2.toFixed(2);
+		document.getElementById('total_decimo').innerHTML = total_decimo.toFixed(2);
+		document.getElementById('total_neta1').innerHTML = total_neta1.toFixed(2);
 	}
 </script>

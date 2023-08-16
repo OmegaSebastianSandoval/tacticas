@@ -29,6 +29,7 @@
             margin-top: 20px;
         }
     </style>
+
         <div class="home-nomina">
         <?php  if ((Session::getInstance()->get("kt_login_level") == '4' )) { ?>
 

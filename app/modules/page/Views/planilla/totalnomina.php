@@ -6,12 +6,15 @@
         text-align: center;
     }
 </style>
+<?php
+include '../public/skins/page/js/horas.php';
+?>
 <div class="container-fluid">
     <div class=" d-flex justify-content-between align-items-center">
-       
-       
+
+
         <h3 class="my-0  d-flex text-start gap-2 align-items-center"><i class="fa-regular fa-newspaper" title="Hoja de vida"></i> <?php echo $this->titlesection; ?></h3>
-       
+
         <a href="/page/planilla">
             <button class="btn-primary-home  btn-primary-volver  mt-2" type="submit">
                 <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
@@ -22,7 +25,7 @@
         </a>
     </div>
     <div class="container-fluid  ">
-    <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
+        <div class=" d-flex justify-content-start mt-2 gap-2 align-items-center">
             <a class="btn-tab btn-consolidado <?php echo $this->tipo == 1 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=1">Horas normales </a>
             <a class="btn-tab btn-consolidado <?php echo $this->tipo == 2 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=2">Horas adicionales diurnas</a>
             <a class="btn-tab btn-consolidado <?php echo $this->tipo == 3 ? 'active' : '' ?> m-0  " href="/page/planilla/horasnormales?planilla=<?php echo $this->planila ?>&tipo=3">Horas adicionales nocturnas</a>
@@ -36,7 +39,7 @@
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/consolidado?planilla=<?php echo $this->planila ?>">Consolidado nómina
 
             </a>
-            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planila?>">Recibos nómina
+            <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/recibos?planilla=<?php echo $this->planila ?>">Recibos nómina
 
             </a>
             <a class="btn-tab btn-consolidado  m-0  " href="/page/planilla/limite?planilla=<?php echo $this->planila ?>">Reporte límite horas </a>
@@ -90,13 +93,15 @@
                 </tbody>
             </table>
         </div>
+        <input id="planilla" name="planilla" type="hidden" value="<?php echo $this->planila ?>" />
+        <div id="consulta_neta"></div>
         <input type="hidden" id="page-route" value="<?php echo $this->route; ?>/changepage">
     </div>
 </div>
 
 <?php if ($this->planillaCerrada == 1) { ?>
     <script type="text/javascript">
-      $("input").prop("disabled", true);
-      $("select").prop("disabled", true);
+        $("input").prop("disabled", true);
+        $("select").prop("disabled", true);
     </script>
-  <?php } ?>
+<?php } ?>

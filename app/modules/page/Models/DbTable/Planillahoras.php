@@ -48,7 +48,22 @@ class Page_Model_DbTable_Planillahoras extends Db_Table
 		$res = $this->_conn->query($query);
 		return mysqli_insert_id($this->_conn->getConnection());
 	}
+	public function insertpendientes($data)
+	{
+		$planilla = $data['planilla'];
+		$cedula = $data['cedula'];
+		$fecha = $data['fecha'];
+		$horas = $data['horas'];
+		$loc = $data['loc'];
+		$tipo = $data['tipo'];
+		$general = $data['general'];
+		$pendiente = $data['pendiente'];
 
+	
+		$query = "INSERT INTO planilla_horas( planilla, cedula, fecha, horas, loc, tipo, general, pendiente) VALUES ( '$planilla', '$cedula', '$fecha', '$horas', '$loc', '$tipo', '$general', '$pendiente')";
+		$res = $this->_conn->query($query);
+		return mysqli_insert_id($this->_conn->getConnection());
+	}
 	/**
 	 * update Recibe la informacion de un planilla horas  y actualiza la informacion en la base de datos
 	 * @param  array Array Array con la informacion con la cual se va a realizar la actualizacion en la base de datos

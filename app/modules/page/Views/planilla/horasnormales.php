@@ -106,7 +106,12 @@ include '../public/skins/page/js/horas.php';
                             <div align="left" class="ancho4">VALOR</div>
                         </th>
                         <th class="ancho5">LOC GENERAL</th>
-                        <th class="ancho5">Pendientes</th>
+                        <?php foreach($this->cincoAnteriores as $key => $value) { ?>
+
+                        <th class="ancho5">Pendientes <br><?php echo $value; ?></th>
+                        <?php } ?>
+
+
                         <?php for ($j = $this->dia1 * 1; $j <= $this->dia2 * 1; $j++) { ?>
                             <th class="ancho5">
                                 <div class="ancho5">
@@ -137,6 +142,11 @@ include '../public/skins/page/js/horas.php';
                             </div>
                         </th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+
                         <?php for ($j = $this->dia1 * 1; $j <= $this->dia2 * 1; $j++) { ?>
 
 

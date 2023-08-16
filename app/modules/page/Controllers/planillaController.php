@@ -814,10 +814,9 @@ class Page_planillaController extends Page_mainController
 				name="viaticos' . $i . '"
 				id="viaticos' . $i . '"
 				value="' . $planillaTotal->viaticos . '"
-							  class="form-control v" 
-
-				onkeyup="total_neta();  guardar_neta(' . $i . ');" 
-				onchange="total_neta(); guardar_neta(' . $i . ');" />  
+				class="form-control v"
+				onkeyup="total_neta();  guardar_neta(' . "$i" . ') "
+				onchange="total_neta(); guardar_neta(' . "$i" . ') " >  
             </div>
 			
 			</td>
@@ -832,9 +831,9 @@ class Page_planillaController extends Page_mainController
 			  id="prestamos' . $i . '" 
 			  value="' . $planillaTotal->prestamos . '" 
 			  class="form-control v" 
-			  onkeyup="total_neta(); guardar_neta(' . $i . ');" 
-			  onchange="total_neta(); guardar_neta(' . $i . ');"
-			   ' . ($_SESSION["kt_login_level"] == 3 ? 'readonly' : '') . ' />
+			  onkeyup="total_neta(); guardar_neta(' . "$i" . ')" 
+			  onchange="total_neta(); guardar_neta(' . "$i" . ')"
+			   ' . ($_SESSION["kt_login_level"] == 3 ? 'readonly' : '') . ' >
 			</div>
 			
 			
@@ -850,9 +849,9 @@ class Page_planillaController extends Page_mainController
 			id="prestamos_financiera' . $i . '" 
 			value="' . $planillaTotal->prestamos_financiera . '" 
 			class="form-control v" 
-			onkeyup="total_neta(); guardar_neta(' . $i . ');" 
-			onchange="total_neta(); guardar_neta(' . $i . ');"
-				 ' . ($_SESSION["kt_login_level"] == 3 ? 'readonly' : '') . ' />
+			onkeyup="total_neta(); guardar_neta(' . "$i" . ') " 
+			onchange="total_neta(); guardar_neta(' . "$i" . ') "
+			' . ($_SESSION["kt_login_level"] == 3 ? 'readonly' : '') . ' >
 			</div>
 			
 		
@@ -866,8 +865,8 @@ class Page_planillaController extends Page_mainController
 			id="decimo' . $i . '" 
 			value="' . $planillaTotal->decimo . '" 			  
 			class="form-control v" 
-			onkeyup="total_neta(); guardar_neta(' . $i . ');" 
-			onchange="total_neta(); guardar_neta(' . $i . ');"
+			onkeyup="total_neta(); guardar_neta(' . "'$i'" . ') " 
+			onchange="total_neta(); guardar_neta(' . "'$i'" . ') "
 			' . ($_SESSION["kt_login_level"] == 3 ? 'readonly' : '') . ' />
 			</div>
 			
@@ -893,11 +892,11 @@ class Page_planillaController extends Page_mainController
 		<td><div align="center"><strong>' . $this->formato_numero($totales['bruta']) . '</strong></div></td>
 		<td><div align="center"><strong>' . $this->formato_numero($totales['seguridad_social']) . '</strong></div></td>
 		<td><div align="center"><strong>' . $this->formato_numero($totales['seguro_educativo']) . '</strong></div></td>
-		<td><div align="center"><strong>' . $this->formato_numero($totales['viaticos']) . '</strong></div></td>
-		<td><div align="center"><strong>' . $this->formato_numero($totales['prestamos']) . '</strong></div></td>
-		<td><div align="center"><strong>' . $this->formato_numero($totales['prestamos2']) . '</strong></div></td>
-		<td><div align="center"><strong>' . $this->formato_numero($totales['decimo']) . '</strong></div></td>
-		<td><div align="center"><strong>' . $this->formato_numero($totales['neta']) . '</strong></div></td>
+		<td><div align="center"  id="total_viaticos"><strong>' . $this->formato_numero($totales['viaticos']) . '</strong></div></td>
+		<td><div align="center" id="total_prestamos"><strong>' . $this->formato_numero($totales['prestamos']) . '</strong></div></td>
+		<td><div align="center" id="total_prestamos2"><strong>' . $this->formato_numero($totales['prestamos2']) . '</strong></div></td>
+		<td><div align="center" id="total_decimo"><strong>' . $this->formato_numero($totales['decimo']) . '</strong></div></td>
+		<td><div align="center" id="total_neta1"><strong>' . $this->formato_numero($totales['neta']) . '</strong></div></td>
 		</tr>';
 
 		$this->_view->tabla = $tabla;
@@ -1752,6 +1751,7 @@ class Page_planillaController extends Page_mainController
 
 	public function horasnormalesAction()
 	{
+
 		$this->_view->planila = $id = $this->_getSanitizedParam("planilla");
 		$this->_view->tipo = $tipo = $this->_getSanitizedParam("tipo");
 
@@ -1821,9 +1821,18 @@ class Page_planillaController extends Page_mainController
 			$value->fechas = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha != '0000-00-00' ", "");
 		}
 
-		// echo '<pre>';
-		// print_r($cedulas);
-		// echo '</pre>';
+
+
+		// 5 dias anteriores de la quincena actual para agregar los pendientes
+
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+
+
+
+		/* echo '<pre>';
+		print_r($diasEspeciales);
+		echo '</pre>'; */
+
 
 		foreach ($cedulas as $value) {
 
@@ -1862,9 +1871,8 @@ class Page_planillaController extends Page_mainController
 			class="v2 form-select" 
 			onchange="guardar_hora(' . "'$i'" . ',' . "'G'" . ')" 
 			' . ($this->_getSanitizedParam("tipo") != 1 ? 'style="visibility:hidden;"' : '') . '
-			
-			  dir="rtl" 
-			  style="width:100px;">
+			dir="rtl" 
+			style="width:100px;">
 			<option 
 			value="" 
 			' . ($horas->general == '' ? 'selected="selected"' : '') . '>
@@ -1884,56 +1892,64 @@ class Page_planillaController extends Page_mainController
 			<input id="fecha_' . $i . '_0" name="fecha_' . $i . '_0" type="hidden" value="0000-00-00" />
 			</td>';
 
-			$tabla .= '<td align="center">';
-			$horas = $planillaHorasModel->getList(" planilla = '$id' AND fecha = '$fecha' AND cedula ='$cedula'  AND tipo='$tipo'", "")[0];
+			foreach ($cincoAnteriores as $keyDia => $diaAnterior) {
+				$diaPend = $keyDia + 1;
 
-			$tabla .= '
-			<div align="left" class="nowrap">
-                <div class="enlinea">
-                  <span class="ancho_v">Horas</span>
-                </div>
-                <div class="enlinea">
-				<input 
-				name="horas_' . $i . '_0" 
-				type="text" 
-				id="horas_' . $i . '_0" 
-				class="v form-control" 
-				value="' . $horas->horas . '" 
-				onkeyup="guardar_hora(' . "'$i'" . ',' . "'0'" . ')" 
-				onchange="guardar_hora(' . "'$i'" . ',' . "'0'" . ')" />
-				</div>
-              </div>
+				$tabla .= '<td align="center">';
+				$horas = $planillaHorasModel->getList(" planilla = '$id' AND fecha = '$diaAnterior' AND cedula ='$cedula'  AND tipo='$tipo' AND pendiente = 'pendiente$diaPend' ", "")[0];
 
-              <div align="left" class="nowrap">
-                <div class="enlinea">
-                  <span class="ancho_v">Loc</span>
-                </div>
-                <div class="enlinea"> 
-				<select 
-				name="loc_' . $i . '_0" 
-				id="loc_' . $i . '_0" 
-				class="v form-select" 
-				onchange="guardar_hora(' . "'$i'" . ',' . "'0'" . ')" 
-				title="' . $horas->loc . '">
-
-				<option 
-				value="" 
-				' .  ($horas->loc == '' ? 'selected="selected"' : '') . '>
-				</option>
-			';
-
-			foreach ($localizaciones as $localizacion) {
 				$tabla .= '
-				<option 
-				value="' . $localizacion->nombre . '" 
-				' . ($localizacion->nombre == $horas->loc ? 'selected="selected"' : '') . '>
-				' . $localizacion->nombre . '</option>';
+				<div align="left" class="nowrap">
+					<div class="enlinea">
+					  <span class="ancho_v">Horas</span>
+					</div>
+					<div class="enlinea">
+					<input 
+					name="horas_' . $i . '_' . $diaPend . '" 
+					type="text" 
+					id="horas_' . $i . '_' . $diaPend . '" 
+					class="v form-control pendiente" 
+					value="' . $horas->horas . '" 
+					onkeyup="guardar_hora_pendiente(' . "'$i'" . ',' . "'$diaPend'" . ')" 
+					onchange="guardar_hora_pendiente(' . "'$i'" . ',' . "'$diaPend'" . ')" />
+					</div>
+				  </div>
+	
+				  <div align="left" class="nowrap">
+					<div class="enlinea">
+					  <span class="ancho_v">Loc</span>
+					</div>
+					<div class="enlinea"> 
+					<select 
+					name="loc_' . $i . '_' . $diaPend . '" 
+					id="loc_' . $i . '_' . $diaPend . '" 
+					class="v form-select pendiente" 
+					onchange="guardar_hora_pendiente(' . "'$i'" . ',' . "'$diaPend'" . ')" 
+					title="' . $horas->loc . '">
+	
+					<option 
+					value="" 
+					' .  ($horas->loc == '' ? 'selected="selected"' : '') . '>
+					</option>
+				';
+
+				foreach ($localizaciones as $localizacion) {
+					$tabla .= '
+					<option 
+					value="' . $localizacion->nombre . '" 
+					' . ($localizacion->nombre == $horas->loc ? 'selected="selected"' : '') . '>
+					' . $localizacion->nombre . '</option>';
+				}
+				$tabla .= '
+				</select>
+
+				</div>
+				</div>
+				<input id="fechapend_' . $i . '_' . $diaPend . '" name="fechapend_' . $i . '_' . $diaPend . '" type="hidden" value="' . $diaAnterior . '" />
+
+				</td>';
 			}
-			$tabla .= '
-			</select>
-			</div>
-            </div>
-            </td>';
+
 			$d = 0;
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$d++;
@@ -2135,6 +2151,130 @@ class Page_planillaController extends Page_mainController
 		echo json_encode($respuesta);
 	}
 
+	public function guardarhoraspendientesAction()
+	{
+		ini_set("display_errors", 0);
+		header('Content-Type:application/json');
+		$this->setLayout('blanco');
+		$fecha = $this->_getSanitizedParam("fecha");
+		$horas = $this->_getSanitizedParam("horas");
+		$loc = $this->_getSanitizedParam("loc");
+		$cedula = $this->_getSanitizedParam("cedula");
+		$planilla = $this->_getSanitizedParam("planilla");
+		$tipo = $this->_getSanitizedParam("tipo");
+		$general = $this->_getSanitizedParam("general");
+		$pendiente = $this->_getSanitizedParam("pendiente");
+
+
+
+		$planillaHorasModel = new Page_Model_DbTable_PlanillaHoras();
+
+		$horasConsulta = $planillaHorasModel->getList(" planilla = '$planilla' AND fecha= '$fecha ' AND cedula = '$cedula' AND tipo = '$tipo' ", "");
+
+
+		if (count($horasConsulta) > 0) {
+			$id = $horasConsulta[0]->id;
+			if ($general == 0) {
+				$planillaHorasModel->editField($id, 'horas', $horas);
+				$planillaHorasModel->editField($id, 'loc', $loc);
+				$planillaHorasModel->editField($id, 'pendiente', $pendiente);
+			}
+			if ($general == 1) {
+				$planillaHorasModel->editField($id, 'horas', $horas);
+				$planillaHorasModel->editField($id, 'general', $loc);
+				$planillaHorasModel->editField($id, 'pendiente', $pendiente);
+			}
+
+			/* $horasFacturadas = $facturadasModel->getList(" localizacion = '$loc' AND fecha1 = '" . $fecha1 . "' AND fecha2 = '" . $fecha2 . "' ", ""); */
+		} else {
+
+			if ($general == 0) {
+				$data = [];
+				$data['fecha'] = $this->_getSanitizedParam("fecha");
+				$data['horas'] = $this->_getSanitizedParam("horas");
+				$data['loc'] = $this->_getSanitizedParam("loc");
+				$data['cedula'] = $this->_getSanitizedParam("cedula");
+				$data['planilla'] = $this->_getSanitizedParam("planilla");
+				$data['tipo'] = $this->_getSanitizedParam("tipo");
+				$data['pendiente'] = $this->_getSanitizedParam("pendiente");
+
+
+				$res = $planillaHorasModel->insertpendientes($data);
+			}
+			if ($general == 1) {
+				$data = [];
+				$data['fecha'] = $this->_getSanitizedParam("fecha");
+				$data['horas'] = $this->_getSanitizedParam("horas");
+				$data['cedula'] = $this->_getSanitizedParam("cedula");
+				$data['planilla'] = $this->_getSanitizedParam("planilla");
+				$data['tipo'] = $this->_getSanitizedParam("tipo");
+				$data['general'] = $this->_getSanitizedParam("loc");
+				$data['pendiente'] = $this->_getSanitizedParam("pendiente");
+
+				$res = $planillaHorasModel->insertpendientes($data);
+			}
+		}
+		$respuesta['id'] = $res;
+		/*$respuesta['loc'] = $fecha1;
+		$respuesta['fecha1'] = $fecha2;
+		$respuesta['fecha2'] = $loc;
+		$respuesta['fecha2'] = $horasFacturadas; */
+
+
+		echo json_encode($respuesta);
+	}
+	public function consultanetaAction()
+	{
+		ini_set("display_errors", 0);
+		header('Content-Type:application/json');
+		$this->setLayout('blanco');
+
+		$cedula = $this->_getSanitizedParam("cedula");
+		$planilla = $this->_getSanitizedParam("planilla");
+		$viaticos = $this->_getSanitizedParam("viaticos");
+		$prestamos = $this->_getSanitizedParam("prestamos");
+		$prestamos2 = $this->_getSanitizedParam("prestamos2");
+		$decimo = $this->_getSanitizedParam("decimo");
+		$neta = $this->_getSanitizedParam("neta");
+
+
+
+
+		$planillaTotalesModel = new Page_Model_DbTable_Planillatotales();
+
+
+		$horasConsulta = $planillaTotalesModel->getList(" planilla = '$planilla'  AND cedula = '$cedula' ", "");
+
+
+
+		if (count($horasConsulta) > 0) {
+			$id = $horasConsulta[0]->id;
+
+			$planillaTotalesModel->editField($id, 'viaticos', $viaticos);
+			$planillaTotalesModel->editField($id, 'prestamos', $prestamos);
+			$planillaTotalesModel->editField($id, 'prestamos_financiera', $prestamos2);
+			$planillaTotalesModel->editField($id, 'decimo', $decimo);
+			$planillaTotalesModel->editField($id, 'neta', $neta);
+		} else {
+			$data = [];
+			$data['cedula'] = $cedula;
+			$data['planilla'] = $planilla;
+			$data['viaticos'] = $viaticos;
+			$data['prestamos'] = $prestamos;
+			$data['prestamos2'] = $prestamos2;
+			$data['decimo'] = $decimo;
+			$data['neta'] = $neta;
+			$res = $planillaTotalesModel->insert2($data);
+		}
+		$respuesta['id'] = $res;
+		/*$respuesta['loc'] = $fecha1;
+		$respuesta['fecha1'] = $fecha2;
+		$respuesta['fecha2'] = $loc;
+		$respuesta['fecha2'] = $horasFacturadas; */
+
+
+		echo json_encode($respuesta);
+	}
 
 	public function recibosAction()
 	{
@@ -2179,9 +2319,9 @@ class Page_planillaController extends Page_mainController
 		$empresa = $empresaModel->getById($empresaId);
 		$cedulas = $planillaAsignacionModel->getListCedulas(" planilla= '$id'" . $filtro, "nombre1 ASC");
 
-			/* echo '<pre>';
+		/* echo '<pre>';
 		print_r($cedulas);
-		echo '</pre>' */;
+		echo '</pre>'; */
 		$parametros = $parametrosModel->getById(1);
 
 		$aux = explode("-", $planilla->fecha1);
@@ -2205,6 +2345,11 @@ class Page_planillaController extends Page_mainController
 		$tabla = '';
 		$i = 0;
 		$totales = [];
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+
+		echo '<pre>';
+		print_r($cincoAnteriores);
+		echo '</pre>';
 
 		foreach ($cedulas as $value) {
 			$devengado = [];
@@ -2212,6 +2357,12 @@ class Page_planillaController extends Page_mainController
 			$i++;
 			$cedula = $value->cedula;
 			$valorHora = $value->valor_hora;
+			$metodoPago = '';
+			if ($value->metodo_pago == 2) {
+				$metodoPago = 'TRANSFERENCIA';
+			} else {
+				$metodoPago = 'CHEQUE';
+			}
 
 			//HORA NORMAL
 			$aumento = 1;
@@ -2331,7 +2482,8 @@ class Page_planillaController extends Page_mainController
 			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
 
-			//pendiente5
+
+			/* //pendiente5
 			$tipo = 5;
 			$fecha = "0000-00-00";
 
@@ -2371,8 +2523,27 @@ class Page_planillaController extends Page_mainController
 			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
 			$horas_pendientes[$tipo] = $general->horas * 1;
 			//pendiente1
+ */
 
 
+			$tiposPendientes = [1, 2, 3, 4, 5];
+			$horas_pendientes = [];
+
+			foreach ($cincoAnteriores as $fechaAnt) {
+				foreach ($tiposPendientes as $tipo) {
+
+					$pendienteField = "pendiente$tipo";
+					$general = $planillaHorasModel->getList("planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+					/* 	echo '<pre>';
+					print_r($general);
+					echo '</pre>'; */
+					$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+				}
+			}
+			echo '<pre>';
+
+			print_r($horas_pendientes);
+			echo '</pre>';
 
 
 			$tabla .= '
@@ -2384,11 +2555,14 @@ class Page_planillaController extends Page_mainController
 			<thead>
 			<td>
 			<td><div align="left"><strong>NOMBRE</strong></div></td>
-			<td colspan="2"><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
-			<td><div align="left"></div></td>
+			<td><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
+			
 			<td><div align="left"><strong>CEDULA</strong></div></td>
 			<td><div align="left"><strong>' . $cedula . '</strong></div></td>
 			<td><div align="right"><strong>' . $general->general . '</strong></div></td>
+			<td><div align="left"><strong>MÉTODO DE PAGO</strong></div></td>
+			<td><div align="left"><strong>' . $metodoPago . '</strong></div></td>
+
 		  	</td>
 			<tr>
 			  <th><div align="left">CONCEP.</div></th>
@@ -2546,8 +2720,32 @@ class Page_planillaController extends Page_mainController
 		<table class=" table table-striped table-bordered table-hover table-administrator text-center" style="font-size: 11px">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>';
+
+		/* 	foreach ($horas_pendientes as $fecha => $tipos) {
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor && $valor != '') {
+						$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+					}
+				}
+			} */
+
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+				}
+			}
+
+
 
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tabla .= '
@@ -2757,6 +2955,287 @@ class Page_planillaController extends Page_mainController
 		$this->_view->tabla = $tabla;
 		$this->_view->register_number = count($cedulas);
 	}
+	public function exportarreciboplanoAction()
+	{
+		$this->setLayout('blanco');
+		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+		$this->_view->planilla = $id = $this->_getSanitizedParam("planilla");
+		if ($this->_getSanitizedParam("cleanfilter") == 1) {
+			$nombre = '';
+			$cedulaFiltro = '';
+		}
+		$filtro = "";
+		if ($this->_getSanitizedParam("cedula")) {
+			$this->_view->cedula = $cedulaFiltro = $this->_getSanitizedParam("cedula");
+			$filtro .= " AND hoja_vida.documento='$cedulaFiltro' ";
+		}
+		if ($this->_getSanitizedParam("metodo_pago")) {
+			$this->_view->metodo_pago = $metodo_pago = $this->_getSanitizedParam("metodo_pago");
+			if ($metodo_pago == 2) {
+				$filtro .= " AND hoja_vida.metodo_pago='$metodo_pago' ";
+			}
+			if ($metodo_pago == 1) {
+				$filtro .= " AND (  hoja_vida.metodo_pago = '1' OR hoja_vida.metodo_pago IS NULL)";
+			}
+		}
+		if ($this->_getSanitizedParam("nombre")) {
+			$this->_view->nombre = $nombre = $this->_getSanitizedParam("nombre");
+			$filtro .= " AND (hoja_vida.nombres LIKE '%" . $nombre . "%' OR hoja_vida.apellidos LIKE %" . $nombre . "%') ";
+		}
+
+
+		$empresaModel = new Page_Model_DbTable_Empresas();
+		$planillaAsignacionModel = new Page_Model_DbTable_PlanillaAsignacion();
+		$parametrosModel = new Page_Model_DbTable_Parametros();
+		$planillaHorasModel = new Page_Model_DbTable_PlanillaHoras();
+		$planillaTotales = new Page_Model_DbTable_PlanillaTotales();
+
+		$this->_view->list_meses = $this->getMeses();
+		$list_meses = $this->getMeses();
+
+		$planilla = $this->mainModel->getById($id);
+		$empresaId = $planilla->empresa;
+		$empresa = $empresaModel->getById($empresaId);
+		$cedulas = $planillaAsignacionModel->getListCedulas(" planilla= '$id' AND hoja_vida.metodo_pago = '2' " . $filtro, "nombre1 ASC");
+		$parametros = $parametrosModel->getById(1);
+
+		$aux = explode("-", $planilla->fecha1);
+		$aux2 = explode("-", $planilla->fecha2);
+		$dia1 = $aux[2];
+		$dia2 = $aux2[2];
+		$mes = $aux[1] * 1;
+		$anio = $aux[0];
+		$title = "Planilla de pago del $dia1 al $dia2 de " . $list_meses[$mes] . " del $anio - $empresa->nombre ";
+
+
+		$this->getLayout()->setTitle($title);
+		$this->_view->titlesection = $title;
+		$fecha1 = $planilla->fecha1;
+		$fecha2 = $planilla->fecha2;
+		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
+		$tabla = '';
+		$i = 0;
+		$totales = [];
+
+		$tabla = '<div align="center">PAGO PLANILLA</div>';
+
+		$tabla .= '
+		<div class="content-table table-responsive">
+		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
+		<thead>
+		<tr>
+		<th><div align="left"><strong>Numero de cuenta</strong></div></th>
+		<th><div align="left"><strong>Valor neto</strong></div></th>
+		<th><div align="left"><strong>Clasificacion de la planilla</strong></div></th>
+		<th><div align="left"><strong>Nombre</strong></div></th>
+		<th><div align="left"><strong>Cedula</strong></div></th>
+
+		</tr>
+
+		</thead>
+		<tbody>
+		';
+
+		foreach ($cedulas as $value) {
+			$devengado = [];
+			$incapacidades = [];
+			$i++;
+			$cedula = $value->cedula;
+			$valorHora = $value->valor_hora;
+			$metodoPago = '';
+			if ($value->metodo_pago == 2) {
+				$metodoPago = 'TRANSFERENCIA';
+			} else {
+				$metodoPago = 'CHEQUE';
+			}
+
+			//HORA NORMAL
+			$aumento = 1;
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
+
+			$valor_hora = round($valorHora * $aumento, 2);
+			$total_normal = $horas->total * $valor_hora;
+			$totales['normal'] += $total_normal;
+
+			$cantidades['normal'] = $horas->total * 1;
+			$valores['normal'] = $valor_hora;
+			$devengado['normal'] = $total_normal;
+
+			//HORA EXTRA
+			$aumento = 1 + ($parametros->horas_extra / 100);
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
+
+			$valor_hora = round($valorHora * $aumento, 2);
+			$total_extra = $horas->total * $valor_hora;
+			$totales['extra'] += $total_extra;
+
+			$cantidades['extra'] = $horas->total * 1;
+			$valores['extra'] = $valor_hora;
+			$devengado['extra'] = $total_extra;
+
+
+			//HORA NOCTURNA
+			$aumento = 1 + ($parametros->horas_nocturnas / 100);
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
+
+			$valor_hora = round($valorHora * $aumento, 2);
+			$total_nocturna = $horas->total * $valor_hora;
+			$totales['nocturna'] += $total_nocturna;
+
+			$cantidades['nocturna'] = $horas->total * 1;
+			$valores['nocturna'] = $valor_hora;
+			$devengado['nocturna'] = $total_nocturna;
+
+
+			//HORA FESTIVO
+			$aumento = 1 + ($parametros->festivos / 100);
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
+
+			$valor_hora = round($valorHora * $aumento, 2);
+			$total_festivo = $horas->total * $valor_hora;
+			$totales['festivo'] += $total_festivo;
+
+			$cantidades['festivo'] = $horas->total * 1;
+			$valores['festivo'] = $valor_hora;
+			$devengado['festivo'] = $total_festivo;
+
+
+			//HORA DOMINICAL
+			$aumento = 1 + ($parametros->horas_dominicales / 100);
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
+
+			$valor_hora = round($valorHora * $aumento, 2);
+			$total_dominical = $horas->total * $valor_hora;
+			$totales['dominical'] += $total_dominical;
+
+			$cantidades['dominical'] = $horas->total * 1;
+			$valores['dominical'] = $valor_hora;
+			$devengado['dominical'] = $total_dominical;
+
+
+			$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
+			$totales['bruta'] += $total_bruta;
+
+			$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
+			$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
+			$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
+			$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
+			$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+
+			if ($value->sin_seguridad == 1) {
+				$seguridad_social = 0;
+				$seguridad_social2 = 0;
+				$seguro_educativo = 0;
+				$seguro_educativo2 = 0;
+				$riesgos = 0;
+			}
+
+			$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
+
+			$totales['seguridad_social'] += $seguridad_social;
+			$totales['seguro_educativo'] += $seguro_educativo;
+			$totales['seguridad_social2'] += $seguridad_social2;
+			$totales['seguro_educativo2'] += $seguro_educativo2;
+			$totales['riesgos'] += $riesgos;
+			$totales['total_seguro'] += $total_seguro;
+
+
+			$planillaTotal = $planillaTotales->getList(" planilla = '$id' AND cedula = '$cedula'", "")[0];
+
+
+			$decimo = round($total_bruta * $parametros->decimo / 100, 2);
+			$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
+			$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
+			$total_provisiones = $decimo + $vacaciones + $antiguedad;
+
+
+			$totales['decimo'] += $decimo;
+			$totales['vacaciones'] += $vacaciones;
+			$totales['antiguedad'] += $antiguedad;
+			$totales['total_provisiones'] += $total_provisiones;
+
+			$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
+			$totales['total_gastos'] += $total_gastos;
+
+			$viaticos = $planillaTotal->viaticos;
+			$prestamos = $planillaTotal->prestamos;
+			$prestamos2 = $planillaTotal->prestamos_financiera;
+			$pago_decimo = $planillaTotal->decimo;
+
+			$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
+			$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
+			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
+			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
+
+			//pendiente5
+			$tipo = 5;
+			$fecha = "0000-00-00";
+
+			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
+			$horas_pendientes[$tipo] = $general->horas * 1;
+			//pendiente5
+
+			//pendiente4
+			$tipo = 4;
+			$fecha = "0000-00-00";
+
+			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+			$horas_pendientes[$tipo] = $general->horas * 1;
+			//pendiente4
+
+			//pendiente3
+			$tipo = 3;
+			$fecha = "0000-00-00";
+
+			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+			$horas_pendientes[$tipo] = $general->horas * 1;
+			//pendiente3
+
+			//pendiente2
+			$tipo = 2;
+			$fecha = "0000-00-00";
+
+			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+			$horas_pendientes[$tipo] = $general->horas * 1;
+			//pendiente2
+
+
+			//pendiente1
+			$tipo = 1;
+			$fecha = "0000-00-00";
+
+			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+			$horas_pendientes[$tipo] = $general->horas * 1;
+			//pendiente1
+
+
+
+
+
+			$tabla .= '
+			
+			<tr>
+			<td><div align="left">' . $value->numero_cuenta . '</div></td>
+			<td><div align="left">' . $this->formato_numero($totales['total_empleado2']) . '</div></td>
+			<td><div align="left">planilla de pago del ' . $dia1 . ' al ' . $dia2 . ' de ' . $list_meses[$mes] . ' del ' . $anio . ' </div></td>
+			<td><div align="left">' . strtolower($value->nombre1) . '</div></th>
+			<td><div align="left">' . $cedula . '</div></td>
+
+		  	</tr>';
+		}
+
+		$tabla .= '
+		</tbody>
+	</table>
+	</div>';
+
+		$hoy = date('Ym-d h:m:s');
+		header('Content-Type: application/xls');
+		header('Content-Disposition: attachment; filename=recibo_nomina' . $hoy . '.xls');
+		echo $tabla;
+	}
 	public function exportarreciboAction()
 	{
 		$this->setLayout('blanco');
@@ -2831,6 +3310,12 @@ class Page_planillaController extends Page_mainController
 			$i++;
 			$cedula = $value->cedula;
 			$valorHora = $value->valor_hora;
+			$metodoPago = '';
+			if ($value->metodo_pago == 2) {
+				$metodoPago = 'TRANSFERENCIA';
+			} else {
+				$metodoPago = 'CHEQUE';
+			}
 
 			//HORA NORMAL
 			$aumento = 1;
@@ -3003,11 +3488,14 @@ class Page_planillaController extends Page_mainController
 			<thead>
 			<td>
 			<td><div align="left"><strong>NOMBRE</strong></div></td>
-			<td colspan="2"><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
-			<td><div align="left"></div></td>
+			<td><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
+			
 			<td><div align="left"><strong>CEDULA</strong></div></td>
 			<td><div align="left"><strong>' . $cedula . '</strong></div></td>
 			<td><div align="right"><strong>' . $general->general . '</strong></div></td>
+			<td><div align="left"><strong>METODO DE PAGO</strong></div></td>
+			<td><div align="left"><strong>' . $metodoPago . '</strong></div></td>
+
 		  	</td>
 			<tr>
 			  <th><div align="left">CONCEP.</div></th>
@@ -3379,7 +3867,6 @@ class Page_planillaController extends Page_mainController
 		echo $tabla;
 	}
 
-
 	public function imprimirReciboAction()
 	{
 		$this->setLayout('blanco');
@@ -3453,6 +3940,12 @@ class Page_planillaController extends Page_mainController
 			$i++;
 			$cedula = $value->cedula;
 			$valorHora = $value->valor_hora;
+			$metodoPago = '';
+			if ($value->metodo_pago == 2) {
+				$metodoPago = 'TRANSFERENCIA';
+			} else {
+				$metodoPago = 'CHEQUE';
+			}
 
 			//HORA NORMAL
 			$aumento = 1;
@@ -3625,11 +4118,14 @@ class Page_planillaController extends Page_mainController
 			<thead>
 			<td>
 			<td><div align="left"><strong>NOMBRE</strong></div></td>
-			<td colspan="2"><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
-			<td><div align="left"></div></td>
+			<td><div align="left"><strong>' . $value->nombre1 . '</strong></div></td>
+			
 			<td><div align="left"><strong>CEDULA</strong></div></td>
 			<td><div align="left"><strong>' . $cedula . '</strong></div></td>
 			<td><div align="right"><strong>' . $general->general . '</strong></div></td>
+			<td><div align="left"><strong>MÉTODO DE PAGO</strong></div></td>
+			<td><div align="left"><strong>' . $metodoPago . '</strong></div></td>
+
 		  	</td>
 			<tr>
 			  <th><div align="left">CONCEP.</div></th>
@@ -4000,7 +4496,7 @@ class Page_planillaController extends Page_mainController
 
 	public function reciboempleadoAction()
 	{
-	
+
 
 		$empresaModel = new Page_Model_DbTable_Empresas();
 		$planillaAsignacionModel = new Page_Model_DbTable_PlanillaAsignacion();
@@ -4045,183 +4541,183 @@ class Page_planillaController extends Page_mainController
 		$i = 0;
 		$totales = [];
 
-		
-			// echo 1444444444;
-			$planillaId = $cedulas->planilla;
-			$devengado = [];
-			$incapacidades = [];
-			$i++;
-			$cedula = $cedulas->cedula;
-			$valorHora = $cedulas->valor_hora;
-			/* echo $cedula;
+
+		// echo 1444444444;
+		$planillaId = $cedulas->planilla;
+		$devengado = [];
+		$incapacidades = [];
+		$i++;
+		$cedula = $cedulas->cedula;
+		$valorHora = $cedulas->valor_hora;
+		/* echo $cedula;
 			echo $planillaId; */
 
-			//HORA NORMAL
-			$aumento = 1;
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
+		//HORA NORMAL
+		$aumento = 1;
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_normal = $horas->total * $valor_hora;
-			$totales['normal'] += $total_normal;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_normal = $horas->total * $valor_hora;
+		$totales['normal'] += $total_normal;
 
-			$cantidades['normal'] = $horas->total * 1;
-			$valores['normal'] = $valor_hora;
-			$devengado['normal'] = $total_normal;
+		$cantidades['normal'] = $horas->total * 1;
+		$valores['normal'] = $valor_hora;
+		$devengado['normal'] = $total_normal;
 
-			//HORA EXTRA
-			$aumento = 1 + ($parametros->horas_extra / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
+		//HORA EXTRA
+		$aumento = 1 + ($parametros->horas_extra / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_extra = $horas->total * $valor_hora;
-			$totales['extra'] += $total_extra;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_extra = $horas->total * $valor_hora;
+		$totales['extra'] += $total_extra;
 
-			$cantidades['extra'] = $horas->total * 1;
-			$valores['extra'] = $valor_hora;
-			$devengado['extra'] = $total_extra;
-
-
-			//HORA NOCTURNA
-			$aumento = 1 + ($parametros->horas_nocturnas / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_nocturna = $horas->total * $valor_hora;
-			$totales['nocturna'] += $total_nocturna;
-
-			$cantidades['nocturna'] = $horas->total * 1;
-			$valores['nocturna'] = $valor_hora;
-			$devengado['nocturna'] = $total_nocturna;
+		$cantidades['extra'] = $horas->total * 1;
+		$valores['extra'] = $valor_hora;
+		$devengado['extra'] = $total_extra;
 
 
-			//HORA FESTIVO
-			$aumento = 1 + ($parametros->festivos / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
+		//HORA NOCTURNA
+		$aumento = 1 + ($parametros->horas_nocturnas / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_festivo = $horas->total * $valor_hora;
-			$totales['festivo'] += $total_festivo;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_nocturna = $horas->total * $valor_hora;
+		$totales['nocturna'] += $total_nocturna;
 
-			$cantidades['festivo'] = $horas->total * 1;
-			$valores['festivo'] = $valor_hora;
-			$devengado['festivo'] = $total_festivo;
-
-
-			//HORA DOMINICAL
-			$aumento = 1 + ($parametros->horas_dominicales / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_dominical = $horas->total * $valor_hora;
-			$totales['dominical'] += $total_dominical;
-
-			$cantidades['dominical'] = $horas->total * 1;
-			$valores['dominical'] = $valor_hora;
-			$devengado['dominical'] = $total_dominical;
+		$cantidades['nocturna'] = $horas->total * 1;
+		$valores['nocturna'] = $valor_hora;
+		$devengado['nocturna'] = $total_nocturna;
 
 
-			$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
-			$totales['bruta'] += $total_bruta;
+		//HORA FESTIVO
+		$aumento = 1 + ($parametros->festivos / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
 
-			$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
-			$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
-			$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
-			$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
-			$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_festivo = $horas->total * $valor_hora;
+		$totales['festivo'] += $total_festivo;
 
-			if ($cedulas->sin_seguridad == 1) {
-				$seguridad_social = 0;
-				$seguridad_social2 = 0;
-				$seguro_educativo = 0;
-				$seguro_educativo2 = 0;
-				$riesgos = 0;
-			}
-
-			$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
-
-			$totales['seguridad_social'] += $seguridad_social;
-			$totales['seguro_educativo'] += $seguro_educativo;
-			$totales['seguridad_social2'] += $seguridad_social2;
-			$totales['seguro_educativo2'] += $seguro_educativo2;
-			$totales['riesgos'] += $riesgos;
-			$totales['total_seguro'] += $total_seguro;
+		$cantidades['festivo'] = $horas->total * 1;
+		$valores['festivo'] = $valor_hora;
+		$devengado['festivo'] = $total_festivo;
 
 
-			$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
+		//HORA DOMINICAL
+		$aumento = 1 + ($parametros->horas_dominicales / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
+
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_dominical = $horas->total * $valor_hora;
+		$totales['dominical'] += $total_dominical;
+
+		$cantidades['dominical'] = $horas->total * 1;
+		$valores['dominical'] = $valor_hora;
+		$devengado['dominical'] = $total_dominical;
 
 
-			$decimo = round($total_bruta * $parametros->decimo / 100, 2);
-			$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
-			$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
-			$total_provisiones = $decimo + $vacaciones + $antiguedad;
+		$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
+		$totales['bruta'] += $total_bruta;
+
+		$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
+		$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
+		$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
+		$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
+		$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+
+		if ($cedulas->sin_seguridad == 1) {
+			$seguridad_social = 0;
+			$seguridad_social2 = 0;
+			$seguro_educativo = 0;
+			$seguro_educativo2 = 0;
+			$riesgos = 0;
+		}
+
+		$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
+
+		$totales['seguridad_social'] += $seguridad_social;
+		$totales['seguro_educativo'] += $seguro_educativo;
+		$totales['seguridad_social2'] += $seguridad_social2;
+		$totales['seguro_educativo2'] += $seguro_educativo2;
+		$totales['riesgos'] += $riesgos;
+		$totales['total_seguro'] += $total_seguro;
 
 
-			$totales['decimo'] += $decimo;
-			$totales['vacaciones'] += $vacaciones;
-			$totales['antiguedad'] += $antiguedad;
-			$totales['total_provisiones'] += $total_provisiones;
-
-			$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
-			$totales['total_gastos'] += $total_gastos;
-
-			$viaticos = $planillaTotal->viaticos;
-			$prestamos = $planillaTotal->prestamos;
-			$prestamos2 = $planillaTotal->prestamos_financiera;
-			$pago_decimo = $planillaTotal->decimo;
-
-			$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
-			$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
-			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
-			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
-
-			//pendiente5
-			$tipo = 5;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente5
-
-			//pendiente4
-			$tipo = 4;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente4
-
-			//pendiente3
-			$tipo = 3;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente3
-
-			//pendiente2
-			$tipo = 2;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente2
+		$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
 
 
-			//pendiente1
-			$tipo = 1;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente1
+		$decimo = round($total_bruta * $parametros->decimo / 100, 2);
+		$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
+		$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
+		$total_provisiones = $decimo + $vacaciones + $antiguedad;
 
 
+		$totales['decimo'] += $decimo;
+		$totales['vacaciones'] += $vacaciones;
+		$totales['antiguedad'] += $antiguedad;
+		$totales['total_provisiones'] += $total_provisiones;
+
+		$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
+		$totales['total_gastos'] += $total_gastos;
+
+		$viaticos = $planillaTotal->viaticos;
+		$prestamos = $planillaTotal->prestamos;
+		$prestamos2 = $planillaTotal->prestamos_financiera;
+		$pago_decimo = $planillaTotal->decimo;
+
+		$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
+		$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
+		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
+		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
+
+		//pendiente5
+		$tipo = 5;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente5
+
+		//pendiente4
+		$tipo = 4;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente4
+
+		//pendiente3
+		$tipo = 3;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente3
+
+		//pendiente2
+		$tipo = 2;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente2
 
 
-			$tabla .= '
+		//pendiente1
+		$tipo = 1;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente1
+
+
+
+
+		$tabla .= '
 			<div class="d-flex text-center justify-content-center title">
 			' . $title2 . '</div>';
-			$tabla .= '
+		$tabla .= '
 			<div class="content-table table-responsive">
             <table class=" table table-striped table-bordered table-hover table-administrator text-center" style="font-size: 11px">
 			<thead>
@@ -4243,7 +4739,7 @@ class Page_planillaController extends Page_mainController
 			  <th  colspan="2"><div align="center">NETO A PAGAR</div></th>
 			</tr>
 			</thead>';
-			$tabla .= '
+		$tabla .= '
 			<tbody>
 			<tr>
 			<td align="right"><div align="center">1</div></td>
@@ -4383,8 +4879,8 @@ class Page_planillaController extends Page_mainController
         </div>';
 
 
-			$tabla .= '<div class="d-flex text-center justify-content-center title">' . $title3 . '</div>';
-			$tabla .= '
+		$tabla .= '<div class="d-flex text-center justify-content-center title">' . $title3 . '</div>';
+		$tabla .= '
 		<div class="content-table table-responsive">
 		<table class=" table table-striped table-bordered table-hover table-administrator text-center" style="font-size: 11px">
 		<thead>
@@ -4392,219 +4888,218 @@ class Page_planillaController extends Page_mainController
 		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>
 		<th width="40">Pend.</th>';
 
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tabla .= '
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tabla .= '
 			<th width="40"><div align="center">
 			' . $j . '		
 		</div></th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
 		<tr>
 		  <th>&nbsp;</th>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
-				$tabla .= '<th width="40"><div align="center">
+			$tabla .= '<th width="40"><div align="center">
 			  
 			   ' . $dias2[$this->dia_semana($dia)] . ' 
 			 
 				</div>
 				</th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		</tr>
 		</thead>';
-			$tabla .= '
+		$tabla .= '
 		<tbody>
 		<tr>
 		<td width="200">Horas Normales</td>
 		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
 		';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 1; //normal
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 1; //normal
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['normal'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['normal'] = $incapacidades['normal'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['normal'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['normal'] = $incapacidades['normal'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['normal'] . '</div></td>
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Diurnas</td>
 			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 2; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 2; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['extra'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['extra'] = $incapacidades['extra'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['extra'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['extra'] = $incapacidades['extra'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['extra'] . '</div></td>
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Nocturnas</td>
 			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 3; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 3; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['nocturna'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['nocturna'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['nocturna'] . '</div></td>
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 1 Tiempo y Medio</td>
 			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 4; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 4; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['festivo'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['festivo'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['festivo'] . '</div></td>
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 2 Tiempos y Medio</td>
 			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 5; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 5; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['dominical'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['dominical'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['dominical'] . '</div></td>
 			<td><div align="center">' . $cantidades['dominical'] . '</div></td>
 			</tr>';
-			$tabla .= '
+		$tabla .= '
 			</tbody>
 		</table>
         </div>';
-		
+
 
 
 		$this->_view->tabla = $tabla;
-		
 	}
 	public function exportarreciboEmpleadoAction()
 	{
 		$this->setLayout('blanco');
 		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-		
+
 		$empresaModel = new Page_Model_DbTable_Empresas();
 		$planillaAsignacionModel = new Page_Model_DbTable_PlanillaAsignacion();
 		$parametrosModel = new Page_Model_DbTable_Parametros();
@@ -4628,7 +5123,7 @@ class Page_planillaController extends Page_mainController
 		$this->_view->list_meses = $this->getMeses();
 		$list_meses = $this->getMeses();
 
-		
+
 		$aux = explode("-", $planilla->fecha1);
 		$aux2 = explode("-", $planilla->fecha2);
 		$dia1 = $aux[2];
@@ -4654,179 +5149,179 @@ class Page_planillaController extends Page_mainController
 
 
 		$planillaId = $cedulas->planilla;
-		
-			$devengado = [];
-			$incapacidades = [];
-			$i++;
-			$cedula = $cedulas->cedula;
-			$valorHora = $cedulas->valor_hora;
 
-			//HORA NORMAL
-			$aumento = 1;
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
+		$devengado = [];
+		$incapacidades = [];
+		$i++;
+		$cedula = $cedulas->cedula;
+		$valorHora = $cedulas->valor_hora;
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_normal = $horas->total * $valor_hora;
-			$totales['normal'] += $total_normal;
+		//HORA NORMAL
+		$aumento = 1;
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
 
-			$cantidades['normal'] = $horas->total * 1;
-			$valores['normal'] = $valor_hora;
-			$devengado['normal'] = $total_normal;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_normal = $horas->total * $valor_hora;
+		$totales['normal'] += $total_normal;
 
-			//HORA EXTRA
-			$aumento = 1 + ($parametros->horas_extra / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
+		$cantidades['normal'] = $horas->total * 1;
+		$valores['normal'] = $valor_hora;
+		$devengado['normal'] = $total_normal;
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_extra = $horas->total * $valor_hora;
-			$totales['extra'] += $total_extra;
+		//HORA EXTRA
+		$aumento = 1 + ($parametros->horas_extra / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
 
-			$cantidades['extra'] = $horas->total * 1;
-			$valores['extra'] = $valor_hora;
-			$devengado['extra'] = $total_extra;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_extra = $horas->total * $valor_hora;
+		$totales['extra'] += $total_extra;
 
-
-			//HORA NOCTURNA
-			$aumento = 1 + ($parametros->horas_nocturnas / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_nocturna = $horas->total * $valor_hora;
-			$totales['nocturna'] += $total_nocturna;
-
-			$cantidades['nocturna'] = $horas->total * 1;
-			$valores['nocturna'] = $valor_hora;
-			$devengado['nocturna'] = $total_nocturna;
+		$cantidades['extra'] = $horas->total * 1;
+		$valores['extra'] = $valor_hora;
+		$devengado['extra'] = $total_extra;
 
 
-			//HORA FESTIVO
-			$aumento = 1 + ($parametros->festivos / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
+		//HORA NOCTURNA
+		$aumento = 1 + ($parametros->horas_nocturnas / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_festivo = $horas->total * $valor_hora;
-			$totales['festivo'] += $total_festivo;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_nocturna = $horas->total * $valor_hora;
+		$totales['nocturna'] += $total_nocturna;
 
-			$cantidades['festivo'] = $horas->total * 1;
-			$valores['festivo'] = $valor_hora;
-			$devengado['festivo'] = $total_festivo;
-
-
-			//HORA DOMINICAL
-			$aumento = 1 + ($parametros->horas_dominicales / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_dominical = $horas->total * $valor_hora;
-			$totales['dominical'] += $total_dominical;
-
-			$cantidades['dominical'] = $horas->total * 1;
-			$valores['dominical'] = $valor_hora;
-			$devengado['dominical'] = $total_dominical;
+		$cantidades['nocturna'] = $horas->total * 1;
+		$valores['nocturna'] = $valor_hora;
+		$devengado['nocturna'] = $total_nocturna;
 
 
-			$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
-			$totales['bruta'] += $total_bruta;
+		//HORA FESTIVO
+		$aumento = 1 + ($parametros->festivos / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
 
-			$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
-			$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
-			$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
-			$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
-			$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_festivo = $horas->total * $valor_hora;
+		$totales['festivo'] += $total_festivo;
 
-			if ($cedulas->sin_seguridad == 1) {
-				$seguridad_social = 0;
-				$seguridad_social2 = 0;
-				$seguro_educativo = 0;
-				$seguro_educativo2 = 0;
-				$riesgos = 0;
-			}
-
-			$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
-
-			$totales['seguridad_social'] += $seguridad_social;
-			$totales['seguro_educativo'] += $seguro_educativo;
-			$totales['seguridad_social2'] += $seguridad_social2;
-			$totales['seguro_educativo2'] += $seguro_educativo2;
-			$totales['riesgos'] += $riesgos;
-			$totales['total_seguro'] += $total_seguro;
+		$cantidades['festivo'] = $horas->total * 1;
+		$valores['festivo'] = $valor_hora;
+		$devengado['festivo'] = $total_festivo;
 
 
-			$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
+		//HORA DOMINICAL
+		$aumento = 1 + ($parametros->horas_dominicales / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
+
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_dominical = $horas->total * $valor_hora;
+		$totales['dominical'] += $total_dominical;
+
+		$cantidades['dominical'] = $horas->total * 1;
+		$valores['dominical'] = $valor_hora;
+		$devengado['dominical'] = $total_dominical;
 
 
-			$decimo = round($total_bruta * $parametros->decimo / 100, 2);
-			$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
-			$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
-			$total_provisiones = $decimo + $vacaciones + $antiguedad;
+		$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
+		$totales['bruta'] += $total_bruta;
+
+		$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
+		$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
+		$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
+		$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
+		$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+
+		if ($cedulas->sin_seguridad == 1) {
+			$seguridad_social = 0;
+			$seguridad_social2 = 0;
+			$seguro_educativo = 0;
+			$seguro_educativo2 = 0;
+			$riesgos = 0;
+		}
+
+		$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
+
+		$totales['seguridad_social'] += $seguridad_social;
+		$totales['seguro_educativo'] += $seguro_educativo;
+		$totales['seguridad_social2'] += $seguridad_social2;
+		$totales['seguro_educativo2'] += $seguro_educativo2;
+		$totales['riesgos'] += $riesgos;
+		$totales['total_seguro'] += $total_seguro;
 
 
-			$totales['decimo'] += $decimo;
-			$totales['vacaciones'] += $vacaciones;
-			$totales['antiguedad'] += $antiguedad;
-			$totales['total_provisiones'] += $total_provisiones;
-
-			$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
-			$totales['total_gastos'] += $total_gastos;
-
-			$viaticos = $planillaTotal->viaticos;
-			$prestamos = $planillaTotal->prestamos;
-			$prestamos2 = $planillaTotal->prestamos_financiera;
-			$pago_decimo = $planillaTotal->decimo;
-
-			$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
-			$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
-			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
-			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
-
-			//pendiente5
-			$tipo = 5;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente5
-
-			//pendiente4
-			$tipo = 4;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente4
-
-			//pendiente3
-			$tipo = 3;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente3
-
-			//pendiente2
-			$tipo = 2;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente2
+		$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
 
 
-			//pendiente1
-			$tipo = 1;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente1
+		$decimo = round($total_bruta * $parametros->decimo / 100, 2);
+		$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
+		$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
+		$total_provisiones = $decimo + $vacaciones + $antiguedad;
 
 
+		$totales['decimo'] += $decimo;
+		$totales['vacaciones'] += $vacaciones;
+		$totales['antiguedad'] += $antiguedad;
+		$totales['total_provisiones'] += $total_provisiones;
+
+		$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
+		$totales['total_gastos'] += $total_gastos;
+
+		$viaticos = $planillaTotal->viaticos;
+		$prestamos = $planillaTotal->prestamos;
+		$prestamos2 = $planillaTotal->prestamos_financiera;
+		$pago_decimo = $planillaTotal->decimo;
+
+		$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
+		$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
+		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
+		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
+
+		//pendiente5
+		$tipo = 5;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente5
+
+		//pendiente4
+		$tipo = 4;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente4
+
+		//pendiente3
+		$tipo = 3;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente3
+
+		//pendiente2
+		$tipo = 2;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente2
 
 
-			$tabla .= '<div align="center">PAGO PLANILLA</div>';
-			$tabla .= '<div align="center">PLANILLA DE PAGO DEL ' . $dia1 . ' AL ' . $dia2 . ' DE ' . $list_meses[$mes] . ' DEL ' . $anio . ' - ' . $empresa->nombre . ' 
+		//pendiente1
+		$tipo = 1;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente1
+
+
+
+
+		$tabla .= '<div align="center">PAGO PLANILLA</div>';
+		$tabla .= '<div align="center">PLANILLA DE PAGO DEL ' . $dia1 . ' AL ' . $dia2 . ' DE ' . $list_meses[$mes] . ' DEL ' . $anio . ' - ' . $empresa->nombre . ' 
 			</div>';
-			$tabla .= '
+		$tabla .= '
 			<div class="content-table table-responsive">
             <table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 			<thead>
@@ -4848,7 +5343,7 @@ class Page_planillaController extends Page_mainController
 			  <th  colspan="2"><div align="center">NETO A PAGAR</div></th>
 			</tr>
 			</thead>';
-			$tabla .= '
+		$tabla .= '
 			<tbody>
 			<tr>
 			<td align="right"><div align="center">1</div></td>
@@ -4988,9 +5483,9 @@ class Page_planillaController extends Page_mainController
         </div>';
 
 
-			$tabla .= '<div align="center">DESCRIPCION DE TRABAJO</div>';
+		$tabla .= '<div align="center">DESCRIPCION DE TRABAJO</div>';
 
-			$tabla .= '
+		$tabla .= '
 		<div class="content-table table-responsive">
 		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 		<thead>
@@ -4998,209 +5493,209 @@ class Page_planillaController extends Page_mainController
 		<th rowspan="2"><div align="left">DESCRIPCION</div></th>
 		<th width="40">Pend.</th>';
 
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tabla .= '
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tabla .= '
 			<th width="40"><div align="center">
 			' . $j . '		
 		</div></th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
 		<tr>
 		  <th>&nbsp;</th>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
-				$tabla .= '<th width="40"><div align="center">
+			$tabla .= '<th width="40"><div align="center">
 			  
 			   ' . $dias2[$this->dia_semana($dia)] . ' 
 			 
 				</div>
 				</th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		</tr>
 		</thead>';
-			$tabla .= '
+		$tabla .= '
 		<tbody>
 		<tr>
 		<td width="200">Horas Normales</td>
 		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
 		';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 1; //normal
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 1; //normal
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['normal'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['normal'] = $incapacidades['normal'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['normal'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['normal'] = $incapacidades['normal'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['normal'] . '</div></td>
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Diurnas</td>
 			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 2; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 2; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['extra'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['extra'] = $incapacidades['extra'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['extra'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['extra'] = $incapacidades['extra'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['extra'] . '</div></td>
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Nocturnas</td>
 			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 3; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 3; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['nocturna'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['nocturna'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['nocturna'] . '</div></td>
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 1 Tiempo y Medio</td>
 			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 4; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 4; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['festivo'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['festivo'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['festivo'] . '</div></td>
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 2 Tiempos y Medio</td>
 			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 5; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 5; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['dominical'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['dominical'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['dominical'] . '</div></td>
 			<td><div align="center">' . $cantidades['dominical'] . '</div></td>
 			</tr>';
-			$tabla .= '
+		$tabla .= '
 			</tbody>
 		</table>
         </div>';
-		
+
 
 		$hoy = date('Ym-d h:m:s');
 		header('Content-Type: application/xls');
@@ -5212,7 +5707,7 @@ class Page_planillaController extends Page_mainController
 	public function imprimirreciboempleadoAction()
 	{
 		$this->setLayout('blanco');
-	
+
 
 		$empresaModel = new Page_Model_DbTable_Empresas();
 		$planillaAsignacionModel = new Page_Model_DbTable_PlanillaAsignacion();
@@ -5257,183 +5752,183 @@ class Page_planillaController extends Page_mainController
 		$i = 0;
 		$totales = [];
 
-		
-			// echo 1444444444;
-			$planillaId = $cedulas->planilla;
-			$devengado = [];
-			$incapacidades = [];
-			$i++;
-			$cedula = $cedulas->cedula;
-			$valorHora = $cedulas->valor_hora;
-			/* echo $cedula;
+
+		// echo 1444444444;
+		$planillaId = $cedulas->planilla;
+		$devengado = [];
+		$incapacidades = [];
+		$i++;
+		$cedula = $cedulas->cedula;
+		$valorHora = $cedulas->valor_hora;
+		/* echo $cedula;
 			echo $planillaId; */
 
-			//HORA NORMAL
-			$aumento = 1;
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
+		//HORA NORMAL
+		$aumento = 1;
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_normal = $horas->total * $valor_hora;
-			$totales['normal'] += $total_normal;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_normal = $horas->total * $valor_hora;
+		$totales['normal'] += $total_normal;
 
-			$cantidades['normal'] = $horas->total * 1;
-			$valores['normal'] = $valor_hora;
-			$devengado['normal'] = $total_normal;
+		$cantidades['normal'] = $horas->total * 1;
+		$valores['normal'] = $valor_hora;
+		$devengado['normal'] = $total_normal;
 
-			//HORA EXTRA
-			$aumento = 1 + ($parametros->horas_extra / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
+		//HORA EXTRA
+		$aumento = 1 + ($parametros->horas_extra / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 2 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_extra = $horas->total * $valor_hora;
-			$totales['extra'] += $total_extra;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_extra = $horas->total * $valor_hora;
+		$totales['extra'] += $total_extra;
 
-			$cantidades['extra'] = $horas->total * 1;
-			$valores['extra'] = $valor_hora;
-			$devengado['extra'] = $total_extra;
-
-
-			//HORA NOCTURNA
-			$aumento = 1 + ($parametros->horas_nocturnas / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_nocturna = $horas->total * $valor_hora;
-			$totales['nocturna'] += $total_nocturna;
-
-			$cantidades['nocturna'] = $horas->total * 1;
-			$valores['nocturna'] = $valor_hora;
-			$devengado['nocturna'] = $total_nocturna;
+		$cantidades['extra'] = $horas->total * 1;
+		$valores['extra'] = $valor_hora;
+		$devengado['extra'] = $total_extra;
 
 
-			//HORA FESTIVO
-			$aumento = 1 + ($parametros->festivos / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
+		//HORA NOCTURNA
+		$aumento = 1 + ($parametros->horas_nocturnas / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 3 $f1 $f2", "")[0];
 
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_festivo = $horas->total * $valor_hora;
-			$totales['festivo'] += $total_festivo;
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_nocturna = $horas->total * $valor_hora;
+		$totales['nocturna'] += $total_nocturna;
 
-			$cantidades['festivo'] = $horas->total * 1;
-			$valores['festivo'] = $valor_hora;
-			$devengado['festivo'] = $total_festivo;
-
-
-			//HORA DOMINICAL
-			$aumento = 1 + ($parametros->horas_dominicales / 100);
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
-
-			$valor_hora = round($valorHora * $aumento, 2);
-			$total_dominical = $horas->total * $valor_hora;
-			$totales['dominical'] += $total_dominical;
-
-			$cantidades['dominical'] = $horas->total * 1;
-			$valores['dominical'] = $valor_hora;
-			$devengado['dominical'] = $total_dominical;
+		$cantidades['nocturna'] = $horas->total * 1;
+		$valores['nocturna'] = $valor_hora;
+		$devengado['nocturna'] = $total_nocturna;
 
 
-			$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
-			$totales['bruta'] += $total_bruta;
+		//HORA FESTIVO
+		$aumento = 1 + ($parametros->festivos / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 4 $f1 $f2", "")[0];
 
-			$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
-			$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
-			$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
-			$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
-			$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_festivo = $horas->total * $valor_hora;
+		$totales['festivo'] += $total_festivo;
 
-			if ($cedulas->sin_seguridad == 1) {
-				$seguridad_social = 0;
-				$seguridad_social2 = 0;
-				$seguro_educativo = 0;
-				$seguro_educativo2 = 0;
-				$riesgos = 0;
-			}
-
-			$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
-
-			$totales['seguridad_social'] += $seguridad_social;
-			$totales['seguro_educativo'] += $seguro_educativo;
-			$totales['seguridad_social2'] += $seguridad_social2;
-			$totales['seguro_educativo2'] += $seguro_educativo2;
-			$totales['riesgos'] += $riesgos;
-			$totales['total_seguro'] += $total_seguro;
+		$cantidades['festivo'] = $horas->total * 1;
+		$valores['festivo'] = $valor_hora;
+		$devengado['festivo'] = $total_festivo;
 
 
-			$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
+		//HORA DOMINICAL
+		$aumento = 1 + ($parametros->horas_dominicales / 100);
+		$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = 5 $f1 $f2", "")[0];
+
+		$valor_hora = round($valorHora * $aumento, 2);
+		$total_dominical = $horas->total * $valor_hora;
+		$totales['dominical'] += $total_dominical;
+
+		$cantidades['dominical'] = $horas->total * 1;
+		$valores['dominical'] = $valor_hora;
+		$devengado['dominical'] = $total_dominical;
 
 
-			$decimo = round($total_bruta * $parametros->decimo / 100, 2);
-			$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
-			$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
-			$total_provisiones = $decimo + $vacaciones + $antiguedad;
+		$total_bruta = $total_normal + $total_extra + $total_nocturna + $total_festivo + $total_dominical;
+		$totales['bruta'] += $total_bruta;
+
+		$seguridad_social = round($total_bruta * $parametros->seguridad_social / 100, 2);
+		$seguro_educativo = round($total_bruta * $parametros->seguro_educativo / 100, 2);
+		$seguridad_social2 = round($total_bruta * $parametros->seguridad_social2 / 100, 2);
+		$seguro_educativo2 = round($total_bruta * $parametros->seguro_educativo2 / 100, 2);
+		$riesgos = round($total_bruta * $parametros->riesgos_profesionales / 100, 2);
+
+		if ($cedulas->sin_seguridad == 1) {
+			$seguridad_social = 0;
+			$seguridad_social2 = 0;
+			$seguro_educativo = 0;
+			$seguro_educativo2 = 0;
+			$riesgos = 0;
+		}
+
+		$total_seguro = $seguridad_social + $seguro_educativo + $seguridad_social2 + $seguro_educativo2 + $riesgos;
+
+		$totales['seguridad_social'] += $seguridad_social;
+		$totales['seguro_educativo'] += $seguro_educativo;
+		$totales['seguridad_social2'] += $seguridad_social2;
+		$totales['seguro_educativo2'] += $seguro_educativo2;
+		$totales['riesgos'] += $riesgos;
+		$totales['total_seguro'] += $total_seguro;
 
 
-			$totales['decimo'] += $decimo;
-			$totales['vacaciones'] += $vacaciones;
-			$totales['antiguedad'] += $antiguedad;
-			$totales['total_provisiones'] += $total_provisiones;
-
-			$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
-			$totales['total_gastos'] += $total_gastos;
-
-			$viaticos = $planillaTotal->viaticos;
-			$prestamos = $planillaTotal->prestamos;
-			$prestamos2 = $planillaTotal->prestamos_financiera;
-			$pago_decimo = $planillaTotal->decimo;
-
-			$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
-			$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
-			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
-			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
-
-			//pendiente5
-			$tipo = 5;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente5
-
-			//pendiente4
-			$tipo = 4;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente4
-
-			//pendiente3
-			$tipo = 3;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente3
-
-			//pendiente2
-			$tipo = 2;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente2
+		$planillaTotal = $planillaTotales->getList(" planilla = '$planillaId' AND cedula = '$cedula'", "")[0];
 
 
-			//pendiente1
-			$tipo = 1;
-			$fecha = "0000-00-00";
-
-			$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
-			$horas_pendientes[$tipo] = $general->horas * 1;
-			//pendiente1
+		$decimo = round($total_bruta * $parametros->decimo / 100, 2);
+		$vacaciones = round($total_bruta * $parametros->vacaciones / 100, 2);
+		$antiguedad = round($total_bruta * $parametros->antiguedad / 100, 2);
+		$total_provisiones = $decimo + $vacaciones + $antiguedad;
 
 
+		$totales['decimo'] += $decimo;
+		$totales['vacaciones'] += $vacaciones;
+		$totales['antiguedad'] += $antiguedad;
+		$totales['total_provisiones'] += $total_provisiones;
+
+		$total_gastos = $total_bruta + $total_provisiones + $total_seguro - $seguridad_social - $seguro_educativo;
+		$totales['total_gastos'] += $total_gastos;
+
+		$viaticos = $planillaTotal->viaticos;
+		$prestamos = $planillaTotal->prestamos;
+		$prestamos2 = $planillaTotal->prestamos_financiera;
+		$pago_decimo = $planillaTotal->decimo;
+
+		$totales['total_devengado'] = $devengado['normal'] + $devengado['extra'] + $devengado['nocturna'] + $devengado['festivo'] + $devengado['dominical'];
+		$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
+		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
+		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
+
+		//pendiente5
+		$tipo = 5;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo ='$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente5
+
+		//pendiente4
+		$tipo = 4;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente4
+
+		//pendiente3
+		$tipo = 3;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente3
+
+		//pendiente2
+		$tipo = 2;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente2
 
 
-			$tabla .= '<div align="center">RECIBO DE PAGO</div>';
-			$tabla .= '<div align="center">RECIBO DE PAGO DEL ' . $dia1 . ' AL ' . $dia2 . ' DE ' . $list_meses[$mes] . ' DEL ' . $anio . ' - ' . $empresa->nombre . ' 
+		//pendiente1
+		$tipo = 1;
+		$fecha = "0000-00-00";
+
+		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
+		$horas_pendientes[$tipo] = $general->horas * 1;
+		//pendiente1
+
+
+
+
+		$tabla .= '<div align="center">RECIBO DE PAGO</div>';
+		$tabla .= '<div align="center">RECIBO DE PAGO DEL ' . $dia1 . ' AL ' . $dia2 . ' DE ' . $list_meses[$mes] . ' DEL ' . $anio . ' - ' . $empresa->nombre . ' 
 			</div>';
-			$tabla .= '
+		$tabla .= '
 			<div class="content-table table-responsive">
 			<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">			<thead>
 			<td>
@@ -5454,7 +5949,7 @@ class Page_planillaController extends Page_mainController
 			  <th  colspan="2"><div align="center">NETO A PAGAR</div></th>
 			</tr>
 			</thead>';
-			$tabla .= '
+		$tabla .= '
 			<tbody>
 			<tr>
 			<td align="right"><div align="center">1</div></td>
@@ -5594,7 +6089,7 @@ class Page_planillaController extends Page_mainController
         </div>';
 
 
-			
+
 		$tabla .= '<div align="center">DESCRIPCION DE TRABAJO</div>';
 
 		$tabla .= '
@@ -5605,213 +6100,212 @@ class Page_planillaController extends Page_mainController
 		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>
 		<th width="40">Pend.</th>';
 
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tabla .= '
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tabla .= '
 			<th width="40"><div align="center">
 			' . $j . '		
 		</div></th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
 		<tr>
 		  <th>&nbsp;</th>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
-				$tabla .= '<th width="40"><div align="center">
+			$tabla .= '<th width="40"><div align="center">
 			  
 			   ' . $dias2[$this->dia_semana($dia)] . ' 
 			 
 				</div>
 				</th>';
-			}
-			$tabla .= '
+		}
+		$tabla .= '
 		</tr>
 		</thead>';
-			$tabla .= '
+		$tabla .= '
 		<tbody>
 		<tr>
 		<td width="200">Horas Normales</td>
 		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
 		';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 1; //normal
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 1; //normal
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['normal'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['normal'] = $incapacidades['normal'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['normal'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['normal'] = $incapacidades['normal'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['normal'] . '</div></td>
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Diurnas</td>
 			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 2; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 2; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['extra'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['extra'] = $incapacidades['extra'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['extra'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['extra'] = $incapacidades['extra'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['extra'] . '</div></td>
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Horas Extras Nocturnas</td>
 			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 3; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 3; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['nocturna'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['nocturna'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['nocturna'] = $incapacidades['nocturna'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['nocturna'] . '</div></td>
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 1 Tiempo y Medio</td>
 			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 4; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 4; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['festivo'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['festivo'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['festivo'] = $incapacidades['festivo'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['festivo'] . '</div></td>
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
 			<td>Domingos 2 Tiempos y Medio</td>
 			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
-			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
-				$tipo = 5; //extra
-				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
-				$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
+		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
+			$tipo = 5; //extra
+			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
+			$horas = $planillaHorasModel->getList("planilla = '$planillaId' AND fecha = '$fecha' AND tipo = '$tipo' AND cedula = '$cedula'", "")[0];
 
-				$horashoras = $horas->horas * 1;
+			$horashoras = $horas->horas * 1;
 
-				if ($horas->loc == "DESCANSO") {
-					$horashoras = "D";
-				}
-				if ($horas->loc == "VACACIONES") {
-					$horashoras = "V";
-				}
-				if ($horas->loc == "PERMISO") {
-					$horashoras = "P";
-				}
-				if ($horas->loc == "FALTA") {
-					$horashoras = "F";
-				}
-
-				if ($horas->loc == "INCAPACIDAD") {
-					$incapacidades['dominical'] += $horashoras;
-					$horashoras = "I";
-				}
-				$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
-				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+			if ($horas->loc == "DESCANSO") {
+				$horashoras = "D";
 			}
-			$tabla .= '
+			if ($horas->loc == "VACACIONES") {
+				$horashoras = "V";
+			}
+			if ($horas->loc == "PERMISO") {
+				$horashoras = "P";
+			}
+			if ($horas->loc == "FALTA") {
+				$horashoras = "F";
+			}
+
+			if ($horas->loc == "INCAPACIDAD") {
+				$incapacidades['dominical'] += $horashoras;
+				$horashoras = "I";
+			}
+			$incapacidades['dominical'] = $incapacidades['dominical'] * 1;
+			$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
+		}
+		$tabla .= '
 			<td><div align="center">' . $incapacidades['dominical'] . '</div></td>
 			<td><div align="center">' . $cantidades['dominical'] . '</div></td>
 			</tr>';
-			$tabla .= '
+		$tabla .= '
 			</tbody>
 		</table>
         </div>';
-		
+
 
 
 		$this->_view->tabla = $tabla;
-		
 	}
 	public function dia_semana($f)
 	{
@@ -5854,6 +6348,37 @@ class Page_planillaController extends Page_mainController
 		}
 		return $array;
 	}
+	public function obtenerCincoDiasAnteriores($fecha)
+	{
+		$fechaActual = new DateTime($fecha);
+		$ultimoDiaMesAnterior = new DateTime("last day of " . $fechaActual->format("Y-m") . " -1 month");
+		$dias = [];
+
+		if ($fechaActual->format("d") == "01") {
+			$primerDiaMesAnterior = new DateTime($ultimoDiaMesAnterior->format("Y-m-01"));
+			$intervalo = new DateInterval("P1D");
+
+			$diasAMostrar = min(5, $primerDiaMesAnterior->format("t")); // Obtener el mínimo entre 5 y los días del mes anterior
+
+			for ($i = 0; $i < $diasAMostrar; $i++) {
+				$dias[] = $ultimoDiaMesAnterior->format("Y-m-d");
+				$ultimoDiaMesAnterior->sub($intervalo);
+			}
+			$dias = array_reverse($dias); // Invertir el orden para que los días estén en orden ascendente
+		} else {
+			$primerDiaRango = new DateTime($fechaActual->format("Y-m-10"));
+			$ultimoDiaRango = new DateTime($fechaActual->format("Y-m-14"));
+			$intervalo = new DateInterval("P1D");
+
+			while ($primerDiaRango <= $ultimoDiaRango) {
+				$dias[] = $primerDiaRango->format("Y-m-d");
+				$primerDiaRango->add($intervalo);
+			}
+		}
+
+		return $dias;
+	}
+
 
 	/**
 	 * Recibe la informacion del formulario y la retorna en forma de array para la edicion y creacion de Planilla.

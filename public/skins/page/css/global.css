@@ -483,7 +483,11 @@ a.selected {
     left: -80px;
   }
 }
+.modal{
+  text-transform: none;
+  font-size: initial;
 
+}
 /************************************************
 FIN HEADER
 ************************************************ */
