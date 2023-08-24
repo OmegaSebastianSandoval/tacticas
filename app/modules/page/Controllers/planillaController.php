@@ -617,7 +617,7 @@ class Page_planillaController extends Page_mainController
 		</tr>';
 
 		$output .= '</table>';
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=consolidado' . $hoy . '.xls');
 		echo $output;
@@ -942,15 +942,14 @@ class Page_planillaController extends Page_mainController
 		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 
-		$output = '<div align="center" style="font-size:20px">Reporte total nómina  del ' . $dia1 . ' al ' . $dia2 . ' de ' . $list_meses[$mes] . ' del ' . $anio . ' - ' . $empresa->nombre . ' </div>';
+		$output = '<div align="center" style="font-size:20px">Reporte total nomina  del ' . $dia1 . ' al ' . $dia2 . ' de ' . $list_meses[$mes] . ' del ' . $anio . ' - ' . $empresa->nombre . ' </div>';
 
 		$output .= '<div align="center" style="font-size:17px">Desde: ' . $fecha1 . ' - Hasta: ' . $fecha2 . '</div>';
 		$output .= '
-		<table width="100%" border="1" cellpadding="3" cellspacing="0" class="tabla2">
-		<tr class="text-center">
-
+		<table border="1" cellspacing="0" cellpadding="5">
+		<tr>
 		<th valign="">ITEM</th>
-		<th valign="">CÉDULA</th>
+		<th valign="">CEDULA</th>
 		<th valign=""> NOMBRE</th>
 		<th valign="">TOTAL HORA NORMAL</th>
 		<th valign="">TOTAL HORA EXTRA </th>
@@ -965,9 +964,7 @@ class Page_planillaController extends Page_mainController
 		<th valign="">PRESTAMOS FINANCIERA</th>
 		<th valign="">PAGO DECIMO</th>
 		<th valign="">TOTAL NOMINA NETA</th>
-	</tr>
-		
-		';
+	</tr>';
 		$i = 0;
 		$totales = [];
 
@@ -1076,9 +1073,7 @@ class Page_planillaController extends Page_mainController
 			<tr>
 			<td><div align="center">' . $i . '</div></td>
 			<td>
-			<div align="left">' . $cedula  . '</div>
-			<input id="cedula' . $i . '" name="cedula' . $i . '" type="hidden" value="' . $cedula  . '" />
-			</td>
+			<div align="left">' . $cedula  . '</div></td>
 			<td><div align="left">' . $value->nombre1  . '</div></td>
 			<td><div align="center">' . $this->formato_numero($total_normal) . '</div></td>
 			
@@ -1086,55 +1081,16 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $this->formato_numero($total_nocturna) . '</div></td>
 			<td><div align="center">' . $this->formato_numero($total_festivo) . '</div></td>
 			<td><div align="center">' . $this->formato_numero($total_dominical) . '</div></td>
-			<td><div align="center">' . $this->formato_numero($total_bruta) . '
-			<input 
-			id="total_bruta' . $i . '" 
-			name="total_bruta' . $i . '" 
-			type="hidden" 
-			value="' . $total_bruta . '"/>
-			</div>
-			</td>
-			<td><div align="center">' . $this->formato_numero($seguridad_social) . '
-			<input 
-			id="seguridad_social' . $i . '" 
-			name="seguridad_social' . $i . '" 
-			type="hidden" 
-			value="' . $seguridad_social . '"/>
-			</div>
-			</td>
-			<td><div align="center">' . $this->formato_numero($seguro_educativo) . '
-			<input 
-			id="seguro_educativo' . $i . '" 
-			name="seguro_educativo' . $i . '" 
-			type="hidden" 
-			value="' . $seguro_educativo . '"/>
-			</div>
-			</td>
-
+			<td><div align="center">' . $this->formato_numero($total_bruta) . '</div></td>
+			<td><div align="center">' . $this->formato_numero($seguridad_social) . '</div></td>
+			<td><div align="center">' . $this->formato_numero($seguro_educativo) . '</div></td>
+			<td><div align="center">' . $this->formato_numero($planillaTotal->viaticos) . '</div></td>
 			<td>
-			<div align="center">' . $this->formato_numero($planillaTotal->viaticos) . '</div>		
-			</td>
-
-			<td>
-			<div align="center">' . $this->formato_numero($planillaTotal->prestamos) . '</div>		
-			</td>
-
-			<td>
-			<div align="center">' . $this->formato_numero($planillaTotal->prestamos_financiera) . '</div>
-		  	
+			<div align="center">' . $this->formato_numero($planillaTotal->prestamos) . '</div></td>
+			<td><div align="center">' . $this->formato_numero($planillaTotal->prestamos_financiera) . '</div></td>
 			
-		
-			</td>
-			
-			<td>
-			<div align="center">' . $this->formato_numero($planillaTotal->decimo) . '</div>
-		  	
-			</td>
-			<td>
-          	<div align="center" id="neta' . $i . '">' . $this->formato_numero($total_neta) . '</div>
-        </td>
-    
-			
+			<td><div align="center">' . $this->formato_numero($planillaTotal->decimo) . '</div></td>
+			<td><div align="center" id="neta' . $i . '">' . $this->formato_numero($total_neta) . '</div></td>
 			</tr>';
 		}
 		$output .= '
@@ -1159,7 +1115,7 @@ class Page_planillaController extends Page_mainController
 		</tr>';
 
 		$output .= '</table>';
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=total_nomina' . $hoy . '.xls');
 		echo $output;
@@ -1526,7 +1482,7 @@ class Page_planillaController extends Page_mainController
 		</tr>';
 
 		$output .= '</table>';
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=total_nomina' . $hoy . '.xls');
 		echo $output;
@@ -2339,17 +2295,22 @@ class Page_planillaController extends Page_mainController
 		$this->_view->titlesection = $title;
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
 		$totales = [];
-		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
 
+
+		/* 
 		echo '<pre>';
 		print_r($cincoAnteriores);
-		echo '</pre>';
+		echo '</pre>'; */
 
 		foreach ($cedulas as $value) {
 			$devengado = [];
@@ -2366,7 +2327,7 @@ class Page_planillaController extends Page_mainController
 
 			//HORA NORMAL
 			$aumento = 1;
-			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 1 $f1 $f2", "")[0];
+			$horas = $planillaHorasModel->getSumHorasConsolidado(" planilla = '$id' AND cedula ='$cedula' AND tipo = 1 $f1 $f2 ", "")[0];
 
 			$valor_hora = round($valorHora * $aumento, 2);
 			$total_normal = $horas->total * $valor_hora;
@@ -2540,12 +2501,13 @@ class Page_planillaController extends Page_mainController
 					$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
 				}
 			}
-			echo '<pre>';
+
+			/* echo '<pre>';
 
 			print_r($horas_pendientes);
 			echo '</pre>';
 
-
+			return; */
 			$tabla .= '
 			<div class="d-flex text-center justify-content-center title">
 			' . $title2 . '</div>';
@@ -2722,7 +2684,7 @@ class Page_planillaController extends Page_mainController
 		<tr>
 		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>';
 
-		/* 	foreach ($horas_pendientes as $fecha => $tipos) {
+			/* 	foreach ($horas_pendientes as $fecha => $tipos) {
 				foreach ($tipos as $tipo => $valor) {
 					if ($valor && $valor != '') {
 						$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
@@ -2757,8 +2719,21 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= ' <th>&nbsp;</th>';
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -2775,9 +2750,33 @@ class Page_planillaController extends Page_mainController
 			$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>	';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos = 0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 1 && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
+
+
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 1; //normal
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -2806,12 +2805,35 @@ class Page_planillaController extends Page_mainController
 				$tabla .= '<td><div align="center">' . $horashoras . '</div></td>';
 			}
 			$tabla .= '
-			<td><div align="center">' . $incapacidades['normal'] . '</div></td>
-			<td><div align="center">' . $cantidades['normal'] . '</div></td>
+			<td><div align="center" class="1">' . $incapacidades['normal'] . '</div></td>
+			<td><div align="center"  class="1">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos = 0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 2; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -2844,8 +2866,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos = 0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 3 && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 3; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -2878,8 +2923,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos = 0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 4; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -2912,8 +2980,32 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
+
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 5; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3231,7 +3323,7 @@ class Page_planillaController extends Page_mainController
 	</table>
 	</div>';
 
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=recibo_nomina' . $hoy . '.xls');
 		echo $tabla;
@@ -3296,7 +3388,10 @@ class Page_planillaController extends Page_mainController
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
@@ -3434,7 +3529,7 @@ class Page_planillaController extends Page_mainController
 			$totales['deducciones'] = $prestamos + $prestamos2 + $seguridad_social + $seguro_educativo;
 			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
-
+			/* 
 			//pendiente5
 			$tipo = 5;
 			$fecha = "0000-00-00";
@@ -3476,7 +3571,22 @@ class Page_planillaController extends Page_mainController
 			$horas_pendientes[$tipo] = $general->horas * 1;
 			//pendiente1
 
+ */
 
+			$tiposPendientes = [1, 2, 3, 4, 5];
+			$horas_pendientes = [];
+
+			foreach ($cincoAnteriores as $fechaAnt) {
+				foreach ($tiposPendientes as $tipo) {
+
+					$pendienteField = "pendiente$tipo";
+					$general = $planillaHorasModel->getList("planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+					/* 	echo '<pre>';
+		 print_r($general);
+		 echo '</pre>'; */
+					$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+				}
+			}
 
 
 			$tabla .= '<div align="center">PAGO PLANILLA</div>';
@@ -3654,8 +3764,22 @@ class Page_planillaController extends Page_mainController
 		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCION</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCION</div></th>';
+
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+				}
+			}
 
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tabla .= '
@@ -3667,8 +3791,21 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= ' <th>&nbsp;</th>';
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -3685,9 +3822,31 @@ class Page_planillaController extends Page_mainController
 			$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 1  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 1; //normal
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3720,8 +3879,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 2; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3754,8 +3936,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 3  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 3; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3788,8 +3993,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 4; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3822,8 +4050,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 5; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -3861,7 +4112,7 @@ class Page_planillaController extends Page_mainController
         </div>';
 		}
 
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=recibo_nomina' . $hoy . '.xls');
 		echo $tabla;
@@ -3926,7 +4177,11 @@ class Page_planillaController extends Page_mainController
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
@@ -4065,7 +4320,7 @@ class Page_planillaController extends Page_mainController
 			$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 			$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
 
-			//pendiente5
+			/* //pendiente5
 			$tipo = 5;
 			$fecha = "0000-00-00";
 
@@ -4105,8 +4360,23 @@ class Page_planillaController extends Page_mainController
 			$general = $planillaHorasModel->getList(" planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
 			$horas_pendientes[$tipo] = $general->horas * 1;
 			//pendiente1
+ */
 
 
+			$tiposPendientes = [1, 2, 3, 4, 5];
+			$horas_pendientes = [];
+
+			foreach ($cincoAnteriores as $fechaAnt) {
+				foreach ($tiposPendientes as $tipo) {
+
+					$pendienteField = "pendiente$tipo";
+					$general = $planillaHorasModel->getList("planilla = '$id' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+					/* 	echo '<pre>';
+		 print_r($general);
+		 echo '</pre>'; */
+					$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+				}
+			}
 
 
 			$tabla .= '<div align="center">PAGO PLANILLA</div>';
@@ -4284,8 +4554,22 @@ class Page_planillaController extends Page_mainController
 		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCION</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCION</div></th>';
+
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+				}
+			}
 
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tabla .= '
@@ -4297,8 +4581,21 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatos = false;
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+						$hayDatos = true;
+						break; // Si hay un valor, no es necesario seguir verificando
+					}
+				}
+
+				if ($hayDatos) {
+					$tabla .= ' <th>&nbsp;</th>';
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -4315,9 +4612,32 @@ class Page_planillaController extends Page_mainController
 			$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 1  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
+
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 1; //normal
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4350,8 +4670,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 2; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4384,8 +4727,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 3  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 3; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4418,8 +4784,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 4; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4452,8 +4841,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+
+
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+
+						if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 			for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 				$tipo = 5; //extra
 				$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4535,7 +4947,11 @@ class Page_planillaController extends Page_mainController
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
@@ -4670,7 +5086,7 @@ class Page_planillaController extends Page_mainController
 		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
 
-		//pendiente5
+		/* //pendiente5
 		$tipo = 5;
 		$fecha = "0000-00-00";
 
@@ -4709,8 +5125,23 @@ class Page_planillaController extends Page_mainController
 
 		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
 		$horas_pendientes[$tipo] = $general->horas * 1;
-		//pendiente1
+		//pendiente1 */
 
+
+		$tiposPendientes = [1, 2, 3, 4, 5];
+		$horas_pendientes = [];
+
+		foreach ($cincoAnteriores as $fechaAnt) {
+			foreach ($tiposPendientes as $tipo) {
+
+				$pendienteField = "pendiente$tipo";
+				$general = $planillaHorasModel->getList("planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+				/* 	echo '<pre>';
+				print_r($general);
+				echo '</pre>'; */
+				$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+			}
+		}
 
 
 
@@ -4885,8 +5316,22 @@ class Page_planillaController extends Page_mainController
 		<table class=" table table-striped table-bordered table-hover table-administrator text-center" style="font-size: 11px">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>';
+
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+			}
+		}
 
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tabla .= '
@@ -4898,8 +5343,22 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= '<th>&nbsp;</th>';
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -4916,9 +5375,31 @@ class Page_planillaController extends Page_mainController
 		$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 1  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 1; //normal
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4951,8 +5432,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 2; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -4985,8 +5489,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 3  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 3; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5019,8 +5546,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 4; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5053,8 +5603,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 5; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5095,7 +5668,7 @@ class Page_planillaController extends Page_mainController
 
 		$this->_view->tabla = $tabla;
 	}
-	public function exportarreciboEmpleadoAction()
+	public function exportarreciboempleadoAction()
 	{
 		$this->setLayout('blanco');
 		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -5140,7 +5713,12 @@ class Page_planillaController extends Page_mainController
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
@@ -5274,7 +5852,7 @@ class Page_planillaController extends Page_mainController
 		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
 
-		//pendiente5
+		/* //pendiente5
 		$tipo = 5;
 		$fecha = "0000-00-00";
 
@@ -5313,10 +5891,23 @@ class Page_planillaController extends Page_mainController
 
 		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
 		$horas_pendientes[$tipo] = $general->horas * 1;
-		//pendiente1
+		//pendiente1 */
 
 
+		$tiposPendientes = [1, 2, 3, 4, 5];
+		$horas_pendientes = [];
 
+		foreach ($cincoAnteriores as $fechaAnt) {
+			foreach ($tiposPendientes as $tipo) {
+
+				$pendienteField = "pendiente$tipo";
+				$general = $planillaHorasModel->getList("planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+				/* 	echo '<pre>';
+	 print_r($general);
+	 echo '</pre>'; */
+				$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+			}
+		}
 
 		$tabla .= '<div align="center">PAGO PLANILLA</div>';
 		$tabla .= '<div align="center">PLANILLA DE PAGO DEL ' . $dia1 . ' AL ' . $dia2 . ' DE ' . $list_meses[$mes] . ' DEL ' . $anio . ' - ' . $empresa->nombre . ' 
@@ -5490,8 +6081,22 @@ class Page_planillaController extends Page_mainController
 		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCION</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCION</div></th>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+
+			}
+		}
 
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tabla .= '
@@ -5503,8 +6108,21 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+		  foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= ' <th>&nbsp;</th>';
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -5521,9 +6139,32 @@ class Page_planillaController extends Page_mainController
 		$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 1  && $valor !== ''&& $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 1; //normal
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5556,8 +6197,32 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+	
+	
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+	
+						if ($tipo == 2  && $valor !== ''&& $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+	
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 2; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5590,8 +6255,32 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+	
+	
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+	
+						if ($tipo == 3  && $valor !== ''&& $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+	
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 3; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5624,8 +6313,32 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+	
+	
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+	
+						if ($tipo == 4  && $valor !== ''&& $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+	
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 4; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5658,8 +6371,32 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+			foreach ($horas_pendientes as $fecha => $tipos) {
+				$hayDatosTipo = 0;
+				$hayDatos	=	0;
+	
+	
+				foreach ($tipos as $tipo => $valor) {
+					if ($valor !== null && $valor !== '') {
+	
+						if ($tipo == 5  && $valor !== ''&& $valor >= 1) {
+							$hayDatosTipo = 1;
+							break;
+	
+						} else {
+							$hayDatos = 1;
+						}
+					}
+				}
+				if ($hayDatosTipo == 1) {
+					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+				} else {
+					if ($hayDatos == 1) {
+						$tabla .= '	<td><div align="center">0</div></td>';
+					}
+				}
+			}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 5; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -5697,7 +6434,7 @@ class Page_planillaController extends Page_mainController
         </div>';
 
 
-		$hoy = date('Ym-d h:m:s');
+		$hoy = date('Y-m-d h:m:s');
 		header('Content-Type: application/xls');
 		header('Content-Disposition: attachment; filename=recibo_nomina' . $hoy . '.xls');
 		echo $tabla;
@@ -5746,7 +6483,10 @@ class Page_planillaController extends Page_mainController
 		$fecha1 = $planilla->fecha1;
 		$fecha2 = $planilla->fecha2;
 		$dias2 = array("", "L", "M", "M", "J", "V", "S", "D");
-		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
+		$this->_view->cincoAnteriores = $cincoAnteriores =  $this->obtenerCincoDiasAnteriores($planilla->fecha1);
+		$fechaAnterior1 = $cincoAnteriores[0];
+		$fechaAnterior2 = $cincoAnteriores[4];
+		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2')  OR fecha >= '$fechaAnterior1' AND fecha<='$fechaAnterior2' AND pendiente IS NOT NULL ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
 		$i = 0;
@@ -5881,7 +6621,7 @@ class Page_planillaController extends Page_mainController
 		$totales['total_empleado'] = $totales['total_devengado'] - $totales['deducciones'] + $viaticos;
 		$totales['total_empleado2'] = $totales['total_empleado'] + $pago_decimo;
 
-		//pendiente5
+		/* //pendiente5
 		$tipo = 5;
 		$fecha = "0000-00-00";
 
@@ -5921,8 +6661,22 @@ class Page_planillaController extends Page_mainController
 		$general = $planillaHorasModel->getList(" planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fecha' ", "")[0];
 		$horas_pendientes[$tipo] = $general->horas * 1;
 		//pendiente1
+ */
 
+		$tiposPendientes = [1, 2, 3, 4, 5];
+		$horas_pendientes = [];
 
+		foreach ($cincoAnteriores as $fechaAnt) {
+			foreach ($tiposPendientes as $tipo) {
+
+				$pendienteField = "pendiente$tipo";
+				$general = $planillaHorasModel->getList("planilla = '$planillaId' AND cedula ='$cedula' AND tipo = '$tipo' AND fecha = '$fechaAnt' AND pendiente != '' ", "")[0];
+				/* 	echo '<pre>';
+		 print_r($general);
+		 echo '</pre>'; */
+				$horas_pendientes[$fechaAnt][$tipo] = $general->horas;
+			}
+		}
 
 
 		$tabla .= '<div align="center">RECIBO DE PAGO</div>';
@@ -6097,8 +6851,23 @@ class Page_planillaController extends Page_mainController
 	<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
 		<thead>
 		<tr>
-		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>
-		<th width="40">Pend.</th>';
+		<th rowspan="2"><div align="left">DESCRIPCIÓN</div></th>';
+
+
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
+			}
+		}
 
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tabla .= '
@@ -6110,8 +6879,22 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">INC.</div></th>
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
-		<tr>
-		  <th>&nbsp;</th>';
+		<tr>';
+
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatos = false;
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+					$hayDatos = true;
+					break; // Si hay un valor, no es necesario seguir verificando
+				}
+			}
+
+			if ($hayDatos) {
+				$tabla .= '<th>&nbsp;</th>';
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$dia = $anio . "-" . $this->con_cero($mes) . "-" . $this->con_cero($j);
 
@@ -6128,9 +6911,32 @@ class Page_planillaController extends Page_mainController
 		$tabla .= '
 		<tbody>
 		<tr>
-		<td width="200">Horas Normales</td>
-		<td><div align="center">' . $horas_pendientes[1] . '&nbsp;</div></td>
-		';
+		<td width="200">Horas Normales</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 1  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
+
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 1; //normal
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6163,8 +6969,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['normal'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Diurnas</td>
-			<td><div align="center">' . $horas_pendientes[2] . '&nbsp;</div></td>';
+			<td>Horas Extras Diurnas</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 2; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6197,8 +7026,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['extra'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Horas Extras Nocturnas</td>
-			<td><div align="center">' . $horas_pendientes[3] . '&nbsp;</div></td>';
+			<td>Horas Extras Nocturnas</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 3  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 3; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6231,8 +7083,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['nocturna'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 1 Tiempo y Medio</td>
-			<td><div align="center">' . $horas_pendientes[4] . '&nbsp;</div></td>';
+			<td>Domingos 1 Tiempo y Medio</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 4; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6265,8 +7140,31 @@ class Page_planillaController extends Page_mainController
 			<td><div align="center">' . $cantidades['festivo'] . '</div></td>
 			</tr>
 			<tr>
-			<td>Domingos 2 Tiempos y Medio</td>
-			<td><div align="center">' . $horas_pendientes[5] . '&nbsp;</div></td>';
+			<td>Domingos 2 Tiempos y Medio</td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
+					}
+				}
+			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 5; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6366,8 +7264,8 @@ class Page_planillaController extends Page_mainController
 			}
 			$dias = array_reverse($dias); // Invertir el orden para que los días estén en orden ascendente
 		} else {
-			$primerDiaRango = new DateTime($fechaActual->format("Y-m-10"));
-			$ultimoDiaRango = new DateTime($fechaActual->format("Y-m-14"));
+			$primerDiaRango = new DateTime($fechaActual->format("Y-m-11"));
+			$ultimoDiaRango = new DateTime($fechaActual->format("Y-m-15"));
 			$intervalo = new DateInterval("P1D");
 
 			while ($primerDiaRango <= $ultimoDiaRango) {

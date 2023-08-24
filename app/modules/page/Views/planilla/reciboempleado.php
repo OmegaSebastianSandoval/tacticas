@@ -42,7 +42,7 @@
 
                 <div class="d-flex gap-2">
 
-                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarreciboEmpleado" ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
+                    <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarreciboempleado" ?>"> <i class="fa-regular fa-file-excel"></i> Exportar</a></div>
                     <div class="text-right"><a target="_blank"  class="btn btn-sm d-flex align-items-center gap-2 btn-secondary" href="<?php echo $this->route . "/imprimirreciboempleado" ?>">  <i class="fa-solid fa-print"></i></i>Imprimir</a></div>
                 
                 </div>

@@ -374,7 +374,7 @@ SELECT t.tipo, COALESCE(SUM(p.horas), 0) AS total
 		if ($order != '') {
 			$orders = ' ORDER BY ' . $order;
 		}
-		$select = 'SELECT SUM(horas) AS total FROM planilla_horas ' . $filter  . ' ' . $orders;
+		 $select = 'SELECT SUM(horas) AS total FROM planilla_horas ' . $filter  . ' ' . $orders;
 		$res = $this->_conn->query($select)->fetchAsObject();
 		return $res;
 	}

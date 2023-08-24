@@ -87,18 +87,18 @@
 			tipo: tipo,
 			general: general
 		}); */
-
-			$.post("/page/planilla/guardarhoras", {
-				"fecha": fecha,
-				"horas": horas,
-				"loc": loc,
-				"cedula": cedula,
-				"planilla": planilla,
-				"tipo": tipo,
-				"general": general
-			}, function(res) {
-				//	console.log(res);
-			})
+		//if (loc == '' && horas >= 1) return
+		$.post("/page/planilla/guardarhoras", {
+			"fecha": fecha,
+			"horas": horas,
+			"loc": loc,
+			"cedula": cedula,
+			"planilla": planilla,
+			"tipo": tipo,
+			"general": general
+		}, function(res) {
+			//	console.log(res);
+		})
 
 		total_horas(i);
 
@@ -113,6 +113,10 @@
 		if (general == "1") {
 			actualizar_filtro();
 		}
+		 if(loc=='' && horas>=1){
+
+			verificar_planilla()
+		} 
 
 	}
 
@@ -136,15 +140,15 @@
 		var cedula = document.getElementById('cedula' + i).value;
 		var planilla = document.getElementById('planilla').value;
 		var tipo = document.getElementById('tipo').value;
-		var pendiente = 'pendiente'+j
+		var pendiente = 'pendiente' + j
 
 		console.log(pendiente);
-	
- 
 
 
 
-			$.post("/page/planilla/guardarhoraspendientes", {
+
+		//if (loc == '' && horas >= 1) return
+		$.post("/page/planilla/guardarhoraspendientes", {
 			"fecha": fecha,
 			"horas": horas,
 			"loc": loc,
@@ -156,7 +160,19 @@
 		}, function(res) {
 			//	console.log(res);
 		})
+		total_horas(i);
 
+
+		if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
+			if (general == "1" || j > 0) {
+				llenar_fila(loc, i, j);
+			}
+		}
+
+
+		if (general == "1") {
+			actualizar_filtro();
+		}
 		/* 		total_horas(i);
 
 
@@ -315,19 +331,25 @@
 		var e;
 		var loc = "";
 		var total = 0;
+		console.log(i);
+		console.log(j);
 
 		for (i = 1; i <= 200; i++) {
 			for (j = 1; j <= 31; j++) {
+				
 				if (document.getElementById('horas_' + i + '_' + j)) {
+					console.log(i);
+		console.log(j);
 					horas = document.getElementById('horas_' + i + '_' + j).value;
 					e = document.getElementById('loc_' + i + '_' + j);
 					loc = e.options[e.selectedIndex].value;
+
 					if (horas > 0 && loc == "") {
 						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#FFCCCC';
 						total++;
-					} else {
-						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#E7F6F9';
-					}
+					} /* else {
+						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = 'red';
+					} */
 				}
 			}
 		}
