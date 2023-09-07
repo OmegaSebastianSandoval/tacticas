@@ -12,7 +12,7 @@
 
     .title {
         color: var(--primary);
-    
+
         font-weight: 600;
         font-size: 1rem;
         margin-top: 2rem;
@@ -84,14 +84,14 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text input-icono  fondo-azul-claro "><i class="fas fa-calendar-alt"></i></span>
                         </div>
-                        <select class="form-control"  id="metodo_pago" name="metodo_pago">
-									<option value="">Seleccione...</option>
-									<?php foreach ($this->list_metodo_pago as $key => $value) { ?>
-										<option <?php if ($this->metodo_pago == $key) {
-													echo "selected";
-												} ?> value="<?php echo $key; ?>" /> <?= $value; ?></option>
-									<?php } ?>
-								</select>
+                        <select class="form-control" id="metodo_pago" name="metodo_pago">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($this->list_metodo_pago as $key => $value) { ?>
+                                <option <?php if ($this->metodo_pago == $key) {
+                                            echo "selected";
+                                        } ?> value="<?php echo $key; ?>" /> <?= $value; ?></option>
+                            <?php } ?>
+                        </select>
                     </label>
                 </div>
 
@@ -118,12 +118,12 @@
                 <div class="d-flex gap-2">
 
                     <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarrecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar planilla</a></div>
-                    
+
                     <div class="text-right"><a class="btn btn-sm btn-success2" href="<?php echo $this->route . "/exportarreciboplano?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>"> <i class="fa-regular fa-file-excel"></i> Exportar excel plano</a></div>
 
 
-                    <div class="text-right"><a target="_blank"  class="btn btn-sm d-flex align-items-center gap-2 btn-secondary" href="<?php echo $this->route . "/imprimirRecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>">  <i class="fa-solid fa-print"></i></i>Imprimir</a></div>
-                
+                    <div class="text-right"><a target="_blank" class="btn btn-sm d-flex align-items-center gap-2 btn-secondary" href="<?php echo $this->route . "/imprimirRecibo?planilla=" . $this->planilla; ?>&nombre=<?php echo $this->nombre; ?>&cedula=<?php echo $this->cedula; ?>&metodo_pago=<?php echo $this->metodo_pago; ?>"> <i class="fa-solid fa-print"></i></i>Imprimir</a></div>
+
                 </div>
             </div>
         </div>

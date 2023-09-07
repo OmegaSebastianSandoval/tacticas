@@ -86,6 +86,9 @@
                     <div class="">
                         <a href="/page/login/recuperar" class="">¿Olvidó su contraseña?</a>
                     </div>
+                    <div class="">
+                        <a href="/page/loginempleados/" class="" style="font-size:15px">¿Eres empleado?</a>
+                    </div>
                     <input type="hidden" id="csrf" name="csrf" value="<?php echo $this->csrf; ?>" />
                     <input type="hidden" id="img" name="img" value="<?php echo $this->img; ?>" />
 

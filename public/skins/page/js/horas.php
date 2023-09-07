@@ -87,36 +87,36 @@
 			tipo: tipo,
 			general: general
 		}); */
-		//if (loc == '' && horas >= 1) return
-		$.post("/page/planilla/guardarhoras", {
-			"fecha": fecha,
-			"horas": horas,
-			"loc": loc,
-			"cedula": cedula,
-			"planilla": planilla,
-			"tipo": tipo,
-			"general": general
-		}, function(res) {
-			//	console.log(res);
-		})
+		if (loc == '' && horas >= 1 || loc != '' && horas === '' || loc != '' && horas == 0 || loc == '' && horas == 0) {
+			return
+		} else {
+			$.post("/page/planilla/guardarhoras", {
+				"fecha": fecha,
+				"horas": horas,
+				"loc": loc,
+				"cedula": cedula,
+				"planilla": planilla,
+				"tipo": tipo,
+				"general": general
+			}, function(res) {
+				//	console.log(res);
+			})
 
-		total_horas(i);
+			total_horas(i);
 
 
-		if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
-			if (general == "1" || j > 0) {
-				llenar_fila(loc, i, j);
+			if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
+				if (general == "1" || j > 0) {
+					llenar_fila(loc, i, j);
+				}
+			}
+
+
+			if (general == "1") {
+				actualizar_filtro();
 			}
 		}
 
-
-		if (general == "1") {
-			actualizar_filtro();
-		}
-		 if(loc=='' && horas>=1){
-
-			verificar_planilla()
-		} 
 
 	}
 
@@ -147,32 +147,36 @@
 
 
 
-		//if (loc == '' && horas >= 1) return
-		$.post("/page/planilla/guardarhoraspendientes", {
-			"fecha": fecha,
-			"horas": horas,
-			"loc": loc,
-			"cedula": cedula,
-			"planilla": planilla,
-			"tipo": tipo,
-			"general": general,
-			"pendiente": pendiente
-		}, function(res) {
-			//	console.log(res);
-		})
-		total_horas(i);
+		if (loc == '' && horas >= 1 || loc != '' && horas === '' || loc != '' && horas == 0 || loc == '' && horas == 0) {
+			return
+		} else {
+			$.post("/page/planilla/guardarhoraspendientes", {
+				"fecha": fecha,
+				"horas": horas,
+				"loc": loc,
+				"cedula": cedula,
+				"planilla": planilla,
+				"tipo": tipo,
+				"general": general,
+				"pendiente": pendiente
+			}, function(res) {
+				//	console.log(res);
+			})
+			total_horas(i);
 
 
-		if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
-			if (general == "1" || j > 0) {
-				llenar_fila(loc, i, j);
+			if (loc != 'DESCANSO' && loc != 'VACACIONES' && loc != 'PERMISO' && loc != 'FALTA' && loc != 'INCAPACIDAD') {
+				if (general == "1" || j > 0) {
+					llenar_fila(loc, i, j);
+				}
+			}
+
+
+			if (general == "1") {
+				actualizar_filtro();
 			}
 		}
 
-
-		if (general == "1") {
-			actualizar_filtro();
-		}
 		/* 		total_horas(i);
 
 
@@ -336,10 +340,10 @@
 
 		for (i = 1; i <= 200; i++) {
 			for (j = 1; j <= 31; j++) {
-				
+
 				if (document.getElementById('horas_' + i + '_' + j)) {
 					console.log(i);
-		console.log(j);
+					console.log(j);
 					horas = document.getElementById('horas_' + i + '_' + j).value;
 					e = document.getElementById('loc_' + i + '_' + j);
 					loc = e.options[e.selectedIndex].value;
@@ -347,7 +351,8 @@
 					if (horas > 0 && loc == "") {
 						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = '#FFCCCC';
 						total++;
-					} /* else {
+					}
+					/* else {
 						document.getElementById('casilla_' + i + '_' + j).style.backgroundColor = 'red';
 					} */
 				}

@@ -3050,7 +3050,9 @@ class Page_planillaController extends Page_mainController
 	public function exportarreciboplanoAction()
 	{
 		$this->setLayout('blanco');
-		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+		$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+
 		$this->_view->planilla = $id = $this->_getSanitizedParam("planilla");
 		if ($this->_getSanitizedParam("cleanfilter") == 1) {
 			$nombre = '';
@@ -3108,27 +3110,23 @@ class Page_planillaController extends Page_mainController
 		$f1 = " AND ( (fecha >= '$fecha1' AND fecha<='$fecha2') OR fecha='0000-00-00' ) ";
 		$f2 = " AND (loc!='DESCANSO' AND loc!='VACACIONES' AND loc!='PERMISO' AND loc!='FALTA') ";
 		$tabla = '';
-		$i = 0;
+		$i = 2;
 		$totales = [];
+		$title = 'PAGO PLANILLA';
 
-		$tabla = '<div align="center">PAGO PLANILLA</div>';
 
-		$tabla .= '
-		<div class="content-table table-responsive">
-		<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tabla">
-		<thead>
-		<tr>
-		<th><div align="left"><strong>Numero de cuenta</strong></div></th>
-		<th><div align="left"><strong>Valor neto</strong></div></th>
-		<th><div align="left"><strong>Clasificacion de la planilla</strong></div></th>
-		<th><div align="left"><strong>Nombre</strong></div></th>
-		<th><div align="left"><strong>Cedula</strong></div></th>
+		// Establecer el título del documento en negrita y centrado
+		$sheet->mergeCells('A1:E1'); // Combinar celdas para el título
+		$sheet->setCellValue('A1', $title);
+		$sheet->getStyle('A1')->getFont()->setBold(true); // Establecer el texto en negrita
 
-		</tr>
 
-		</thead>
-		<tbody>
-		';
+		$sheet->setCellValue('A2', 'Número de cuenta');
+		$sheet->setCellValue('B2', 'Valor neto');
+		$sheet->setCellValue('C2', 'Clasificación de la planilla');
+		$sheet->setCellValue('D2', 'Nombre');
+		$sheet->setCellValue('E2', 'Cédula');
+
 
 		foreach ($cedulas as $value) {
 			$devengado = [];
@@ -3306,27 +3304,57 @@ class Page_planillaController extends Page_mainController
 
 
 
-			$tabla .= '
+			/* 	$tabla .= '
 			
 			<tr>
 			<td><div align="left">' . $value->numero_cuenta . '</div></td>
-			<td><div align="left">' . $this->formato_numero($totales['total_empleado2']) . '</div></td>
+			<td><div align="left" style="mso-number-format:"0.00;">' . $this->formato_numero($totales['total_empleado2']) . '</div></td>
 			<td><div align="left">planilla de pago del ' . $dia1 . ' al ' . $dia2 . ' de ' . $list_meses[$mes] . ' del ' . $anio . ' </div></td>
 			<td><div align="left">' . strtolower($value->nombre1) . '</div></th>
 			<td><div align="left">' . $cedula . '</div></td>
 
-		  	</tr>';
+		  	</tr>'; */
+			// Formato número para las celdas E a J
+
+			// Formatear el valor como número
+			$valorFormateado = $this->formato_numero($totales['total_empleado2']);
+
+			// Reemplazar la coma por un punto
+			$valorFormateado = str_replace(',', '.', $valorFormateado);
+
+			// Añadir el valor a la hoja de cálculo
+			$valorNumerico = floatval($valorFormateado);
+
+			$sheet->setCellValue('A' . $i, $value->numero_cuenta);
+			$sheet->setCellValue('B' . $i, $valorNumerico);
+
+			// Aplicar el formato de número adecuado a la celda
+			$sheet->getStyle('B' . $i)->getNumberFormat()->setFormatCode('#,##0.00'); // Ajusta el formato según tu necesidad
+
+
+			$sheet->setCellValue('C' . $i, "planilla de pago del $dia1 al $dia2  de  $list_meses[$mes] del $anio");
+			$sheet->setCellValue('D' . $i, strtolower($value->nombre1));
+			$sheet->setCellValue('E' . $i, $cedula);
 		}
 
-		$tabla .= '
-		</tbody>
-	</table>
-	</div>';
+		// Establecer anchos de columnas automáticamente
+		foreach (range('A', 'J') as $col) {
+			$sheet->getColumnDimension($col)->setAutoSize(true);
+		}
 
-		$hoy = date('Y-m-d h:m:s');
-		header('Content-Type: application/xls');
-		header('Content-Disposition: attachment; filename=recibo_nomina' . $hoy . '.xls');
-		echo $tabla;
+		// Crear el objeto Writer para guardar el archivo en XLSX
+		$writer = new Xlsx($spreadsheet);
+
+		// Definir el nombre del archivo
+		$filename = 'Recibo_plano' . date('Ymd_His') . '.xls';
+
+		// Definir el tipo de contenido y el encabezado para la descarga
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="' . $filename . '"');
+		header('Cache-Control: max-age=0');
+
+		// Enviar el archivo al navegador
+		$writer->save('php://output');
 	}
 	public function exportarreciboAction()
 	{
@@ -6094,7 +6122,6 @@ class Page_planillaController extends Page_mainController
 
 			if ($hayDatos) {
 				$tabla .= '<th width="40">Pend.<br> ' . $fecha . '</th>';
-
 			}
 		}
 
@@ -6109,7 +6136,7 @@ class Page_planillaController extends Page_mainController
 		<th width="40" rowspan="2"><div align="center">TOT</div></th>
 	  	</tr>
 		<tr>';
-		  foreach ($horas_pendientes as $fecha => $tipos) {
+		foreach ($horas_pendientes as $fecha => $tipos) {
 			$hayDatos = false;
 
 			foreach ($tipos as $tipo => $valor) {
@@ -6148,10 +6175,9 @@ class Page_planillaController extends Page_mainController
 			foreach ($tipos as $tipo => $valor) {
 				if ($valor !== null && $valor !== '') {
 
-					if ($tipo == 1  && $valor !== ''&& $valor >= 1) {
+					if ($tipo == 1  && $valor !== '' && $valor >= 1) {
 						$hayDatosTipo = 1;
 						break;
-
 					} else {
 						$hayDatos = 1;
 					}
@@ -6198,31 +6224,30 @@ class Page_planillaController extends Page_mainController
 			</tr>
 			<tr>
 			<td>Horas Extras Diurnas</td>';
-			foreach ($horas_pendientes as $fecha => $tipos) {
-				$hayDatosTipo = 0;
-				$hayDatos	=	0;
-	
-	
-				foreach ($tipos as $tipo => $valor) {
-					if ($valor !== null && $valor !== '') {
-	
-						if ($tipo == 2  && $valor !== ''&& $valor >= 1) {
-							$hayDatosTipo = 1;
-							break;
-	
-						} else {
-							$hayDatos = 1;
-						}
-					}
-				}
-				if ($hayDatosTipo == 1) {
-					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
-				} else {
-					if ($hayDatos == 1) {
-						$tabla .= '	<td><div align="center">0</div></td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 2  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
 					}
 				}
 			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 2; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6256,31 +6281,30 @@ class Page_planillaController extends Page_mainController
 			</tr>
 			<tr>
 			<td>Horas Extras Nocturnas</td>';
-			foreach ($horas_pendientes as $fecha => $tipos) {
-				$hayDatosTipo = 0;
-				$hayDatos	=	0;
-	
-	
-				foreach ($tipos as $tipo => $valor) {
-					if ($valor !== null && $valor !== '') {
-	
-						if ($tipo == 3  && $valor !== ''&& $valor >= 1) {
-							$hayDatosTipo = 1;
-							break;
-	
-						} else {
-							$hayDatos = 1;
-						}
-					}
-				}
-				if ($hayDatosTipo == 1) {
-					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
-				} else {
-					if ($hayDatos == 1) {
-						$tabla .= '	<td><div align="center">0</div></td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 3  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
 					}
 				}
 			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 3; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6314,31 +6338,30 @@ class Page_planillaController extends Page_mainController
 			</tr>
 			<tr>
 			<td>Domingos 1 Tiempo y Medio</td>';
-			foreach ($horas_pendientes as $fecha => $tipos) {
-				$hayDatosTipo = 0;
-				$hayDatos	=	0;
-	
-	
-				foreach ($tipos as $tipo => $valor) {
-					if ($valor !== null && $valor !== '') {
-	
-						if ($tipo == 4  && $valor !== ''&& $valor >= 1) {
-							$hayDatosTipo = 1;
-							break;
-	
-						} else {
-							$hayDatos = 1;
-						}
-					}
-				}
-				if ($hayDatosTipo == 1) {
-					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
-				} else {
-					if ($hayDatos == 1) {
-						$tabla .= '	<td><div align="center">0</div></td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 4  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
 					}
 				}
 			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 4; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
@@ -6372,31 +6395,30 @@ class Page_planillaController extends Page_mainController
 			</tr>
 			<tr>
 			<td>Domingos 2 Tiempos y Medio</td>';
-			foreach ($horas_pendientes as $fecha => $tipos) {
-				$hayDatosTipo = 0;
-				$hayDatos	=	0;
-	
-	
-				foreach ($tipos as $tipo => $valor) {
-					if ($valor !== null && $valor !== '') {
-	
-						if ($tipo == 5  && $valor !== ''&& $valor >= 1) {
-							$hayDatosTipo = 1;
-							break;
-	
-						} else {
-							$hayDatos = 1;
-						}
-					}
-				}
-				if ($hayDatosTipo == 1) {
-					$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
-				} else {
-					if ($hayDatos == 1) {
-						$tabla .= '	<td><div align="center">0</div></td>';
+		foreach ($horas_pendientes as $fecha => $tipos) {
+			$hayDatosTipo = 0;
+			$hayDatos	=	0;
+
+
+			foreach ($tipos as $tipo => $valor) {
+				if ($valor !== null && $valor !== '') {
+
+					if ($tipo == 5  && $valor !== '' && $valor >= 1) {
+						$hayDatosTipo = 1;
+						break;
+					} else {
+						$hayDatos = 1;
 					}
 				}
 			}
+			if ($hayDatosTipo == 1) {
+				$tabla .= '	<td><div align="center">' . $valor . '&nbsp;</div></td>';
+			} else {
+				if ($hayDatos == 1) {
+					$tabla .= '	<td><div align="center">0</div></td>';
+				}
+			}
+		}
 		for ($j = $dia1 * 1; $j <= $dia2 * 1; $j++) {
 			$tipo = 5; //extra
 			$fecha = $anio . "-" .  $this->con_cero($mes) . "-" .  $this->con_cero($j);
